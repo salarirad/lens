@@ -2,7 +2,7 @@
   "name": "lens",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cutsocial.github.io/lens",
+  "homepage": "https://morteza.github.io/lens",
   "dependencies": {
     "gh-pages": "2.x",
     "react": "16.13.x",
