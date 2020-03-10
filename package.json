@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "https://morteza.github.io/lens",
   "dependencies": {
+    "@material-ui/core": "4.x",
+    "@material-ui/icons": "4.x",
     "gh-pages": "2.x",
     "react": "16.13.x",
     "react-dom": "16.13.x",
