@@ -16,7 +16,7 @@ export default function AppRouter() {
     <Router basename="/">
         <Switch>
           <Route exact path="/"><About /></Route>
-          <Route path="/s"><Study /></Route>
+          <Route path="/s/:studyId"><Study /></Route>
           <Route path="/about"><About /></Route>
         </Switch>
     </Router>
