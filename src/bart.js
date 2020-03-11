@@ -5,9 +5,10 @@ state = {
   totalScore: 0.0,
   pumps: 0,
   round: 1,
-  currentRoundScore: 0,
+  roundScore: 0,
   isFinished: false,
-  cashedIn: false,
+  cashed: false,
+  explosionProbability: 0
   responses: {
   },
   baloonTransition: 'all 0.5s ease-out'
@@ -23,29 +24,16 @@ props.rounds
 export default function BART(props) {
   
   const inflat = () => {
-    setCurrentRoundReward((pumps - props.initialPumps + 1) * reward);
+    setRoundReward((pumps - props.initialPumps + 1) * props.reward);
     setPumps(pumps+1);
+    setExplosionProbability(Math.ceil(Math.random() * 100));
   
     useEffect(() => {
-      //TODO store random and risk in state
-      random = getRandomInt(0,100);
-      risk = 100 / (props.maxPumps - pumps + 1),
-      
-      _responses = responses.concat([{
-        round: round,
-        risk: risk,
-        pumps: pumps - props.initialPumps,
-        random: random,
-        score: currentRoundScore
-      }]);
-  
-      this.setResponses(_responses);
-  
-      if ((random < risk) && pumps > initialPumps) {
+      risk = 100 / (props.maxPumps - pumps + 1)
+      if ((explosionProbability < risk) && pumps > initialPumps) {
         explode();
       }
-  
-    }, [pumps, currentRoundScore]);
+    }, [pumps, roundScore, explosionProbability]);
   
     if ((random < risk) && this.pumps > this.initialPumps) {
       this.explode();
@@ -54,7 +42,17 @@ export default function BART(props) {
   }
   
   const nextRound = () => {
-    //TODO store response
+    this.setResponses(responses.concat([{
+      round: round,
+      risk: 100 / (props.maxPumps - pumps + 1),
+      pumps: pumps - props.initialPumps,  //`pump` here is not the same as `state.pumps`! It's just for reporting.
+      explosionProbability: explosionProbability,
+      score: roundScore,
+      result: cashed? "cashed" : "exploded"
+    }]));
+
+    this.setResponses(_responses);
+
     setRound(round+1);
     setPumps(props.initialPumps);
   
@@ -68,28 +66,23 @@ export default function BART(props) {
   
   }
   
-  const getRandomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
-  
   const explode = () => {
-    setExploded(true);
-    setCurrentRoundScore(0);
-    setCashedIn(false);
+    setRoundScore(0);
+    setCashed(false);
     setPumps(props.initialPumps);
   
     useEffect(() => {
       nextRound();
-    }, [exploded, currentRoundScore, pumps])
+    }, [roundScore, pumps])
   }
   
   const cashIn = () => {
-    setTotalScore(totalScore + currentRoundScore);
-    setCashedIn(true);
+    setTotalScore(totalScore + roundScore);
+    setCashed(true);
   
     useEffect(() => {
       nextRound();
-    }, [totalScore, cashedIn]);
+    }, [totalScore, cashed]);
   }
   
   const showScore = () => {
