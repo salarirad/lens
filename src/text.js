@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 export default function Text(props) {
 
   const [data] = useState({value: props.content.text});
+  //props: title, text, placeholder, help, required
 
   //to store data on pressing next
   useEffect(() => {
@@ -12,7 +13,7 @@ export default function Text(props) {
 
   return (
     <div className="text">
-      {props.content.text} -> {JSON.stringify(data)}
+      {props.content.text}
     </div>
   );
 }

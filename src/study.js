@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 
 import {useParams} from 'react-router-dom';
 
-import {Container, ThemeProvider, CssBaseline, LinearProgress} from '@material-ui/core';
+import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper} from '@material-ui/core';
 
-import ControlButtons from './control-buttons';
+import Navigation from './navigation';
 import Text from './text';
 import Matrix from './matrix';
 import Submission from './submission';
@@ -87,13 +87,23 @@ export default function Study(props) {
 
     {showProgress && <LinearProgress variant="determinate" value={progress} />}
 
-    <Container maxWidth="sm">
-      {!finished && storingData && <div>loading...</div>}
-
-      {!storingData && renderView(view)}
-
-      <ControlButtons onNext={onNext} finished={finished}/>
-
+    <Container maxWidth="sm" className='study-container'>
+      <Grid container
+        spacing={2}
+        direction="column"
+        justify="flex-start"
+        alignItems="stretch"
+      >
+        <Grid item>
+          <Paper className='view-container'>
+          {!finished && storingData && <div>loading...</div>}
+          {!storingData && renderView(view)}
+          </Paper>
+        </Grid>
+        <Grid item>
+          <Navigation onNext={onNext} finished={finished}/>
+        </Grid>
+      </Grid>
     </Container>
     </ThemeProvider>
   );
