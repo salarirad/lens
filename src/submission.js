@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export default function Finished(props) {
+export default function Submission(props) {
 
   return (
     <div className="finished">

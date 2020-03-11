@@ -7,7 +7,7 @@ import {Container, ThemeProvider, CssBaseline, LinearProgress} from '@material-u
 import ControlButtons from './control-buttons';
 import Text from './text';
 import Matrix from './matrix';
-import Finished from './finished';
+import Submission from './submission';
 
 
 export default function Study(props) {
@@ -51,7 +51,7 @@ export default function Study(props) {
   const renderView = (view) => {
 
     if (finished) {
-      return <Finished submission={responses} />;
+      return <Submission submission={responses} />;
     }
 
     switch(view?.type) {
