@@ -3,9 +3,12 @@
 }
 
 .study-container {
-  padding: 16px;
+  margin-top: 16px;
 }
 
 .view-container {
-  padding: 16px;
+}
+
+.Text-container {
+  padding: 0 8px 0 8px;
 }
