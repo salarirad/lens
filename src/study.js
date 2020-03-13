@@ -8,6 +8,7 @@ import Navigation from './navigation';
 import Text from './text';
 import Matrix from './matrix';
 import Submission from './submission';
+import BART from './bart';
 
 
 export default function Study(props) {
@@ -57,6 +58,8 @@ export default function Study(props) {
     switch(view?.type) {
       case 'text': 
         return <Text onNext={storeData} content={view}>{props.children}</Text>;
+      case 'bart': 
+        return <BART onNext={storeData} onFinish={onNext} content={view}>{props.children}</BART>;
       case 'matrix':
         return <Matrix onNext={storeData} content={view}></Matrix>
       default:

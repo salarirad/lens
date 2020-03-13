@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
+
+import {Button, Grid} from '@material-ui/core';
 
 /*TODO
 state = {
@@ -21,68 +23,70 @@ props.onFinish
 props.rounds
 */
 
-export default function BART(props) {
+import './bart.css';
+
+export default function BART({content, onFinish}) {
   
-  const inflat = () => {
-    setRoundReward((pumps - props.initialPumps + 1) * props.reward);
+  const {reward, maxPumps, initialPumps, rounds} = content;
+
+  const [pumps, setPumps] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [cashed, setCashed] = useState(false);
+  const [round, setRound] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
+  const [roundScore, setRoundScore] = useState(0);
+  const [explosionProbability, setExplosionProbability] = useState(0);
+  const [responses, setResponses] = useState([]);
+
+  const inflate = () => {
     setPumps(pumps+1);
     setExplosionProbability(Math.ceil(Math.random() * 100));
-  
-    useEffect(() => {
-      risk = 100 / (props.maxPumps - pumps + 1)
-      if ((explosionProbability < risk) && pumps > initialPumps) {
-        explode();
-      }
-    }, [pumps, roundScore, explosionProbability]);
-  
-    if ((random < risk) && this.pumps > this.initialPumps) {
-      this.explode();
-    }
-  
   }
+
+  useEffect(() => {
+    let risk = 100 / (maxPumps - pumps + 1)
+    if ((explosionProbability < risk) && pumps > initialPumps) {
+      explode();
+    }
+  }, [pumps, explosionProbability, maxPumps, initialPumps]);
   
+  // rounds is updated
+  useEffect(() => {
+    if (round > rounds) {
+      setFinished(true);
+      finish();
+    }
+  }, [round, rounds]);
+
   const nextRound = () => {
-    this.setResponses(responses.concat([{
+    setResponses(responses.concat([{
       round: round,
-      risk: 100 / (props.maxPumps - pumps + 1),
-      pumps: pumps - props.initialPumps,  //`pump` here is not the same as `state.pumps`! It's just for reporting.
+      risk: 100 / (maxPumps - pumps + 1),
+      pumps: pumps - initialPumps,  //`pump` here is not the same as `state.pumps`! It's just for reporting.
       explosionProbability: explosionProbability,
       score: roundScore,
       result: cashed? "cashed" : "exploded"
     }]));
 
-    this.setResponses(_responses);
-
     setRound(round+1);
-    setPumps(props.initialPumps);
-  
-    // rounds is updated
-    useEffect(() => {
-      if (this.round > props.rounds) {
-        this.setFinished(true);
-        this.finish();
-      }  
-    }, [round, pumps]);
-  
+    setPumps(initialPumps);
   }
   
   const explode = () => {
     setRoundScore(0);
     setCashed(false);
-    setPumps(props.initialPumps);
-  
-    useEffect(() => {
-      nextRound();
-    }, [roundScore, pumps])
+    setPumps(initialPumps);
   }
-  
+
   const cashIn = () => {
     setTotalScore(totalScore + roundScore);
     setCashed(true);
-  
-    useEffect(() => {
-      nextRound();
-    }, [totalScore, cashed]);
+    nextRound();
+  }
+
+  const finish = () => {
+    onFinish(responses);
+    //TODO
   }
   
   const showScore = () => {
@@ -90,34 +94,39 @@ export default function BART(props) {
     // if "finished" call props.onFinish
   }
 
+  return (
+    <Fragment>
+      <md-toolbar layout="column" layout-align="center center">
+      <Grid container direction="row" layout-align="space-around center">
+            <div>
+              <span>Round Score</span>
+              <span>{roundScore}</span>
+            </div>
+            <div>
+              <span>Total Score</span>
+              <span>{totalScore}</span>
+            </div>
+      </Grid>
+      
+      </md-toolbar>
+      
+      <Grid container direction="column">
+        <div direction="column" layout-align="center center">
+          <div className="bubble-container"> {/* set baloon size */}
+            <figure className="bubble"></figure>
+          </div>
+        </div>
+      </Grid>
+      <Grid container direction="row" justify="space-around">
+        <Button onClick={inflate}>Inflate</Button>
+        <Button disabled>
+          Round {round} of {rounds}
+        </Button>
+        {! finished &&
+          <Button onClick={cashIn}>Cash In</Button>
+        }
+      </Grid>
+    </Fragment>
+  );
+
 }
-
-
-
-<md-toolbar layout="column" layout-align="center center">
-  <div class="md-toolbar-tools" flex layout="row" layout-align="space-around center">
-        <div>
-          <span md-colors="{color: 'amber'}" class="md-caption">{{'bart.successful_pumps' | translate}}</span>
-          <span class="md-title">{{$ctrl.pumps-$ctrl.initialPumps | number: 0 | persianDigits}}</span>
-        </div>
-        <div>
-          <span md-colors="{color: 'amber'}" class="md-caption">{{'bart.total_score' | translate}}</span>
-          <span class="md-title">{{$ctrl.total | number | persianDigits}}</span>
-        </div>
-  </div>
-
-</md-toolbar>
-
-<md-content flex layout="column" layout-align="end center" class="bottom-fabs">
-    <div flex layout="column" layout-align="center center">
-      <div class="ui basic stage segment" ng-style="$ctrl.balloonSize">
-        <figure class="ball bubble"></figure>
-      </div>
-    </div>
-    <div flex="none"></div>
-    <md-button class="md-primary md-fab md-fab-bottom-right" ng-hide="$ctrl.isFinished" ng-click="$ctrl.inflate()">{{'bart.inflate_button' | translate}}</md-button>
-    <md-button md-no-ink ng-disabled="true" class="md-fab-bottom-center" style="padding-bottom:30px">
-      {{'bart.round' | translate}} {{$ctrl.toBePrintedRound | number | persianDigits}} {{'bart.of' | translate}} {{$ctrl.element.rounds | number | persianDigits}}
-    </md-button>
-    <md-button class="md-fab md-fab-bottom-left" ng-hide="$ctrl.isFinished" ng-click="$ctrl.cashIn()">{{'bart.cash_in_button' | translate}}</md-button>
-</md-content>

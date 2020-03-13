@@ -7,8 +7,12 @@
       "text": "hello<br />This is a **test**!"
     },
     {
-      "type": "text",
-      "text": "two"
+      "type": "bart",
+      "text": "two",
+      "reward": 1,
+      "maxPumps": 10,
+      "initialPumps": 0,
+      "rounds": 5
     }
   ]
 }
