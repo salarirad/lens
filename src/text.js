@@ -5,7 +5,7 @@ import Markdown from 'react-markdown';
 
 export default function Text(props) {
 
-  const [data] = useState({value: props.content.text});
+  const [data] = useState({value: null});
   //props: title, text, placeholder, help, required, pattern, instruction
 
   //to store data on pressing next

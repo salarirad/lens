@@ -101,8 +101,9 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       onClose={() => setDialogIsOpen(false)}
       disableBackdropClick
       disableEscapeKeyDown
+      aria-labelledby="dialog-title"
     >
-        <DialogTitle >{responses[responses.length - 1].result=='cashed'?'You Cashed!':'Balloon Exploded!'}</DialogTitle>
+        <DialogTitle id="dialog-title"><b>{responses[responses.length - 1].result==='cashed'?'You Cashed In!':'Balloon Exploded!'}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
           You are rewarded with {responses[responses.length - 1].score} points.
@@ -110,8 +111,8 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogIsOpen(false)} color="primary" autoFocus>
-            {responses.length<=rounds?'Continue':'Finish'}
+          <Button onClick={() => setDialogIsOpen(false)} color="primary" autoFocus size='large'>
+            {round<=rounds?'Next Round':'Next'}
           </Button>
         </DialogActions>
       </Dialog>);
@@ -125,15 +126,17 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
 
       <Grid item container direction='row' justify="space-around" alignItems='center'>
 
+        {(round<=rounds) && 
           <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
             Next Reward<Typography variant="h4">{pumps * reward}</Typography>
           </Grid></Grid>
+        }
 
+        {(round<=rounds) && 
           <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-            <Button disabled variant='text'>
-              Round {round} of {rounds}
-            </Button>
+              <Typography color='textSecondary' variant='caption'>Round {round} of {rounds}</Typography>
           </Grid></Grid>
+        }
 
           <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
             Total Points<Typography variant="h4">{totalScore}</Typography>
