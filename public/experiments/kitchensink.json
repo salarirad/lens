@@ -13,6 +13,12 @@
       "maxPumps": 30,
       "initialPumps": 2,
       "rounds": 5
+    },
+    {
+      "type": "text",
+      "instruction": true,
+      "title": "Hello",
+      "text": "hello 2<br />This is a **test**!"
     }
   ]
 }

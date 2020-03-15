@@ -25,15 +25,18 @@ export default function Study(props) {
   const [finished, setFinished] = useState(false);
   const [storingData, setStoringData] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [showStudyNav, setShowStudyNav] = useState(true);
 
   let theme = responsiveFontSizes(createMuiTheme());
 
   const storeData = (data) => {
+    console.log('study.storeData');
     setResponses(responses.concat([data]));
     setStoringData(false);
   }
 
   const onNext = () => {
+    console.log('study.onNext');
     setStoringData(true);
 
     const nextViewIndex = currentViewIndex + 1;
@@ -59,7 +62,7 @@ export default function Study(props) {
       case 'text': 
         return <Text onNext={storeData} content={view}>{props.children}</Text>;
       case 'bart': 
-        return <BART onNext={storeData} onFinish={onNext} content={view}>{props.children}</BART>;
+        return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowStudyNav}>{props.children}</BART>;
       case 'matrix':
         return <Matrix onNext={storeData} content={view}></Matrix>
       default:
@@ -103,9 +106,11 @@ export default function Study(props) {
           {!storingData && renderView(view)}
           </Paper>
         </Grid>
+        { showStudyNav && !storingData &&
         <Grid item>
           <Navigation onNext={onNext} finished={finished}/>
         </Grid>
+        }
       </Grid>
     </Container>
     </ThemeProvider>
