@@ -31,76 +31,62 @@ export default function BART({content, onFinish}) {
 
   const [pumps, setPumps] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [cashed, setCashed] = useState(false);
-  const [round, setRound] = useState(0);
+  const [round, setRound] = useState(1);
   const [totalScore, setTotalScore] = useState(0);
-  const [roundScore, setRoundScore] = useState(0);
-  const [explosionProbability, setExplosionProbability] = useState(0);
   const [responses, setResponses] = useState([]);
 
-  const inflate = () => {
-    setPumps(pumps+1);
-    setExplosionProbability(Math.ceil(Math.random() * 100));
-  }
 
-  useEffect(() => {
-    let risk = 100 / (maxPumps - pumps + 1)
-    if ((explosionProbability < risk) && pumps > initialPumps) {
-      explode();
-    }
-  }, [pumps, explosionProbability, maxPumps, initialPumps]);
-  
-  // rounds is updated
-  useEffect(() => {
-    if (round > rounds) {
-      setFinished(true);
-      finish();
-    }
-  }, [round, rounds]);
-
-  const nextRound = () => {
+  // round changed
+  const newRound = (cashed, explosionProbability) => {
     setResponses(responses.concat([{
       round: round,
       risk: 100 / (maxPumps - pumps + 1),
       pumps: pumps - initialPumps,  //`pump` here is not the same as `state.pumps`! It's just for reporting.
       explosionProbability: explosionProbability,
-      score: roundScore,
+      score: cashed? (maxPumps - pumps + 1) * reward : 0,
       result: cashed? "cashed" : "exploded"
     }]));
 
+    setFinished(round >= rounds);
+    setPumps(0);  
     setRound(round+1);
-    setPumps(initialPumps);
+
   }
+
+  useEffect(() => {
+    if (finished)
+      onFinish(responses);
+  }, [finished]);
+
+  // inflate
+  const onInflate = () => {
+    console.log(`inflated`);
+    let risk = 100 / (maxPumps - pumps + 1);
+    let prob = Math.ceil(Math.random() * 100);
+
+    console.log(prob, '>=', risk);
+
+    if ((prob >= risk) && pumps > initialPumps) {
+      newRound(false, prob);
+    } else {
+      setPumps(pumps+1);
+    }
+  };
+
+  const onCashIn = () => {
+    console.log(`cashed`);
+    let score = pumps * reward;
+    setTotalScore(totalScore + score);
+    newRound(true);
+  };
   
-  const explode = () => {
-    setRoundScore(0);
-    setCashed(false);
-    setPumps(initialPumps);
-  }
-
-  const cashIn = () => {
-    setTotalScore(totalScore + roundScore);
-    setCashed(true);
-    nextRound();
-  }
-
-  const finish = () => {
-    onFinish(responses);
-    //TODO
-  }
-  
-  const showScore = () => {
-    // set ScoreModel button text to "Next" or "Finish"
-    // if "finished" call props.onFinish
-  }
-
   return (
     <Fragment>
       <md-toolbar layout="column" layout-align="center center">
       <Grid container direction="row" layout-align="space-around center">
             <div>
               <span>Round Score</span>
-              <span>{roundScore}</span>
+              <span>{pumps * reward}</span>
             </div>
             <div>
               <span>Total Score</span>
@@ -118,12 +104,12 @@ export default function BART({content, onFinish}) {
         </div>
       </Grid>
       <Grid container direction="row" justify="space-around">
-        <Button onClick={inflate}>Inflate</Button>
+        <Button onClick={onInflate}>Inflate</Button>
         <Button disabled>
           Round {round} of {rounds}
         </Button>
         {! finished &&
-          <Button onClick={cashIn}>Cash In</Button>
+          <Button onClick={onCashIn}>Cash In</Button>
         }
       </Grid>
     </Fragment>

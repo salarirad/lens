@@ -10,8 +10,8 @@
       "type": "bart",
       "text": "two",
       "reward": 1,
-      "maxPumps": 10,
-      "initialPumps": 0,
+      "maxPumps": 30,
+      "initialPumps": 2,
       "rounds": 5
     }
   ]
