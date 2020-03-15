@@ -2,7 +2,7 @@
   "name": "lens",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://lens.cut.social",
+  "homepage": "https://lens.cut.social",
   "dependencies": {
     "@material-ui/core": "4.x",
     "@material-ui/icons": "4.x",
