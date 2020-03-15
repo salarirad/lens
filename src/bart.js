@@ -5,7 +5,6 @@ import {Button, Fab, Grid, Typography, Divider} from '@material-ui/core';
 import {Dialog, DialogActions, DialogTitle, DialogContentText, DialogContent} from '@material-ui/core';
 
 import './bart.css';
-import { render } from 'react-dom';
 
 export default function BART({content, onStore, onFinish, showStudyNav}) {
   
@@ -113,7 +112,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   /**
    * Render BART component (main render)
    */
-  render = () => {
+  const render = () => {
     return (
       <Fragment>
         {dialogIsOpen && renderDialog()}
@@ -159,6 +158,6 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     );
   }
 
-  render();
+  return render();
 
 }

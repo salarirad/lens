@@ -9,7 +9,7 @@ import Text from './text';
 import Matrix from './matrix';
 import Submission from './submission';
 import BART from './bart';
-
+import GoNoGo from './gonogo';
 
 export default function Study(props) {
 
@@ -62,7 +62,9 @@ export default function Study(props) {
       case 'text': 
         return <Text onNext={storeData} content={view}>{props.children}</Text>;
       case 'bart': 
-        return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav}>{props.children}</BART>;
+        return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
+      case 'gonogo': 
+        return <GoNoGo onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
       case 'matrix':
         return <Matrix onNext={storeData} content={view}></Matrix>
       default:
