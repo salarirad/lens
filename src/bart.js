@@ -4,28 +4,8 @@ import {Button, Fab, Grid, Typography, Divider} from '@material-ui/core';
 
 import {Dialog, DialogActions, DialogTitle, DialogContentText, DialogContent} from '@material-ui/core';
 
-/*TODO
-state = {
-  totalScore: 0.0,
-  pumps: 0,
-  round: 1,
-  roundScore: 0,
-  isFinished: false,
-  cashed: false,
-  explosionProbability: 0
-  responses: {
-  },
-  baloonTransition: 'all 0.5s ease-out'
-}
-
-props.reward
-props.maxPumps
-props.initialPumps
-props.onFinish
-props.rounds
-*/
-
 import './bart.css';
+import { render } from 'react-dom';
 
 export default function BART({content, onStore, onFinish, showStudyNav}) {
   
@@ -42,6 +22,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   const [responses, setResponses] = useState([]);
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
+  // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (finished && !dialogIsOpen) {
       onFinish();
@@ -50,9 +31,12 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     }
   }, [finished, dialogIsOpen]);
 
-  // round changed
+  /**
+   * Store round responses, then proceed to the next round or finish the game
+   * @param {*} cashed either cashed or exploded
+   * @param {*} explosionProbability last probability of balloon getting exploded
+   */
   const newRound = (cashed, explosionProbability) => {
-
     setDialogIsOpen(true);
 
     setResponses(responses.concat([{
@@ -69,7 +53,9 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     setRound(round+1);
   }
 
-  // inflate
+  /**
+   * action to inflate the baloon
+   */
   const onInflate = () => {
 
     let risk = 100 / (maxPumps - pumps + 1);
@@ -82,6 +68,9 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     }
   };
 
+  /**
+   * action to cash in the reward
+   */
   const onCashIn = () => {
     let score = pumps * reward;
     setTotalScore(totalScore + score);
@@ -94,6 +83,9 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     transition: (pumps===0)?'':'width 1s, height 1s' //explosition and pumping effects
   };
 
+  /**
+   * render a dialog that shows round summary.
+   */
   const renderDialog = () => {
     return (
     <Dialog
@@ -103,7 +95,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       disableEscapeKeyDown
       aria-labelledby="dialog-title"
     >
-        <DialogTitle id="dialog-title"><b>{responses[responses.length - 1].result==='cashed'?'You Cashed In!':'Balloon Exploded!'}</b></DialogTitle>
+        <DialogTitle id="dialog-title"><b>{responses[responses.length - 1].result==='cashed'?'You cashed in the reward!':'Balloon Exploded!'}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
           You are rewarded with {responses[responses.length - 1].score} points.
@@ -118,48 +110,55 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       </Dialog>);
   }
 
-  return (
-    <Fragment>
-      {dialogIsOpen && renderDialog()}
+  /**
+   * Render BART component (main render)
+   */
+  render = () => {
+    return (
+      <Fragment>
+        {dialogIsOpen && renderDialog()}
+  
+        <Grid container direction='column' spacing={2} justify="space-between" alignItems='stretch'>
+  
+        <Grid item container direction='row' justify="space-around" alignItems='center'>
+  
+          {(round<=rounds) && 
+            <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
+              Next Reward<Typography variant="h4">{pumps * reward}</Typography>
+            </Grid></Grid>
+          }
+  
+          {(round<=rounds) && 
+            <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
+                <Typography color='textSecondary' variant='caption'>Round {round} of {rounds}</Typography>
+            </Grid></Grid>
+          }
+  
+            <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
+              Total Points<Typography variant="h4">{totalScore}</Typography>
+            </Grid></Grid>
+        </Grid>
+  
+        <Grid item><Divider /></Grid>
+  
+        <Grid item container direction="row" justify="space-around" alignItems='center'>
+          <Fab onClick={onInflate} color='primary'>Pump</Fab>
+          <Fab onClick={onCashIn} color='primary'>Cash</Fab>
+        </Grid>
+  
+        <Grid item container direction="column" alignContent='center'> 
+          <div className="bubble-container" style={bubbleStyle}>
+            <figure className="bubble"></figure>
+          </div>
+        </Grid>
+  
+  
+        </Grid>
+      </Fragment>
+  
+    );
+  }
 
-      <Grid container direction='column' spacing={2} justify="space-between" alignItems='stretch'>
-
-      <Grid item container direction='row' justify="space-around" alignItems='center'>
-
-        {(round<=rounds) && 
-          <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-            Next Reward<Typography variant="h4">{pumps * reward}</Typography>
-          </Grid></Grid>
-        }
-
-        {(round<=rounds) && 
-          <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-              <Typography color='textSecondary' variant='caption'>Round {round} of {rounds}</Typography>
-          </Grid></Grid>
-        }
-
-          <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-            Total Points<Typography variant="h4">{totalScore}</Typography>
-          </Grid></Grid>
-      </Grid>
-
-      <Grid item><Divider /></Grid>
-
-      <Grid item container direction="row" justify="space-around" alignItems='center'>
-        <Fab onClick={onInflate} color='primary'>Pump</Fab>
-        <Fab onClick={onCashIn} color='primary'>Cash</Fab>
-      </Grid>
-
-      <Grid item container direction="column" alignContent='center'> 
-        <div className="bubble-container" style={bubbleStyle}>
-          <figure className="bubble"></figure>
-        </div>
-      </Grid>
-
-
-      </Grid>
-    </Fragment>
-
-  );
+  render();
 
 }

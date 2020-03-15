@@ -25,7 +25,7 @@ export default function Study(props) {
   const [finished, setFinished] = useState(false);
   const [storingData, setStoringData] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [showStudyNav, setShowStudyNav] = useState(true);
+  const [showNav, setShowNav] = useState(true);
 
   let theme = responsiveFontSizes(createMuiTheme());
 
@@ -62,7 +62,7 @@ export default function Study(props) {
       case 'text': 
         return <Text onNext={storeData} content={view}>{props.children}</Text>;
       case 'bart': 
-        return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowStudyNav}>{props.children}</BART>;
+        return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav}>{props.children}</BART>;
       case 'matrix':
         return <Matrix onNext={storeData} content={view}></Matrix>
       default:
@@ -106,7 +106,7 @@ export default function Study(props) {
           {!storingData && renderView(view)}
           </Paper>
         </Grid>
-        { showStudyNav && !storingData &&
+        { showNav && !storingData &&
         <Grid item>
           <Navigation onNext={onNext} finished={finished}/>
         </Grid>
