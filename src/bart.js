@@ -12,11 +12,11 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     showStudyNav(false);
   });
 
-  const {reward, maxPumps, initialPumps, rounds} = content;
+  const {reward, maxPumps, initialPumps, trials} = content;
 
   const [pumps, setPumps] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [round, setRound] = useState(1);
+  const [trial, setTrial] = useState(1);
   const [totalScore, setTotalScore] = useState(0);
   const [responses, setResponses] = useState([]);
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -31,15 +31,15 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   }, [finished, dialogIsOpen]);
 
   /**
-   * Store round responses, then proceed to the next round or finish the game
+   * Store trial responses, then proceed to the next trial or finish the game
    * @param {*} cashed either cashed or exploded
    * @param {*} explosionProbability last probability of balloon getting exploded
    */
-  const newRound = (cashed, explosionProbability) => {
+  const newTrial = (cashed, explosionProbability) => {
     setDialogIsOpen(true);
 
     setResponses(responses.concat([{
-      round: round,
+      trial: trial,
       risk: 100 / (maxPumps - pumps + 1),
       pumps: pumps,
       explosionProbability: explosionProbability,
@@ -47,9 +47,9 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       result: cashed? "cashed" : "exploded"
     }]));
 
-    setFinished(round >= rounds);
+    setFinished(trial >= trials);
     setPumps(0);  
-    setRound(round+1);
+    setTrial(trial+1);
   }
 
   /**
@@ -61,7 +61,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     let prob = Math.ceil(Math.random() * 100);
 
     if ((prob >= risk) && pumps > initialPumps) {
-      newRound(false, prob);
+      newTrial(false, prob);
     } else {
       setPumps(pumps+1);
     }
@@ -73,7 +73,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   const onCashIn = () => {
     let score = pumps * reward;
     setTotalScore(totalScore + score);
-    newRound(true);
+    newTrial(true);
   };
   
   let bubbleStyle = {
@@ -83,7 +83,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   };
 
   /**
-   * render a dialog that shows round summary.
+   * render a dialog that shows trial summary.
    */
   const renderDialog = () => {
     return (
@@ -103,7 +103,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogIsOpen(false)} color="primary" autoFocus size='large'>
-            {round<=rounds?'Next Round':'Next'}
+            {trial<=trials?'Next Round':'Next'}
           </Button>
         </DialogActions>
       </Dialog>);
@@ -121,15 +121,15 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   
         <Grid item container direction='row' justify="space-around" alignItems='center'>
   
-          {(round<=rounds) && 
+          {(triak<=trials) && 
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
               Next Reward<Typography variant="h4">{pumps * reward}</Typography>
             </Grid></Grid>
           }
   
-          {(round<=rounds) && 
+          {(trials<=trials) && 
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-                <Typography color='textSecondary' variant='caption'>Round {round} of {rounds}</Typography>
+                <Typography color='textSecondary' variant='caption'>Round {trial} of {trials}</Typography>
             </Grid></Grid>
           }
   
