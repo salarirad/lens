@@ -112,7 +112,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   /**
    * Render BART component (main render)
    */
-  const render = () => {
+  //const render = () => {
     return (
       <Fragment>
         {dialogIsOpen && renderDialog()}
@@ -121,13 +121,13 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   
         <Grid item container direction='row' justify="space-around" alignItems='center'>
   
-          {(triak<=trials) && 
+          {trial<=trials && 
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
               Next Reward<Typography variant="h4">{pumps * reward}</Typography>
             </Grid></Grid>
           }
   
-          {(trials<=trials) && 
+          {trial<=trials && 
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
                 <Typography color='textSecondary' variant='caption'>Round {trial} of {trials}</Typography>
             </Grid></Grid>
@@ -139,16 +139,17 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
         </Grid>
   
         <Grid item><Divider /></Grid>
-  
-        <Grid item container direction="row" justify="space-around" alignItems='center'>
-          <Fab onClick={onInflate} color='primary'>Pump</Fab>
-          <Fab onClick={onCashIn} color='primary'>Cash</Fab>
-        </Grid>
+
   
         <Grid item container direction="column" alignContent='center'> 
           <div className="bubble-container" style={bubbleStyle}>
             <figure className="bubble"></figure>
           </div>
+        </Grid>
+
+        <Grid item container direction="row" justify="space-around" alignItems='center'>
+          <Fab onClick={onInflate} color='primary'>Pump</Fab>
+          <Fab onClick={onCashIn} color='primary'>Cash</Fab>
         </Grid>
   
   
@@ -156,8 +157,6 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       </Fragment>
   
     );
-  }
-
-  return render();
+  //} //.render()
 
 }

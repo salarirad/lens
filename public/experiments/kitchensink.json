@@ -26,9 +26,10 @@
 			"type":"gonogo",
 			"text":"Quick, tap/click on the stars. If you see a circle, do not click or tap on the opposite side.",
 			"help":"Press one of the images in less than three seconds.",
-			"trials": 5,
-      "ISI": 3000,
-      "ITI": 2000,
+      "trials": 5,
+      "SOA": 3000,
+      "ISI": 2000,
+      "ITI": 1000,
       "showFixation": true,
 			"timeoutsBeforeForcedTerminate": 10,
 			"choices": [
@@ -49,7 +50,7 @@
       "reward": 1,
       "maxPumps": 30,
       "initialPumps": 2,
-      "rounds": 2
+      "trials": 2
     },
     {
       "id": "sample-likert",
