@@ -31,7 +31,7 @@
       "ISI": 2000,
       "ITI": 1000,
       "showFixation": true,
-			"timeoutsBeforeForcedTerminate": 10,
+			"timeoutsBeforeReset": 10,
 			"choices": [
 				{ "value": "star", "expectedResponse": "go" },
 				{ "value": "circle", "expectedResponse": "nogo" }

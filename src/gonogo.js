@@ -5,13 +5,13 @@ import { Grid, Typography, Divider} from '@material-ui/core';
 
 import Image from 'material-ui-image';
 
-import {Markdown} from 'react-markdown';
+import Markdown from 'react-markdown';
 
 import './gonogo.css';
 
 export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
-  const {text, trials, ISI, ITI, showFixation, choices, timeoutsBeforeForcedTerminate} = content;
+  const {text, trials, SOA, ISI, ITI, showFixation, choices, timeoutsBeforeReset} = content;
 
   const [finished, setFinished] = useState(false);
   const [startTimestamp, setStartTimestamp] = useState(null);
@@ -38,7 +38,8 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     }
   }, [finished]);
 
-  const select = () => {
+  const select = (choice) => {
+    setFinished(true);
     //TODO stop trial timer
     //TODO generate response and append it to the state
     //TODO show fixation and start a timer for a new trial
