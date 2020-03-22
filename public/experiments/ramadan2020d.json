@@ -24,7 +24,7 @@
     {
 			"id": "Go/NoGo",
 			"type":"gonogo",
-			"content":"Quick, tap/click on the stars. If you see a circle, do not click or tap on the opposite side.",
+			"text":"Quick, tap/click on the stars. If you see a circle, do not click or tap on the opposite side.",
 			"help":"Press one of the images in less than three seconds.",
 			"trials": 5,
       "ISI": 3000,
