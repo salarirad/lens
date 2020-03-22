@@ -1,9 +1,9 @@
 {
-  "studyId": "kitchensink",
-  "conditon": "a",
+  "studyId": "ramadan2020",
+  "conditon": "c",
   "whenFinishedRedirectTo": "https://google.com?ID=123456",
   "metadata": {
-    "maintainer": "ansarinia@me.com"
+    "maintainer": "salar.rad@gmail.com"
   },
   "views": [
     {
