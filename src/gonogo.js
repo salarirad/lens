@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react';
 
 
-import { Grid, Typography, Divider} from '@material-ui/core';
+import { Button, Grid, Typography, Divider} from '@material-ui/core';
 
 import Image from 'material-ui-image';
 
@@ -11,39 +11,82 @@ import './gonogo.css';
 
 export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
-  const {text, trials, SOA, ISI, ITI, showFixation, choices, timeoutsBeforeReset} = content;
+  const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
   const [finished, setFinished] = useState(false);
-  const [startTimestamp, setStartTimestamp] = useState(null);
-  const [responses, setResponses] = useState([]);
-  const [fixation, setFixation] = useState(false);
-  const [trialPeriod, setTrialPeriod] = useState(0);
+  const [responses, setResponses] = useState({startTimestamp: null, trial: []});
+  const [trial, setTrial] = useState(null);
+  const [step, setStep] = useState(null); // null, stimuli, fixation, feedback
+  const [clock, setClock] = useState(null);
 
   useEffect(() => {
     showStudyNav(false);
-    //TODO
-    const interval = setInterval(() => {
-      console.log(trialPeriod);
-      setTrialPeriod(trialPeriod + 1);
-    }, ISI);
-    return () => clearInterval(interval);
   });
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (finished) {
+      clearInterval(clock);
       onFinish();
       onStore(responses);
       showStudyNav(true);
     }
   }, [finished]);
+  
 
-  const select = (choice) => {
-    setFinished(true);
-    //TODO stop trial timer
-    //TODO generate response and append it to the state
-    //TODO show fixation and start a timer for a new trial
-    //TODO trial++ and start a new trial
+  const fixation = () => {
+    setStep('fixation');
+    setClock(
+      setInterval(() => {
+        stimuli();
+      }, fixationDuration)
+    );
+  }
+  const stimuli = () => {
+    setStep('stimuli');
+    setClock(
+      setInterval(() => {
+        feedback();
+      }, feedbackDuration)
+    );
+  }
+
+  const feedback = () => {
+    setStep('feedback');
+    setClock(
+      setInterval(() => {
+        fixation();
+      }, 1000)
+    );
+  }
+
+  const startTask = () => {
+    setTrial(1);
+    fixation();
+  }
+
+
+
+  const handleResponse = (choice) => {
+    clearInterval(clock);
+    //store response
+    setTrial(trial+1);
+    fixation();
+  }
+
+  // start screen
+  if (trial === null) {
+    return (
+      <Grid>
+        Are you ready?
+      <Button
+        onClick={() => startTask()}
+      >
+        Yes
+      </Button>
+      </Grid>
+
+    )
   }
 
   //const render = () => {
@@ -53,21 +96,21 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
           <Markdown source={text} escapeHtml={false} />
         </Grid>
 
-        {trialPeriod === 0 &&
+        {step === 'stimuli' &&
           <Grid item container direction="row">
             <Grid item>
-              <Image onClick={() => select(0)} src={`/public/${choices[0].value}.png`}/>
+              <Image onClick={() => handleResponse(0)} src={`/public/${choices[0].value}.png`}/>
             </Grid>
             <Grid item><Divider /></Grid>
             <Grid item>
-              <Image onClick={() =>select(1)} src={`/public/${choices[1].value}.png`}/>
+              <Image onClick={() => handleResponse(1)} src={`/public/${choices[1].value}.png`}/>
             </Grid>
           </Grid>
         }
-        {trialPeriod === 1 && 
+        {step === 'feedback' && 
           <Grid item>Feedback</Grid>
         }
-        {trialPeriod === 2 && 
+        {step === 'fixation' && 
           <Grid item>Fixation</Grid>
         }
 
