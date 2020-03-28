@@ -3,6 +3,14 @@ import React, {useState, useEffect, Fragment} from 'react';
 
 import { Button, Grid, Typography, Divider} from '@material-ui/core';
 
+import { 
+  Star, 
+  RadioButtonUnchecked as Circle, 
+  Add,
+  Check as Correct,
+  Clear as Incorrect
+} from '@material-ui/icons';
+
 import Image from 'material-ui-image';
 
 import Markdown from 'react-markdown';
@@ -17,6 +25,7 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   const [responses, setResponses] = useState({startTimestamp: null, trial: []});
   const [trial, setTrial] = useState(null);
   const [step, setStep] = useState(null); // null, stimuli, fixation, feedback
+  const [correct, setCorrect] = useState(null);
   const [clock, setClock] = useState(null);
 
   useEffect(() => {
@@ -26,7 +35,7 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (finished) {
-      clearInterval(clock);
+      clearTimeout(clock);
       onFinish();
       onStore(responses);
       showStudyNav(true);
@@ -36,27 +45,31 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   const fixation = () => {
     setStep('fixation');
+    clearTimeout(clock);
     setClock(
-      setInterval(() => {
+      setTimeout(() => {
         stimuli();
       }, fixationDuration)
     );
   }
   const stimuli = () => {
     setStep('stimuli');
+    clearTimeout(clock);
+    setCorrect(false);
     setClock(
-      setInterval(() => {
+      setTimeout(() => {
         feedback();
-      }, feedbackDuration)
+      }, stimuliDuration)
     );
   }
 
   const feedback = () => {
     setStep('feedback');
+    clearTimeout(clock);
     setClock(
-      setInterval(() => {
+      setTimeout(() => {
         fixation();
-      }, 1000)
+      }, feedbackDuration)
     );
   }
 
@@ -65,10 +78,8 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     fixation();
   }
 
-
-
   const handleResponse = (choice) => {
-    clearInterval(clock);
+    clearTimeout(clock);
     //store response
     setTrial(trial+1);
     fixation();
@@ -91,30 +102,32 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   //const render = () => {
     return (
-      <Grid container direction='column' spacing={2} justify="space-between" alignItems='stretch'>
-        <Grid item>
-          <Markdown source={text} escapeHtml={false} />
+        <Grid item container direction='column' spacing={2} justify="space-between" alignItems='stretch'>
+          <Grid item>
+            <Markdown source={text} escapeHtml={false} />
+          </Grid>
+
+          {step === 'stimuli' &&
+            <Grid item container direction="row" justify="space-around" alignItems="center">
+                <Star fontSize='large' onClick={() => handleResponse(0)} className='star gng-icon' />
+                <Divider orientation="vertical" flexItem />
+                <Circle fontSize='large' onClick={() => handleResponse(0)} className='circle gng-icon' />
+            </Grid>
+          }
+          {step === 'feedback' && 
+            <Grid item container direction='row' justify='space-around' alignItems='center'>
+              {correct && <Correct fontSize='large' className='correct gng-icon' />}
+              {!correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
+            </Grid>
+          }
+          {step === 'fixation' && 
+            <Grid item container direction="row" justify="space-around" alignItems="center">
+              <Add fontSize='large' className='fixation gng-icon' />
+            </Grid>
+          }
+
         </Grid>
 
-        {step === 'stimuli' &&
-          <Grid item container direction="row">
-            <Grid item>
-              <Image onClick={() => handleResponse(0)} src={`/public/${choices[0].value}.png`}/>
-            </Grid>
-            <Grid item><Divider /></Grid>
-            <Grid item>
-              <Image onClick={() => handleResponse(1)} src={`/public/${choices[1].value}.png`}/>
-            </Grid>
-          </Grid>
-        }
-        {step === 'feedback' && 
-          <Grid item>Feedback</Grid>
-        }
-        {step === 'fixation' && 
-          <Grid item>Fixation</Grid>
-        }
-
-      </Grid>
     );
   //} //.render()
 
