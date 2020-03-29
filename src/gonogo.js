@@ -65,7 +65,9 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   useEffect(() => {
     if (trial>trials.total)
+    setTimeout(() => {
       setFinished(true);
+    }, feedbackDuration)
   }, [trial])
   
 
@@ -106,6 +108,7 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   const handleResponse = (choice) => {
     clearTimeout(clock);
+    setCorrect((choice===choices.go && !stimuli[trial-1].endsWith('nogo')) || (choice==='empty' && stimuli[trial-1].endsWith('nogo')))
     //store response
     setTrial(trial+1);
     showFeedback();
@@ -114,9 +117,9 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   const renderStimulus = (stimulus) => {
     return (
       <Fragment>
-      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse(0)} className='star gng-icon' />}
-      {stimulus==='empty' && <div onClick={() => handleResponse(0)} className='empty gng-icon'> </div>}
-      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse(0)} className='circle gng-icon' />}
+      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='star gng-icon' />}
+      {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='empty gng-icon'> </div>}
+      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='circle gng-icon' />}
       </Fragment>
     );
   }
