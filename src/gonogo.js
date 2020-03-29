@@ -15,6 +15,9 @@ import Image from 'material-ui-image';
 
 import Markdown from 'react-markdown';
 
+import {sample, shuffle} from './utils/random';
+
+
 import './gonogo.css';
 
 export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
@@ -27,10 +30,28 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   const [step, setStep] = useState(null); // null, stimuli, fixation, feedback
   const [correct, setCorrect] = useState(null);
   const [clock, setClock] = useState(null);
+  const [stimuli,setStimuli] = useState(null);
 
   useEffect(() => {
     showStudyNav(false);
   });
+
+  useEffect(() => {
+    if (stimuli===null) {
+      let stim = [...Array(trials.total).keys()].map((i,t) => {
+        if (i<trials.leftGo)
+          return 'left-go'
+        if (i<trials.go)
+          return 'right-go'
+        if (i<trials.go + (trials.left - trials.leftGo))
+          return 'left-nogo'
+        return 'right-nogo'
+      }) 
+      stim = shuffle(stim)
+      setStimuli(stim)
+      console.log(stim)
+    }
+  },[stimuli]);
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
@@ -41,60 +62,98 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
       showStudyNav(true);
     }
   }, [finished]);
+
+  useEffect(() => {
+    if (trial>trials.total)
+      setFinished(true);
+  }, [trial])
   
 
-  const fixation = () => {
+  const showFixation = () => {
     setStep('fixation');
     clearTimeout(clock);
     setClock(
       setTimeout(() => {
-        stimuli();
+        showStimuli();
       }, fixationDuration)
     );
   }
-  const stimuli = () => {
+  const showStimuli = () => {
     setStep('stimuli');
     clearTimeout(clock);
     setCorrect(false);
     setClock(
       setTimeout(() => {
-        feedback();
+        showFeedback();
       }, stimuliDuration)
     );
   }
 
-  const feedback = () => {
+  const showFeedback = () => {
     setStep('feedback');
     clearTimeout(clock);
     setClock(
       setTimeout(() => {
-        fixation();
+        showFixation();
       }, feedbackDuration)
     );
   }
 
   const startTask = () => {
     setTrial(1);
-    fixation();
+    showFixation();
   }
 
   const handleResponse = (choice) => {
     clearTimeout(clock);
     //store response
     setTrial(trial+1);
-    fixation();
+    showFeedback();
+  }
+
+  const renderStimulus = (stimulus) => {
+    return (
+      <Fragment>
+      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse(0)} className='star gng-icon' />}
+      {stimulus==='empty' && <div onClick={() => handleResponse(0)} className='empty gng-icon'> </div>}
+      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse(0)} className='circle gng-icon' />}
+      </Fragment>
+    );
+  }
+
+  const renderStimuli = (trialType) => {
+    return (
+      <Grid item container direction="row" justify="space-around" alignItems="center">
+        {trialType === 'left-go' && renderStimulus(choices.go)}
+        {trialType === 'left-nogo' && renderStimulus(choices.nogo)}
+        {(trialType !== 'left-go' && trialType !== 'left-nogo') && renderStimulus('empty')}
+        <Divider orientation="vertical" flexItem />
+        {trialType === 'right-go' && renderStimulus(choices.go)}
+        {trialType === 'right-nogo' && renderStimulus(choices.nogo)}
+        {(trialType !== 'right-go' && trialType !== 'right-nogo') && renderStimulus('empty')}
+      </Grid>
+    )
+  }
+
+  const renderFeedback = () => {
+    return (
+      <Grid item container direction='row' justify='space-around' alignItems='center'>
+        {correct && <Correct fontSize='large' className='correct gng-icon' />}
+        {!correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
+      </Grid>
+    )
+
   }
 
   // start screen
   if (trial === null) {
     return (
-      <Grid>
-        Are you ready?
-      <Button
-        onClick={() => startTask()}
-      >
-        Yes
-      </Button>
+      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
+        <Grid item><Markdown source="Are you ready?" escapeHtml={false} /></Grid>
+        <Grid item>
+          <Button onClick={() => startTask()}>Yes</Button>
+        </Grid>
+
       </Grid>
 
     )
@@ -102,24 +161,15 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   //const render = () => {
     return (
-        <Grid item container direction='column' spacing={2} justify="space-between" alignItems='stretch'>
+        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
           <Grid item>
             <Markdown source={text} escapeHtml={false} />
           </Grid>
 
-          {step === 'stimuli' &&
-            <Grid item container direction="row" justify="space-around" alignItems="center">
-                <Star fontSize='large' onClick={() => handleResponse(0)} className='star gng-icon' />
-                <Divider orientation="vertical" flexItem />
-                <Circle fontSize='large' onClick={() => handleResponse(0)} className='circle gng-icon' />
-            </Grid>
-          }
-          {step === 'feedback' && 
-            <Grid item container direction='row' justify='space-around' alignItems='center'>
-              {correct && <Correct fontSize='large' className='correct gng-icon' />}
-              {!correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
-            </Grid>
-          }
+          {step === 'stimuli' && renderStimuli(stimuli[trial-1])}
+
+          {step === 'feedback' && renderFeedback()}
+
           {step === 'fixation' && 
             <Grid item container direction="row" justify="space-around" alignItems="center">
               <Add fontSize='large' className='fixation gng-icon' />

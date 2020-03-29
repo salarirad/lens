@@ -20,8 +20,13 @@
 			"type":"gonogo",
 			"text":"Quick, tap/click on the stars. If you see a circle, do not click or tap on the opposite side.",
 			"help":"Press one of the images in less than three seconds.",
-      "trials": 5,
-      "stimuliDuration": 3000,
+      "trials": {
+        "total": 4,
+        "go": 2,
+        "left": 2,
+        "leftGo": 1
+      },
+      "stimuliDuration": 30000,
       "fixationDuration": 1000, 
       "feedbackDuration": 1000,
       "timeoutsBeforeReset": 10,
