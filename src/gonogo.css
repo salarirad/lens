@@ -5,25 +5,25 @@
 }
 
 .correct {
-  color: rgb(15, 134, 15);
+  color: #0f860f;
 }
 
 .incorrect {
-  color: rgb(189, 26, 26);
+  color: #bd1a1a;
 }
 
 .fixation {
-  color: rgb(255, 255, 255);
+  color: #ffffff;
 }
 
 .star {
   cursor: pointer;
-  color: rgb(252, 237, 36)
+  color: #fced24;
 }
 
 .circle {
   cursor: pointer;
-  color: rgb(35, 35, 163)
+  color: #2323a3;
 }
 
 .empty {

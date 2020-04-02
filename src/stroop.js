@@ -53,7 +53,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   }, [finished]);
 
   useEffect(() => {
-    if (trial>trials.total) {
+    if (trial>=trials.length) {
       taskFinishedAt = Date.now(); //timestamp
       setTimeout(() => {
         setFinished(true);
@@ -65,7 +65,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
   const showFixation = () => {
     setStep('fixation');
-    setTrial(trial+1);
+    setTrial(t => t+1);
     clearTimeout(clock);
 
     trialStartedAt = Date.now(); //timestamp
@@ -127,7 +127,6 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
     setResponses(responses)
 
-    setTrial(trial+1);
     showFeedback();
   }
 
@@ -150,7 +149,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
       {choices.map((choice,i) => {
         let [word, color] = choice.split(',')
         return (
-          <Button key={i} style={{color: color}} onClick={() => handleResponse(choice)}>
+          <Button key={i} style={{color: color}} onClick={() => handleResponse(choice)} size="large">
             {word}
           </Button>
         );
