@@ -4,8 +4,6 @@ import React, {useState, useEffect, Fragment} from 'react';
 import { Button, Grid, Typography, Divider} from '@material-ui/core';
 
 import { 
-  Star, 
-  RadioButtonUnchecked as Circle, 
   Add,
   Check as Correct,
   Clear as Incorrect
@@ -15,15 +13,13 @@ import Image from 'material-ui-image';
 
 import Markdown from 'react-markdown';
 
-import {sample, shuffle} from './utils/random';
 
-
-import './gonogo.css';
+import './stroop.css';
 
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let taskStartedAt, taskFinishedAt, trialStartedAt, stimuliAt, respondedAt
 
-export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
+export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
@@ -38,22 +34,6 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   useEffect(() => {
     showStudyNav(false);
   });
-
-  useEffect(() => {
-    if (stimuli===null) {
-      let stim = [...Array(trials.total).keys()].map((i,t) => {
-        if (i<trials.leftGo)
-          return 'left-go'
-        if (i<trials.go)
-          return 'right-go'
-        if (i<trials.go + (trials.left - trials.leftGo))
-          return 'left-nogo'
-        return 'right-nogo'
-      }) 
-      stim = shuffle(stim)
-      setStimuli(stim)
-    }
-  },[stimuli]);
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
@@ -84,11 +64,12 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   
 
   const showFixation = () => {
-
     setStep('fixation');
+    setTrial(trial+1);
+    clearTimeout(clock);
+
     trialStartedAt = Date.now(); //timestamp
 
-    clearTimeout(clock);
     setClock(
       setTimeout(() => {
         showStimuli();
@@ -104,7 +85,6 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     setCorrect(false);
     setClock(
       setTimeout(() => {
-        //TODO store timeout
         showFeedback();
       }, stimuliDuration)
     );
@@ -115,14 +95,13 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     clearTimeout(clock);
     setClock(
       setTimeout(() => {
-        console.log(trial);
         showFixation();
       }, feedbackDuration)
     );
   }
 
   const startTask = () => {
-    setTrial(1);
+    setTrial(0);
     taskStartedAt = Date.now(); //timestamp
     showFixation();
   }
@@ -132,13 +111,12 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
     clearTimeout(clock);
 
-    let crt = (choice===choices.go && !stimuli[trial-1].endsWith('nogo')) || 
-              (choice==='empty' && stimuli[trial-1].endsWith('nogo'))
+    let crt = true //(choice.word === trial[].color)
     setCorrect(crt)
 
     responses.trials.push({
       'trial': trial,
-      'stimuli': stimuli[trial-1],
+      'stimulus': trials[trial-1],
       'choice': choice,
       'correct': crt,
       'respondedAt': respondedAt,
@@ -149,29 +127,34 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
     setResponses(responses)
 
+    setTrial(trial+1);
     showFeedback();
   }
 
   const renderStimulus = (stimulus) => {
+    let [word, color] = stimulus.split(',')
     return (
-      <Fragment>
-      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='star gng-icon' />}
-      {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='empty gng-icon'> </div>}
-      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='circle gng-icon' />}
-      </Fragment>
+      <Grid container item direction='row' justify='space-around' alignItems='center'>
+      <Typography className='stroop-stimulus' variant='h1' style={{color: color}}>
+        {word}
+      </Typography>
+      </Grid>
+
     );
   }
 
-  const renderStimuli = (trialType) => {
+  const renderChoices = (choices) => {
+    
     return (
-      <Grid item container direction="row" justify="space-around" alignItems="center">
-        {trialType === 'left-go' && renderStimulus(choices.go)}
-        {trialType === 'left-nogo' && renderStimulus(choices.nogo)}
-        {(trialType !== 'left-go' && trialType !== 'left-nogo') && renderStimulus('empty')}
-        <Divider orientation="vertical" flexItem />
-        {trialType === 'right-go' && renderStimulus(choices.go)}
-        {trialType === 'right-nogo' && renderStimulus(choices.nogo)}
-        {(trialType !== 'right-go' && trialType !== 'right-nogo') && renderStimulus('empty')}
+      <Grid container item direction='row' justify='space-around' alignItems='center'>
+      {choices.map((choice,i) => {
+        let [word, color] = choice.split(',')
+        return (
+          <Button key={i} style={{color: color}} onClick={() => handleResponse(choice)}>
+            {word}
+          </Button>
+        );
+      })}
       </Grid>
     )
   }
@@ -207,7 +190,8 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
             <Markdown source={text} escapeHtml={false} />
           </Grid>
 
-          {step === 'stimuli' && renderStimuli(stimuli[trial-1])}
+          {step === 'stimuli' && renderStimulus(trials[trial-1].stimulus) }
+          {step === 'stimuli' && renderChoices(trials[trial-1].choices) }
 
           {step === 'feedback' && renderFeedback()}
 

@@ -10,6 +10,7 @@ import Matrix from './matrix';
 import Submission from './submission';
 import BART from './bart';
 import GoNoGo from './gonogo';
+import Stroop from './stroop';
 
 export default function Study(props) {
 
@@ -65,6 +66,8 @@ export default function Study(props) {
         return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
       case 'gonogo': 
         return <GoNoGo onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
+      case 'stroop': 
+        return <Stroop onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
       case 'matrix':
         return <Matrix onNext={storeData} content={view}></Matrix>
       default:
