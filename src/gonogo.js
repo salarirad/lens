@@ -20,12 +20,15 @@ import {sample, shuffle} from './utils/random';
 
 import './gonogo.css';
 
+//FIXME these are realtime variables, so I keep them out of the component's state.
+let taskStartedAt, taskFinishedAt, trialStartedAt, stimuliAt, respondedAt
+
 export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
   const [finished, setFinished] = useState(false);
-  const [responses, setResponses] = useState({startTimestamp: null, trial: []});
+  const [responses, setResponses] = useState({taskStartedAt: null, taskFinishedAt: null, trials: []});
   const [trial, setTrial] = useState(null);
   const [step, setStep] = useState(null); // null, stimuli, fixation, feedback
   const [correct, setCorrect] = useState(null);
@@ -49,7 +52,6 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
       }) 
       stim = shuffle(stim)
       setStimuli(stim)
-      console.log(stim)
     }
   },[stimuli]);
 
@@ -58,21 +60,34 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     if (finished) {
       clearTimeout(clock);
       onFinish();
-      onStore(responses);
+
+      // add timestamps
+      let finalResponses = responses;
+      finalResponses.taskStartedAt = taskStartedAt;
+      finalResponses.taskFinishedAt = taskFinishedAt;
+      finalResponses.taskDuration = taskFinishedAt - taskStartedAt;
+
+      onStore(finalResponses);
       showStudyNav(true);
     }
   }, [finished]);
 
   useEffect(() => {
-    if (trial>trials.total)
-    setTimeout(() => {
-      setFinished(true);
-    }, feedbackDuration)
+    if (trial>trials.total) {
+      taskFinishedAt = Date.now(); //timestamp
+      setTimeout(() => {
+        setFinished(true);
+      }, feedbackDuration);
+    }
+
   }, [trial])
   
 
   const showFixation = () => {
     setStep('fixation');
+
+    trialStartedAt = Date.now(); //timestamp
+
     clearTimeout(clock);
     setClock(
       setTimeout(() => {
@@ -82,6 +97,9 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   }
   const showStimuli = () => {
     setStep('stimuli');
+
+    stimuliAt = Date.now(); //timestamp
+
     clearTimeout(clock);
     setCorrect(false);
     setClock(
@@ -103,13 +121,32 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   const startTask = () => {
     setTrial(1);
+    taskStartedAt = Date.now(); //timestamp
     showFixation();
   }
 
   const handleResponse = (choice) => {
+    respondedAt = Date.now(); //timestamp
+
     clearTimeout(clock);
-    setCorrect((choice===choices.go && !stimuli[trial-1].endsWith('nogo')) || (choice==='empty' && stimuli[trial-1].endsWith('nogo')))
-    //store response
+
+    let crt = (choice===choices.go && !stimuli[trial-1].endsWith('nogo')) || 
+              (choice==='empty' && stimuli[trial-1].endsWith('nogo'))
+    setCorrect(crt)
+
+    responses.trials.push({
+      'trial': trial,
+      'stimuli': stimuli[trial-1],
+      'choice': choice,
+      'correct': crt,
+      'respondedAt': respondedAt,
+      'trialStartedAt': trialStartedAt,
+      'stimuliAt': stimuliAt,
+      'rt': respondedAt - stimuliAt
+    });
+
+    setResponses(responses)
+
     setTrial(trial+1);
     showFeedback();
   }
