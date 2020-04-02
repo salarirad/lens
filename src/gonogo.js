@@ -84,8 +84,9 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   
 
   const showFixation = () => {
-
     setStep('fixation');
+    setTrial(t => t+1);
+
     trialStartedAt = Date.now(); //timestamp
 
     clearTimeout(clock);
@@ -104,7 +105,18 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     setCorrect(false);
     setClock(
       setTimeout(() => {
-        //TODO store timeout
+        setResponses(r => {
+          r.trials.push({
+            'stimuli': stimuli[trial-1],
+            'choice': null,
+            'correct': null,
+            'respondedAt': null,
+            'trialStartedAt': trialStartedAt,
+            'stimuliAt': stimuliAt,
+            'rt': null
+          })
+          return r;
+        });
         showFeedback();
       }, stimuliDuration)
     );
@@ -115,14 +127,13 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     clearTimeout(clock);
     setClock(
       setTimeout(() => {
-        console.log(trial);
         showFixation();
       }, feedbackDuration)
     );
   }
 
   const startTask = () => {
-    setTrial(1);
+    setTrial(0);
     taskStartedAt = Date.now(); //timestamp
     showFixation();
   }
@@ -136,18 +147,20 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
               (choice==='empty' && stimuli[trial-1].endsWith('nogo'))
     setCorrect(crt)
 
-    responses.trials.push({
-      'trial': trial,
-      'stimuli': stimuli[trial-1],
-      'choice': choice,
-      'correct': crt,
-      'respondedAt': respondedAt,
-      'trialStartedAt': trialStartedAt,
-      'stimuliAt': stimuliAt,
-      'rt': respondedAt - stimuliAt
-    });
+    responses.trials.push();
 
-    setResponses(responses)
+    setResponses(r => {
+      r.trials.push({
+        'stimuli': stimuli[trial-1],
+        'choice': choice,
+        'correct': crt,
+        'respondedAt': respondedAt,
+        'trialStartedAt': trialStartedAt,
+        'stimuliAt': stimuliAt,
+        'rt': respondedAt - stimuliAt
+      })
+      return r;
+    });
 
     showFeedback();
   }
