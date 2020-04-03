@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react';
 
 
-import { Button, Grid, Typography, Divider} from '@material-ui/core';
+import { Box, Button, Grid, Typography, Divider} from '@material-ui/core';
 
 import { 
   Add,
@@ -133,7 +133,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   const renderStimulus = (stimulus) => {
     let [word, color] = stimulus.split(',')
     return (
-      <Grid container item direction='row' justify='space-around' alignItems='center'>
+      <Grid container item direction='column' alignItems='center' justify='flex-start'>
       <Typography className='stroop-stimulus' variant='h1' style={{color: color}}>
         {word}
       </Typography>
@@ -145,13 +145,15 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   const renderChoices = (choices) => {
     
     return (
-      <Grid container item direction='row' justify='space-around' alignItems='center'>
+      <Grid item container direction='row' justify='space-around' alignItems='stretch'>
       {choices.map((choice,i) => {
         let [word, color] = choice.split(',')
         return (
-          <Button key={i} style={{color: color}} onClick={() => handleResponse(choice)} size="large">
+          <Box width='49%'>
+          <Button key={i} style={{color: color}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
             {word}
           </Button>
+          </Box>
         );
       })}
       </Grid>
@@ -171,20 +173,19 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   // start screen
   if (trial === null) {
     return (
-      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
+      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start'>
         <Grid item><Markdown source="Are you ready?" escapeHtml={false} /></Grid>
         <Grid item>
           <Button onClick={() => startTask()}>Yes</Button>
         </Grid>
 
       </Grid>
-
     )
   }
 
   //const render = () => {
     return (
-        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
+        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container stroop-board'>
           <Grid item>
             <Markdown source={text} escapeHtml={false} />
           </Grid>
