@@ -2,7 +2,9 @@ import React, {useState, useEffect} from 'react';
 
 import {useParams} from 'react-router-dom';
 
-import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper, createMuiTheme, responsiveFontSizes} from '@material-ui/core';
+import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper} from '@material-ui/core';
+
+import theme from './utils/theme';
 
 import Navigation from './navigation';
 import Text from './text';
@@ -29,8 +31,6 @@ export default function Study(props) {
   const [storingData, setStoringData] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showNav, setShowNav] = useState(true);
-
-  let theme = responsiveFontSizes(createMuiTheme());
 
   const storeData = (data) => {
     console.log('study.storeData');
