@@ -21,27 +21,35 @@ import { useTranslation } from 'react-i18next';
 import './gonogo.css';
 
 //FIXME these are realtime variables, so I keep them out of the component's state.
-let taskStartedAt, taskFinishedAt, trialStartedAt, stimuliAt, respondedAt
+let clock
 
 export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   const {t} = useTranslation();
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
-  const [finished, setFinished] = useState(false);
-  const [responses, setResponses] = useState({taskStartedAt: null, taskFinishedAt: null, trials: []});
-  const [trial, setTrial] = useState(null);
-  const [step, setStep] = useState(null); // null, stimuli, fixation, feedback
-  const [correct, setCorrect] = useState(null);
-  const [clock, setClock] = useState(null);
-  const [stimuli,setStimuli] = useState(null);
+  const [state, setState] = useState({
+    finished: false,
+    trialResponses: [],
+    taskStartedAt: null,
+    taskFinishedAt: null,
+    taskDuration: null,
+    step: null,
+    correct: null,
+    stimuli: null,
+    trialStartedAt: null,
+    respondedAt: null,
+    trial: null
+  })
 
   useEffect(() => {
     showStudyNav(false);
   });
 
   useEffect(() => {
-    if (stimuli===null) {
+
+    // generate stimuli stream
+    if (state.stimuli===null) {
       let stim = [...Array(trials.total).keys()].map((i,t) => {
         if (i<trials.leftGo)
           return 'left-go'
@@ -51,119 +59,93 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
           return 'left-nogo'
         return 'right-nogo'
       }) 
-      stim = shuffle(stim)
-      setStimuli(stim)
+      setState({...state, stimuli: shuffle(stim)});
     }
-  },[stimuli]);
 
-  // when finished, store responses and proceed to the next view
-  useEffect(() => {
-    if (finished) {
+
+    if (state.step === 'fixation') {
+      clearTimeout(clock);  
+      clock = setTimeout(() => {
+          setState({...state, trial: state.trial+1, trialStartedAt: Date.now(), step: 'stimuli'});
+        }, fixationDuration);
+    }
+
+    if (state.step === 'feedback') {
+      clearTimeout(clock);
+      clock = setTimeout(() => {
+          setState({...state, step: 'fixation'})
+        }, feedbackDuration)
+    }
+
+    if (state.step === 'stimuli') {
+      clearTimeout(clock);
+
+      clock = setTimeout(() => {
+        setState({...state,
+          trialResponses: [...state.trialResponses, {
+            'trial': state.trial,
+            'stimuli': state.stimuli[state.trial-1],
+            'choice': null,
+            'correct': null,
+            'respondedAt': null,
+            'trialStartedAt': state.trialStartedAt,
+            'rt': null
+          }],
+          correct: false,
+          step: 'feedback'
+        });
+      }, stimuliDuration)
+
+    }
+
+
+    if (state.trial>trials.total) {
+      setState({...state, finished: true, taskFinishedAt: Date.now()})
+    }
+
+    // finished
+    if (state.finished) {
       clearTimeout(clock);
       onFinish();
 
       // add timestamps
-      let finalResponses = responses;
-      finalResponses.taskStartedAt = taskStartedAt;
-      finalResponses.taskFinishedAt = taskFinishedAt;
-      finalResponses.taskDuration = taskFinishedAt - taskStartedAt;
-
-      onStore(finalResponses);
+      let responses = {trials: state.trialResponses};
+      responses.taskStartedAt = state.taskStartedAt;
+      responses.taskFinishedAt = state.taskFinishedAt;
+      responses.taskDuration = state.taskFinishedAt - state.taskStartedAt;
+      onStore(responses);
       showStudyNav(true);
     }
-  }, [finished]);
-
-  useEffect(() => {
-    if (trial>trials.total) {
-      taskFinishedAt = Date.now(); //timestamp
-      setTimeout(() => {
-        setFinished(true);
-      }, feedbackDuration);
-    }
-
-  }, [trial])
-  
-
-  const showFixation = () => {
-    setStep('fixation');
-    setTrial(t => t+1);
-
-    trialStartedAt = Date.now(); //timestamp
-
-    clearTimeout(clock);
-    setClock(
-      setTimeout(() => {
-        showStimuli();
-      }, fixationDuration)
-    );
-  }
-  const showStimuli = () => {
-    setStep('stimuli');
-
-    stimuliAt = Date.now(); //timestamp
-
-    clearTimeout(clock);
-    setCorrect(false);
-    setClock(
-      setTimeout(() => {
-        setResponses(r => {
-          r.trials.push({
-            'stimuli': stimuli[trial-1],
-            'choice': null,
-            'correct': null,
-            'respondedAt': null,
-            'trialStartedAt': trialStartedAt,
-            'stimuliAt': stimuliAt,
-            'rt': null
-          })
-          return r;
-        });
-        showFeedback();
-      }, stimuliDuration)
-    );
-  }
-
-  const showFeedback = () => {
-    setStep('feedback');
-    clearTimeout(clock);
-    setClock(
-      setTimeout(() => {
-        showFixation();
-      }, feedbackDuration)
-    );
-  }
+    //return () => {showStudyNav(true)}
+  },[state]);
 
   const startTask = () => {
-    setTrial(0);
-    taskStartedAt = Date.now(); //timestamp
-    showFixation();
+    setState({...state, trial: 0, step: 'fixation', taskStartedAt: Date.now()})
   }
 
   const handleResponse = (choice) => {
-    respondedAt = Date.now(); //timestamp
+    const respondedAt = Date.now(); //timestamp
 
     clearTimeout(clock);
 
-    let crt = (choice===choices.go && !stimuli[trial-1].endsWith('nogo')) || 
-              (choice==='empty' && stimuli[trial-1].endsWith('nogo'))
-    setCorrect(crt)
+    const _correct = (choice===choices.go && !state.stimuli[state.trial-1].endsWith('nogo')) || 
+              (choice==='empty' && state.stimuli[state.trial-1].endsWith('nogo'))
 
-    responses.trials.push();
-
-    setResponses(r => {
-      r.trials.push({
-        'stimuli': stimuli[trial-1],
+    setState({
+      ...state,
+      correct: _correct,
+      respondedAt: respondedAt,
+      trialResponses: [...state.trialResponses, {
+        'trial': state.trial,
+        'stimuli': state.stimuli[state.trial-1],
         'choice': choice,
-        'correct': crt,
+        'correct': _correct,
         'respondedAt': respondedAt,
-        'trialStartedAt': trialStartedAt,
-        'stimuliAt': stimuliAt,
-        'rt': respondedAt - stimuliAt
-      })
-      return r;
-    });
-
-    showFeedback();
+        'trialStartedAt': state.trialStartedAt,
+        'rt': respondedAt - state.trialStartedAt
+      }],
+      step: 'feedback'
+    })
   }
 
   const renderStimulus = (stimulus) => {
@@ -193,15 +175,15 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   const renderFeedback = () => {
     return (
       <Grid item container direction='row' justify='space-around' alignItems='center'>
-        {correct && <Correct fontSize='large' className='correct gng-icon' />}
-        {!correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
+        {state.correct && <Correct fontSize='large' className='correct gng-icon' />}
+        {!state.correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
       </Grid>
     )
 
   }
 
   // start screen
-  if (trial === null) {
+  if (state.trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('gonogo.ready_question')} escapeHtml={false} /></Grid>
@@ -221,11 +203,11 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
             <Markdown source={t(text)} escapeHtml={false} />
           </Grid>
 
-          {step === 'stimuli' && renderStimuli(stimuli[trial-1])}
+          {state.step === 'stimuli' && renderStimuli(state.stimuli[state.trial-1])}
 
-          {step === 'feedback' && renderFeedback()}
+          {state.step === 'feedback' && renderFeedback()}
 
-          {step === 'fixation' && 
+          {state.step === 'fixation' && 
             <Grid item container direction="row" justify="space-around" alignItems="center">
               <Add fontSize='large' className='fixation gng-icon' />
             </Grid>
