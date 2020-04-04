@@ -44,6 +44,7 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   useEffect(() => {
     showStudyNav(false);
+    return () => showStudyNav(true);
   });
 
   useEffect(() => {
@@ -116,7 +117,6 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
       onStore(responses);
       showStudyNav(true);
     }
-    //return () => {showStudyNav(true)}
   },[state]);
 
   const startTask = () => {
