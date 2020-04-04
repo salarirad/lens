@@ -9,6 +9,8 @@ import {Grid, Paper, ThemeProvider, CssBaseline, Container} from '@material-ui/c
 
 import Markdown from 'react-markdown';
 
+import {languages} from './utils/i18n';
+
 import './index.css'
 
 export default function LanguageSelector(props) {
@@ -31,8 +33,11 @@ export default function LanguageSelector(props) {
           <Paper className='languages-container'>
 
           <Markdown source={t('language_selector.text')} escapeHtml={false} />
-          <Link to={`/${studyId}/en`}>English</Link><br />
-          <Link to={`/${studyId}/fa`}>Farsi</Link>
+          <Grid container direction='column'>
+          {Object.entries(languages).map(([key, val]) => {
+            return <Grid item><Link to={`/${studyId}/${key}`}>{val}</Link></Grid>
+          })}
+          </Grid>
           </Paper>
         </Grid>
       </Container>
