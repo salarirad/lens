@@ -10,7 +10,7 @@
       "id": "email",
       "type": "text",
       "instruction": false,
-      "text": "${questions.email}",
+      "text": "questions.email",
       "help": "Example: support@cut.social",
       "placeholder": "Email",
       "pattern": "*@*.*"

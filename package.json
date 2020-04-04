@@ -8,9 +8,11 @@
     "@material-ui/icons": "4.x",
     "gh-pages": "2.x",
     "i18next": "^19.3.4",
+    "i18next-xhr-backend": "^3.2.2",
     "material-ui-image": "^3.2.3",
     "react": "16.13.x",
     "react-dom": "16.13.x",
+    "react-i18next": "^11.3.4",
     "react-markdown": "^4.3.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.x"
