@@ -10,10 +10,6 @@ import './bart.css';
 
 export default function BART({content, onStore, onFinish, showStudyNav}) {
   
-  useEffect(() => {
-    showStudyNav(false);
-  });
-
   const { t } = useTranslation();
   const {reward, maxPumps, initialPumps, trials} = content;
 
@@ -26,12 +22,16 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     dialogIsOpen: false
   });
 
+  useEffect(() => {
+    showStudyNav(false);
+    return () => {showStudyNav(true);}
+  });
+
   // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (state.finished && !state.dialogIsOpen) {
       onFinish();
       onStore(state.responses);
-      showStudyNav(true);
     }
   }, [state]);
 

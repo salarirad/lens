@@ -33,6 +33,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
   useEffect(() => {
     showStudyNav(false);
+    return () => {showStudyNav(true)}
   });
 
   // when finished, store responses and proceed to the next view
@@ -89,7 +90,6 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
       finalResponses.taskDuration = state.taskFinishedAt - state.taskStartedAt;
 
       onStore(finalResponses);
-      showStudyNav(true);
     }
 
     if (state.trial>=trials.length) {
