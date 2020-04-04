@@ -6,3 +6,7 @@
   min-height: 20vh;
   flex-grow: 1;
 }
+
+.fixation {
+  color: #b3b3b3;
+}

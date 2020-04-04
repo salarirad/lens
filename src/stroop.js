@@ -6,7 +6,7 @@ import { Box, Button, Grid, Typography, Divider} from '@material-ui/core';
 import { 
   Add,
   Check as Correct,
-  Clear as Incorrect
+  Clear as Incorrect,
 } from '@material-ui/icons';
 
 import Image from 'material-ui-image';
@@ -17,19 +17,19 @@ import Markdown from 'react-markdown';
 import './stroop.css';
 
 //FIXME these are realtime variables, so I keep them out of the component's state.
-let taskStartedAt, taskFinishedAt, trialStartedAt, stimuliAt, respondedAt
+let clock
 
 export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
-  const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
+  const {text, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
-  const [finished, setFinished] = useState(false);
-  const [responses, setResponses] = useState({taskStartedAt: null, taskFinishedAt: null, trials: []});
-  const [trial, setTrial] = useState(null);
-  const [step, setStep] = useState(null); // null, stimuli, fixation, feedback
-  const [correct, setCorrect] = useState(null);
-  const [clock, setClock] = useState(null);
-  const [stimuli,setStimuli] = useState(null);
+  const [state, setState] = useState({
+    trialResponses: [],
+    finished: false,
+    trial: null,
+    step: null,
+    correct: null
+  })
 
   useEffect(() => {
     showStudyNav(false);
@@ -37,97 +37,95 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
-    if (finished) {
+
+    if (state.step==='fixation') {
+      console.log('stroop: fixation');
+      clock = setTimeout(() => {
+        setState({
+          ...state,
+          step: 'stimulus',
+          trial: state.trial+1, 
+          trialStartedAt: Date.now()
+        });
+      }, fixationDuration)
+      //return clearTimeout(clock);
+
+    } else if (state.step === 'stimulus') {
+      console.log('stroop: stimulus');
       clearTimeout(clock);
+      clock = setTimeout(() => {
+        setState({
+          ...state,
+          step: 'feedback',
+          trialResponses: [...state.trialResponses, {
+            ...trials[state.trial-1], 
+            trial: state.trial,
+            choice: null,
+            correct: null,
+            respondedAt: null,
+            trialStartedAt: state.trialStartedAt,
+            rt: null}
+          ]
+        });
+      }, stimulusDuration);
+    } else if (state.step === 'feedback') {
+      clearTimeout(clock);
+      clock = setTimeout(() => {
+        setState({
+          ...state,
+          step: 'fixation',
+        });
+      }, feedbackDuration);
+    }
+
+    if (state.finished) {
+      clearTimeout(state.clock);
       onFinish();
 
       // add timestamps
-      let finalResponses = responses;
-      finalResponses.taskStartedAt = taskStartedAt;
-      finalResponses.taskFinishedAt = taskFinishedAt;
-      finalResponses.taskDuration = taskFinishedAt - taskStartedAt;
+      let finalResponses = {trials:state.trialResponses};
+      finalResponses.taskStartedAt = state.taskStartedAt;
+      finalResponses.taskFinishedAt = state.taskFinishedAt;
+      finalResponses.taskDuration = state.taskFinishedAt - state.taskStartedAt;
 
       onStore(finalResponses);
       showStudyNav(true);
     }
-  }, [finished]);
 
-  useEffect(() => {
-    if (trial>=trials.length) {
-      taskFinishedAt = Date.now(); //timestamp
-      setTimeout(() => {
-        setFinished(true);
-      }, feedbackDuration);
+    if (state.trial>=trials.length) {
+      setState({...state, taskFinishedAt: Date.now(), finished: true})
     }
 
-  }, [trial])
-  
-
-  const showFixation = () => {
-    setStep('fixation');
-    setTrial(t => t+1);
-    clearTimeout(clock);
-
-    trialStartedAt = Date.now(); //timestamp
-
-    setClock(
-      setTimeout(() => {
-        showStimuli();
-      }, fixationDuration)
-    );
-  }
-  const showStimuli = () => {
-    setStep('stimuli');
-
-    stimuliAt = Date.now(); //timestamp
-
-    clearTimeout(clock);
-    setCorrect(false);
-    setClock(
-      setTimeout(() => {
-        showFeedback();
-      }, stimuliDuration)
-    );
-  }
-
-  const showFeedback = () => {
-    setStep('feedback');
-    clearTimeout(clock);
-    setClock(
-      setTimeout(() => {
-        showFixation();
-      }, feedbackDuration)
-    );
-  }
+  }, [state]);
 
   const startTask = () => {
-    setTrial(0);
-    taskStartedAt = Date.now(); //timestamp
-    showFixation();
+    setState({
+      ...state,
+      trial:0,
+      step:'fixation', 
+      taskStartedAt: Date.now() //timestamp
+    });
   }
 
   const handleResponse = (choice) => {
-    respondedAt = Date.now(); //timestamp
+    let respondedAt = Date.now(); //timestamp
+    let correct = true //(choice.word === trial[].color)
 
     clearTimeout(clock);
 
-    let crt = true //(choice.word === trial[].color)
-    setCorrect(crt)
-
-    responses.trials.push({
-      'trial': trial,
-      'stimulus': trials[trial-1],
-      'choice': choice,
-      'correct': crt,
-      'respondedAt': respondedAt,
-      'trialStartedAt': trialStartedAt,
-      'stimuliAt': stimuliAt,
-      'rt': respondedAt - stimuliAt
-    });
-
-    setResponses(responses)
-
-    showFeedback();
+    setState({
+      ...state,
+      step: 'feedback',
+      trialResponses: [...state.trialResponses,{
+        ...trials[state.trial-1],
+        trial: state.trial,
+        choice: choice,
+        correct: correct,
+        respondedAt: respondedAt,
+        trialStartedAt: state.trialStartedAt,
+        rt: respondedAt - state.trialStartedAt
+      }]
+    })
   }
 
   const renderStimulus = (stimulus) => {
@@ -149,8 +147,8 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
       {choices.map((choice,i) => {
         let [word, color] = choice.split(',')
         return (
-          <Box width='49%'>
-          <Button key={i} style={{color: color}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
+          <Box width='49%' key={i} >
+          <Button style={{color: color}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
             {word}
           </Button>
           </Box>
@@ -161,6 +159,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   }
 
   const renderFeedback = () => {
+    let {correct} = state;
     return (
       <Grid item container direction='row' justify='space-around' alignItems='center'>
         {correct && <Correct fontSize='large' className='correct gng-icon' />}
@@ -171,7 +170,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   }
 
   // start screen
-  if (trial === null) {
+  if (state.trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start'>
         <Grid item><Markdown source="Are you ready?" escapeHtml={false} /></Grid>
@@ -190,12 +189,12 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
             <Markdown source={text} escapeHtml={false} />
           </Grid>
 
-          {step === 'stimuli' && renderStimulus(trials[trial-1].stimulus) }
-          {step === 'stimuli' && renderChoices(trials[trial-1].choices) }
+          {state.step === 'stimulus' && renderStimulus(trials[state.trial-1].stimulus) }
+          {state.step === 'stimulus' && renderChoices(trials[state.trial-1].choices) }
 
-          {step === 'feedback' && renderFeedback()}
+          {state.step === 'feedback' && renderFeedback()}
 
-          {step === 'fixation' && 
+          {state.step === 'fixation' && 
             <Grid item container direction="row" justify="space-around" alignItems="center">
               <Add fontSize='large' className='fixation gng-icon' />
             </Grid>
