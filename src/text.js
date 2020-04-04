@@ -1,31 +1,41 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useRef, useEffect, useState, Fragment } from 'react';
 import { Typography, Divider, Box, TextField, Grid } from '@material-ui/core';
 
 import { useTranslation } from 'react-i18next';
 
 import Markdown from 'react-markdown';
 
-export default function Text(props) {
+export default function Text({content, onStore}) {
+  //props: title, text, placeholder, help, required, pattern, instruction
 
   const { t } = useTranslation();
 
-  const [data] = useState({value: null});
-  //props: title, text, placeholder, help, required, pattern, instruction
+  const response = useRef(null);
+  const [state, setState] = useState({
+    response: response.current
+  });
 
   //to store data on pressing next
   useEffect(() => {
     // store data as a cleanup side-effect (on WillUnmount)
-    return () => { props.onNext(data) };
-  },[data, props]);
+    return () => { onStore(response.current) };
+  },[]);
+
+
+  const handleChange = (e) => {
+    response.current = e.target.value
+    setState({...state, response: response.current});
+  }
+
 
   return (
     <Grid container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
       <Grid item>
-        <Markdown source={t(props.content.text)} escapeHtml={false} />
+        <Markdown source={t(content.text)} escapeHtml={false} />
       </Grid>
-      {!(props.content.instruction || false) &&
+      {!(content.instruction || false) &&
         <Grid item>
-          <TextField label={t(props.content.placeholder)} variant="filled" fullWidth />
+          <TextField label={t(content.placeholder)} variant="filled" fullWidth onChange={handleChange} />
         </Grid>
       }
     </Grid>

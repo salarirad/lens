@@ -33,7 +33,7 @@ export default function Study(props) {
   const [showNav, setShowNav] = useState(true);
 
   const storeData = (data) => {
-    console.log('study.storeData');
+    console.log('study.storeData', data);
     setResponses(responses.concat([data]));
     setStoringData(false);
   }
@@ -63,7 +63,7 @@ export default function Study(props) {
 
     switch(view?.type) {
       case 'text': 
-        return <Text onNext={storeData} content={view}>{props.children}</Text>;
+        return <Text onStore={storeData} content={view}>{props.children}</Text>;
       case 'bart': 
         return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
       case 'gonogo': 
@@ -71,7 +71,7 @@ export default function Study(props) {
       case 'stroop': 
         return <Stroop onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
       case 'matrix':
-        return <Matrix onNext={storeData} content={view}></Matrix>
+        return <Matrix onStore={storeData} content={view}></Matrix>
       default:
         return <div>Not Implemented!</div>;
     }
