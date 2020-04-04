@@ -16,7 +16,7 @@ import Image from 'material-ui-image';
 import Markdown from 'react-markdown';
 
 import {sample, shuffle} from './utils/random';
-
+import { useTranslation } from 'react-i18next';
 
 import './gonogo.css';
 
@@ -25,6 +25,7 @@ let taskStartedAt, taskFinishedAt, trialStartedAt, stimuliAt, respondedAt
 
 export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
+  const {t} = useTranslation();
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
   const [finished, setFinished] = useState(false);
@@ -203,9 +204,9 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
   if (trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
-        <Grid item><Markdown source="Are you ready?" escapeHtml={false} /></Grid>
+        <Grid item><Markdown source={t('gonogo.ready_question')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button onClick={() => startTask()}>Yes</Button>
+          <Button onClick={() => startTask()}>{t('yes')}</Button>
         </Grid>
 
       </Grid>
@@ -217,7 +218,7 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     return (
         <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
           <Grid item>
-            <Markdown source={text} escapeHtml={false} />
+            <Markdown source={t(text)} escapeHtml={false} />
           </Grid>
 
           {step === 'stimuli' && renderStimuli(stimuli[trial-1])}

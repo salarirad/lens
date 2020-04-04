@@ -1,11 +1,13 @@
 {
-  "translation": {
-    "next": "Next",
-    "finish": "Finish",
-    "errors.required": "You must respond to proceed.",
-    "BART.cashIn": "Cash",
-    "BART.pump": "Pump",
-    "BART.trialCounter": "Trial ${trial} of ${trials}",
-    "questions.email": "What is your email?"
-  }
+  "loading": "Loading...",
+  "next": "Next",
+  "yes": "Yes",
+  "finish": "Finish",
+  "errors.required": "You must respond to proceed.",
+  "bart.cashIn": "Cash",
+  "bart.pump": "Pump",
+  "gonogo.ready_question": "Are you ready?",
+  "bart.trialCounter": "Trial {{trial}} of {{trials}}",
+  "ramadan2020.questions.email": "What is your email?",
+  "ramadan2020.questions.email_placeholder": "Email"
 }

@@ -1,0 +1,13 @@
+{
+  "loading": "در حال بارگزاری",
+  "next": "بعدی",
+  "yes": "بله",
+  "finish": "پایان",
+  "errors.required": "برای ادامه، پاسخ دهید.",
+  "bart.cashIn": "نقد",
+  "bart.pump": "باد کن",
+  "gonogo.ready_question": "آماده‌ای؟",
+  "bart.trialCounter": "Trial {{trial}} of {{trials}}",
+  "ramadan2020.questions.email": "What is your email?",
+  "ramadan2020.questions.email_placeholder": "Email"
+}

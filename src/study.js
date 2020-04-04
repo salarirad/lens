@@ -11,10 +11,12 @@ import Submission from './submission';
 import BART from './bart';
 import GoNoGo from './gonogo';
 import Stroop from './stroop';
+import { useTranslation } from 'react-i18next';
 
 export default function Study(props) {
 
-  let {studyId} = useParams();
+  const {t, i18n} = useTranslation();
+  let {lang, studyId} = useParams();
 
   const [subjectId, setSubjectId] = useState(0);
   const [session, setSession] = useState({});
@@ -85,6 +87,7 @@ export default function Study(props) {
 
   //load experiment
   useEffect(() => {
+    i18n.changeLanguage(lang);
     fetch(process.env.PUBLIC_URL + `/experiments/${studyId}.json`)
       .then(resp => resp.json())
       .then(experiment => startExperiment(experiment));
@@ -94,9 +97,9 @@ export default function Study(props) {
   return (
 
     <ThemeProvider theme={theme}>
-    <CssBaseline />
+      <CssBaseline />
 
-    {showProgress && <LinearProgress variant="determinate" value={progress} />}
+      {showProgress && <LinearProgress variant="determinate" value={progress} />}
 
     <Container maxWidth="sm" className='study-container'>
       <Grid container
@@ -107,7 +110,7 @@ export default function Study(props) {
       >
         <Grid item>
           <Paper className='view-container'>
-          {!finished && storingData && <div>loading...</div>}
+          {!finished && storingData && <div>{t('loading')}</div>}
           {!storingData && renderView(view)}
           </Paper>
         </Grid>

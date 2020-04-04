@@ -25,7 +25,7 @@ export default function Text(props) {
       </Grid>
       {!(props.content.instruction || false) &&
         <Grid item>
-          <TextField label={props.content.placeholder} variant="filled" fullWidth />
+          <TextField label={t(props.content.placeholder)} variant="filled" fullWidth />
         </Grid>
       }
     </Grid>
