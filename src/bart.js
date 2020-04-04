@@ -4,6 +4,8 @@ import {Button, Fab, Grid, Typography, Divider} from '@material-ui/core';
 
 import {Dialog, DialogActions, DialogTitle, DialogContentText, DialogContent} from '@material-ui/core';
 
+import { useTranslation } from 'react-i18next';
+
 import './bart.css';
 
 export default function BART({content, onStore, onFinish, showStudyNav}) {
@@ -12,6 +14,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     showStudyNav(false);
   });
 
+  const { t } = useTranslation();
   const {reward, maxPumps, initialPumps, trials} = content;
 
   const [pumps, setPumps] = useState(0);
@@ -94,16 +97,16 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       disableEscapeKeyDown
       aria-labelledby="dialog-title"
     >
-        <DialogTitle id="dialog-title"><b>{responses[responses.length - 1].result==='cashed'?'You cashed in the reward!':'Balloon Exploded!'}</b></DialogTitle>
+        <DialogTitle id="dialog-title"><b>{responses[responses.length - 1].result==='cashed'?t('bart.cashed_title'):t('bart.exploded_title')}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
-          You are rewarded with {responses[responses.length - 1].score} points.
-          In total you have {responses.map(r => r.score).reduce((a,b) => a+b, 0)} points.
+          {t('bart.trial_score_report', {score: responses[responses.length - 1].score})}
+          {t('bart.total_score_report', {score: responses.map(r => r.score).reduce((a,b) => a+b, 0)})}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogIsOpen(false)} color="primary" autoFocus size='large'>
-            {trial<=trials?'Next Round':'Next'}
+            {trial<=trials?t('bart.next_trial'):t('next')}
           </Button>
         </DialogActions>
       </Dialog>);
@@ -123,18 +126,18 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
   
           {trial<=trials && 
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-              Next Reward<Typography variant="h4">{pumps * reward}</Typography>
+              {t('bart.next_reward')}<Typography variant="h4">{pumps * reward}</Typography>
             </Grid></Grid>
           }
   
           {trial<=trials && 
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-                <Typography color='textSecondary' variant='caption'>Round {trial} of {trials}</Typography>
+                <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:trial, trials:trials})}</Typography>
             </Grid></Grid>
           }
   
             <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-              Total Points<Typography variant="h4">{totalScore}</Typography>
+              {t('bart.total_points')}<Typography variant="h4">{totalScore}</Typography>
             </Grid></Grid>
         </Grid>
   
@@ -148,8 +151,8 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
         </Grid>
 
         <Grid item container direction="row" justify="space-around" alignItems='center'>
-          <Fab onClick={onInflate} color='primary'>Pump</Fab>
-          <Fab onClick={onCashIn} color='primary'>Cash</Fab>
+          <Fab onClick={onInflate} color='primary'>{t('bart.pump')}</Fab>
+          <Fab onClick={onCashIn} color='primary'>{t('bart.cash')}</Fab>
         </Grid>
   
   
