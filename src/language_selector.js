@@ -34,9 +34,9 @@ export default function LanguageSelector(props) {
 
           <Markdown source={t('language_selector.text')} escapeHtml={false} />
           <Grid container direction='column'>
-          {Object.entries(languages).map(([key, val]) => {
-            return <Grid item><Link to={`/${studyId}/${key}`}>{val}</Link></Grid>
-          })}
+          {Object.entries(languages).map(([key, val]) => 
+            <Grid item key={key}><Link to={`/${studyId}/${key}`}>{val}</Link></Grid>
+          )}
           </Grid>
           </Paper>
         </Grid>
