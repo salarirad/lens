@@ -31,4 +31,4 @@ jobs:
             git remote set-url origin https://ce5c7878d3295c3725eb574c1c61dc88cfc7b25f@github.com/morteza/lens.git
             npm run deploy
       env:
-        CI: true
+        CI: false
