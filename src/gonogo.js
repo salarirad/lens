@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState, useEffect, Fragment, useRef} from 'react';
 
 
 import { Button, Grid, Typography, Divider} from '@material-ui/core';
@@ -11,8 +11,6 @@ import {
   Clear as Incorrect
 } from '@material-ui/icons';
 
-import Image from 'material-ui-image';
-
 import Markdown from 'react-markdown';
 
 import {sample, shuffle} from './utils/random';
@@ -23,11 +21,12 @@ import './gonogo.css';
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
+export default function GoNoGo({content, onStore, onNext, showStudyNav}) {
 
   const {t} = useTranslation();
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
+  const response = useRef({});
   const [state, setState] = useState({
     finished: false,
     trialResponses: [],
@@ -39,13 +38,21 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     stimuli: null,
     trialStartedAt: null,
     respondedAt: null,
-    trial: null
+    trial: null,
+    timeouts: 0
   })
 
+  // on mount and unmount
   useEffect(() => {
     showStudyNav(false);
-    return () => showStudyNav(true);
-  });
+    return () => {
+      showStudyNav(true);
+      onStore({
+        'view': content,
+        'response': response.current
+      });
+    }
+  },[]);
 
   useEffect(() => {
 
@@ -81,22 +88,26 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
     if (state.step === 'stimuli') {
       clearTimeout(clock);
 
-      clock = setTimeout(() => {
-        setState({...state,
-          trialResponses: [...state.trialResponses, {
-            'trial': state.trial,
-            'stimuli': state.stimuli[state.trial-1],
-            'choice': null,
-            'correct': null,
-            'respondedAt': null,
-            'trialStartedAt': state.trialStartedAt,
-            'rt': null
-          }],
-          correct: false,
-          step: 'feedback'
-        });
-      }, stimuliDuration)
-
+      if (state.timeouts<timeoutsBeforeReset) {
+        clock = setTimeout(() => {
+          setState({...state,
+            trialResponses: [...state.trialResponses, {
+              'trial': state.trial,
+              'stimuli': state.stimuli[state.trial-1],
+              'choice': null,
+              'correct': null,
+              'respondedAt': null,
+              'trialStartedAt': state.trialStartedAt,
+              'rt': null
+            }],
+            timeouts: state.timeouts + 1,
+            correct: false,
+            step: 'feedback'
+          });
+        }, stimuliDuration)
+      } else {
+        setState({...state, step: 'reset'})
+      }
     }
 
 
@@ -104,23 +115,22 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
       setState({...state, finished: true, taskFinishedAt: Date.now()})
     }
 
-    // finished
+    // on finish
     if (state.finished) {
-      clearTimeout(clock);
-      onFinish();
-
-      // add timestamps
-      let responses = {trials: state.trialResponses};
-      responses.taskStartedAt = state.taskStartedAt;
-      responses.taskFinishedAt = state.taskFinishedAt;
-      responses.taskDuration = state.taskFinishedAt - state.taskStartedAt;
-      onStore(responses);
-      showStudyNav(true);
+      clearTimeout(state.clock);
+      
+      // timestamps
+      response.current.trials = state.trialResponses;
+      response.current.taskStartedAt = state.taskStartedAt;
+      response.current.taskFinishedAt = state.taskFinishedAt;
+      response.current.taskDuration = state.taskFinishedAt - state.taskStartedAt;
+      onNext();
     }
+
   },[state]);
 
   const startTask = () => {
-    setState({...state, trial: 0, step: 'fixation', taskStartedAt: Date.now()})
+    setState({...state, trialResponses: [], trial: 0, timeouts: 0, step: 'fixation', taskStartedAt: Date.now()})
   }
 
   const handleResponse = (choice) => {
@@ -182,13 +192,26 @@ export default function GoNoGo({content, onStore, onFinish, showStudyNav}) {
 
   }
 
+  // show reset screen on timeouts reaching a threshold
+  if (state.step === 'reset') {
+    return (
+      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
+        <Grid item><Markdown source={t('gonogo.too_many_timeouts')} escapeHtml={false} /></Grid>
+        <Grid item>
+          <Button variant='text' color='primary' onClick={() => startTask()}>{t('gonogo.restart')}</Button>
+        </Grid>
+      </Grid>
+
+    )
+  }
+
   // start screen
   if (state.trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
-        <Grid item><Markdown source={t('gonogo.ready_question')} escapeHtml={false} /></Grid>
+        <Grid item><Markdown source={t('gonogo.are_you_ready')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button onClick={() => startTask()}>{t('yes')}</Button>
+          <Button variant='text' color='primary' onClick={() => startTask()}>{t('yes')}</Button>
         </Grid>
 
       </Grid>
