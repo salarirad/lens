@@ -17,6 +17,11 @@
   padding: 12px 24px 12px 24px;
 }
 
-.matrix-container {
-  padding: 6px 12px;
+.matrix-spacer {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.matrix-question-container {
+  padding: 0px 16px 16px;
 }

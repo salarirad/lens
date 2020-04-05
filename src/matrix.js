@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, Fragment} from 'react';
 
 import {Grid, Radio, RadioGroup, FormControlLabel, Divider} from '@material-ui/core';
 
@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next';
 export default function Matrix({content, onStore}) {
 
   const {t} = useTranslation();
-  const {questions, choices, id} = content;
+  const {questions, choices, direction } = content;
 
   const response = useRef({
     values: Array.from({ length: questions.length })
@@ -31,7 +31,7 @@ export default function Matrix({content, onStore}) {
           control={<Radio />}
           value={c}
           label={t(c)}
-          labelPlacement="bottom"
+          labelPlacement={direction==='vertical'?'end':'bottom'}
         />
       </Grid>
     )
@@ -43,19 +43,25 @@ export default function Matrix({content, onStore}) {
 
   const renderQuestion = (q, index) => {
     return (
-      <RadioGroup key={index} name={`q${index}`} value={response.current.values[index]} onChange={(e) => handleChange(e, index)}>
+      <Grid item key={index} className='matrix-question-container'>
+      <RadioGroup name={`q${index}`} value={response.current.values[index]} onChange={(e) => handleChange(e, index)}>
       <Markdown source={t(q)} escaleHtml/>
-      <Grid container direction='row' alignItems='flex-start' justify="space-between">
+      <Grid container 
+        direction={direction==='vertical'?'column':'row'} 
+        alignItems='flex-start' 
+        justify="space-between">
         {choices.map((c, j) => renderChoice(c, j))}
       </Grid>
-      <Divider />
       </RadioGroup>
+      </Grid>
     ) 
   }
 
   return (
-    <div className="matrix-container">
-    {questions.map((q,i) => renderQuestion(q,i))}
-    </div>
+    <Grid container direction='column'>
+    {questions
+      .map((q,i) => renderQuestion(q,i))
+      .reduce((q1, q2) => [q1,<Divider key={Math.random().toString()} className='matrix-spacer'/>,q2])}
+    </Grid>
   );
 }
