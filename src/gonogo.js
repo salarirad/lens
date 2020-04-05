@@ -211,7 +211,7 @@ export default function GoNoGo({content, onStore, onNext, showStudyNav}) {
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('gonogo.are_you_ready')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button variant='text' color='primary' onClick={() => startTask()}>{t('yes')}</Button>
+          <Button variant='text' color='primary' onClick={() => startTask()}>{t('gonogo.start')}</Button>
         </Grid>
 
       </Grid>
