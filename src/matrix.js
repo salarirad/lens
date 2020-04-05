@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 
 import {Grid, Radio, RadioGroup, FormControlLabel, Divider} from '@material-ui/core';
 
@@ -9,19 +9,24 @@ export default function Matrix({content, onStore}) {
 
   const {t} = useTranslation();
   const {questions, choices, id} = content;
-  
-  const [state, setState] = useState({
-    responses: Array.from({ length: questions.length })
+
+  const response = useRef({
+    values: Array.from({ length: questions.length })
   });
 
   useEffect(() => {
-    return () => { onStore(state.responses) };
+    return () => {
+      onStore({
+        'view': content,
+        'response': response.current
+      })
+    };
   },[]);
-  
 
+  
   const renderChoice = (c, index) => {
     return (
-      <Grid item xs>
+      <Grid item xs key={index}>
         <FormControlLabel
           control={<Radio />}
           value={c}
@@ -33,17 +38,12 @@ export default function Matrix({content, onStore}) {
   }
 
   const handleChange = (e, index) => {
-    let newResponses = state.responses;
-    newResponses[index] = e.target.value;
-    setState({...state,
-      responses: newResponses
-      })
-    console.log(e.target.value, index);
+    response.current.values[index] = e.target.value;
   }
 
   const renderQuestion = (q, index) => {
     return (
-      <RadioGroup name={`q${index}`} value={state.responses[index]} onChange={(e) => handleChange(e, index)}>
+      <RadioGroup key={index} name={`q${index}`} value={response.current.values[index]} onChange={(e) => handleChange(e, index)}>
       <Markdown source={t(q)} escaleHtml/>
       <Grid container direction='row' alignItems='flex-start' justify="space-between">
         {choices.map((c, j) => renderChoice(c, j))}
