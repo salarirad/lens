@@ -65,11 +65,11 @@ export default function Study(props) {
       case 'text': 
         return <Text onStore={storeData} content={view}>{props.children}</Text>;
       case 'bart': 
-        return <BART onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
+        return <BART onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} />;
       case 'gonogo': 
-        return <GoNoGo onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
+        return <GoNoGo onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} />;
       case 'stroop': 
-        return <Stroop onStore={storeData} onFinish={onNext} content={view} showStudyNav={setShowNav} />;
+        return <Stroop onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} />;
       case 'matrix':
         return <Matrix onStore={storeData} content={view}></Matrix>
       default:

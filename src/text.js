@@ -12,19 +12,23 @@ export default function Text({content, onStore}) {
 
   const response = useRef(null);
   const [state, setState] = useState({
-    response: response.current
+    value: null
   });
 
-  //to store data on pressing next
+
   useEffect(() => {
-    // store data as a cleanup side-effect (on WillUnmount)
-    return () => { onStore(response.current) };
+    return () => {
+      onStore({
+        'view': content,
+        'response': response.current
+      })
+    };
   },[]);
 
 
   const handleChange = (e) => {
     response.current = e.target.value
-    setState({...state, response: response.current});
+    setState({...state, value: response.current});
   }
 
 

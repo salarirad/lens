@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
 
 import { Box, Button, Grid, Typography, Divider} from '@material-ui/core';
@@ -13,28 +13,38 @@ import Image from 'material-ui-image';
 
 import Markdown from 'react-markdown';
 
+import {useTranslation} from 'react-i18next';
 
 import './stroop.css';
 
-//FIXME these are realtime variables, so I keep them out of the component's state.
+//FIXME keep this var as a ref
 let clock
 
-export default function Stroop({content, onStore, onFinish, showStudyNav}) {
+export default function Stroop({content, onStore, onNext, showStudyNav}) {
 
-  const {text, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
+  const {rule, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
+  const {t} = useTranslation();
 
+  const response = useRef({});
   const [state, setState] = useState({
     trialResponses: [],
     finished: false,
     trial: null,
     step: null,
     correct: null
-  })
+  });
 
+  // on mount and unmount
   useEffect(() => {
     showStudyNav(false);
-    return () => {showStudyNav(true)}
-  });
+    return () => {
+      showStudyNav(true);
+      onStore({
+        'view': content,
+        'response': response.current
+      });
+    }
+  },[]);
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
@@ -59,7 +69,6 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
           ...state,
           step: 'feedback',
           trialResponses: [...state.trialResponses, {
-            ...trials[state.trial-1], 
             trial: state.trial,
             choice: null,
             correct: null,
@@ -81,15 +90,13 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
     if (state.finished) {
       clearTimeout(state.clock);
-      onFinish();
-
+      
       // add timestamps
-      let finalResponses = {trials:state.trialResponses};
-      finalResponses.taskStartedAt = state.taskStartedAt;
-      finalResponses.taskFinishedAt = state.taskFinishedAt;
-      finalResponses.taskDuration = state.taskFinishedAt - state.taskStartedAt;
-
-      onStore(finalResponses);
+      response.current.trials = state.trialResponses;
+      response.current.taskStartedAt = state.taskStartedAt;
+      response.current.taskFinishedAt = state.taskFinishedAt;
+      response.current.taskDuration = state.taskFinishedAt - state.taskStartedAt;
+      onNext();
     }
 
     if (state.trial>=trials.length) {
@@ -117,7 +124,6 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
       ...state,
       step: 'feedback',
       trialResponses: [...state.trialResponses,{
-        ...trials[state.trial-1],
         trial: state.trial,
         choice: choice,
         correct: correct,
@@ -133,7 +139,7 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
     return (
       <Grid container item direction='column' alignItems='center' justify='flex-start'>
       <Typography className='stroop-stimulus' variant='h1' style={{color: color}}>
-        {word}
+        {t(word)}
       </Typography>
       </Grid>
 
@@ -143,15 +149,15 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
   const renderChoices = (choices) => {
     
     return (
-      <Grid item container direction='row' justify='space-around' alignItems='stretch'>
+      <Grid container direction='row' justify='space-between' alignItems='stretch' className='stroop-choices'>
       {choices.map((choice,i) => {
         let [word, color] = choice.split(',')
         return (
-          <Box width='49%' key={i} >
+          <Grid item xs key={i}>
           <Button style={{color: color}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
-            {word}
+            {t(word)}
           </Button>
-          </Box>
+          </Grid>
         );
       })}
       </Grid>
@@ -169,24 +175,28 @@ export default function Stroop({content, onStore, onFinish, showStudyNav}) {
 
   }
 
-  // start screen
-  if (state.trial === null) {
+  const renderStartScreen = () => {
     return (
-      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start'>
-        <Grid item><Markdown source="Are you ready?" escapeHtml={false} /></Grid>
+      <Grid container direction='column' spacing={2} alignItems='center'>
+        <Grid item><Markdown source={t('stroop.are_you_ready')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button onClick={() => startTask()}>Yes</Button>
+          <Button variant='text' color='primary' onClick={() => startTask()}>{t('yes')}</Button>
         </Grid>
 
       </Grid>
     )
   }
 
+  if (state.trial === null) {
+    return renderStartScreen();
+  }
+
+  
   //const render = () => {
     return (
         <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container stroop-board'>
           <Grid item>
-            <Markdown source={text} escapeHtml={false} />
+            <Markdown source={t(rule)} escapeHtml={false} />
           </Grid>
 
           {state.step === 'stimulus' && renderStimulus(trials[state.trial-1].stimulus) }

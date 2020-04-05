@@ -4,7 +4,8 @@ export default function Submission(props) {
 
   return (
     <div className="finished">
-      Submission: {JSON.stringify(props.submission)}
+      Submission: <br />
+      <pre>{JSON.stringify(props.submission, null, 2)}</pre>
     </div>
   );
 }
