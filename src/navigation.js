@@ -14,6 +14,9 @@ export default function Navigation(props) {
         {!props.finished && 
           <Button variant="contained" color="primary" onClick={props.onNext}>{t('next')}</Button>
         }
+        {props.finished && props.redirectTo &&
+          <Button variant="contained" color="primary" link={props.redirectTo}>{t('finish_and_redirect')}</Button>        
+        }
       </Grid>
     
     </Grid>

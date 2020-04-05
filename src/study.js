@@ -58,7 +58,7 @@ export default function Study(props) {
   const renderView = (view) => {
 
     if (finished) {
-      return <Submission submission={responses} />;
+      return <Submission submission={responses} submissionNote={experiment.submissionNote} />;
     }
 
     switch(view?.type) {
@@ -116,7 +116,7 @@ export default function Study(props) {
         </Grid>
         { showNav && !storingData &&
         <Grid item>
-          <Navigation onNext={onNext} finished={finished}/>
+          <Navigation onNext={onNext} finished={finished} redirectTo={experiment.redirectTo} />
         </Grid>
         }
       </Grid>
