@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState, useEffect, Fragment, useRef} from 'react';
 
 import {Button, Fab, Grid, Typography, Divider} from '@material-ui/core';
 
@@ -8,30 +8,44 @@ import { useTranslation } from 'react-i18next';
 
 import './bart.css';
 
-export default function BART({content, onStore, onFinish, showStudyNav}) {
+export default function BART({content, onStore, onNext, showStudyNav}) {
   
   const { t } = useTranslation();
-  const {reward, maxPumps, initialPumps, trials} = content;
+  const {reward, maxPumps, safePumps, trials} = content;
 
+  const response = useRef({})
   const [state, setState] = useState({
     pumps: 0,
     finished: false,
     trial: 1,
     totalScore: 0,
-    responses: [],
-    dialogIsOpen: false
+    trialResponses: [],
+    dialogIsOpen: false,
+    taskStartedAt: Date.now()
   });
 
+  // on mount and unmount
   useEffect(() => {
     showStudyNav(false);
-    return () => {showStudyNav(true);}
-  });
-
+    return () => {
+      showStudyNav(true);
+      onStore({
+        'view': content,
+        'response': response.current
+      });
+    }
+  },[]);
+  
   // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (state.finished && !state.dialogIsOpen) {
-      onFinish();
-      onStore(state.responses);
+      const now = Date.now()
+      // add timestamps
+      response.current.trials = state.trialResponses;
+      response.current.taskStartedAt = state.taskStartedAt;
+      response.current.taskFinishedAt = now;
+      response.current.taskDuration = now - state.taskStartedAt;
+      onNext();
     }
   }, [state]);
 
@@ -44,7 +58,7 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     setState({
       ...state, 
       dialogIsOpen: true,
-      responses: [...state.responses, {
+      trialResponses: [...state.trialResponses, {
         trial: state.trial,
         risk: 100 / (maxPumps - state.pumps + 1),
         pumps: state.pumps,
@@ -67,7 +81,8 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
     let risk = 100 / (maxPumps - state.pumps + 1);
     let prob = Math.ceil(Math.random() * 100);
 
-    if ((prob >= risk) && state.pumps > initialPumps) {
+    console.log(risk, prob)
+    if ((prob <= risk) && state.pumps > safePumps) {
       newTrial(false, prob);
     } else {
       setState({
@@ -96,11 +111,11 @@ export default function BART({content, onStore, onFinish, showStudyNav}) {
       disableEscapeKeyDown
       aria-labelledby="dialog-title"
     >
-        <DialogTitle id="dialog-title"><b>{state.responses[state.responses.length - 1].result==='cashed'?t('bart.cashed_title'):t('bart.exploded_title')}</b></DialogTitle>
+        <DialogTitle id="dialog-title"><b>{state.trialResponses[state.trialResponses.length - 1].result==='cashed'?t('bart.cashed_title'):t('bart.exploded_title')}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
-          {t('bart.trial_score_report', {score: state.responses[state.responses.length - 1].score})}
-          {t('bart.total_score_report', {score: state.responses.map(r => r.score).reduce((a,b) => a+b, 0)})}
+          {t('bart.trial_score_report', {score: state.trialResponses[state.trialResponses.length - 1].score})}
+          {t('bart.total_score_report', {score: state.trialResponses.map(r => r.score).reduce((a,b) => a+b, 0)})}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
