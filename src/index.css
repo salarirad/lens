@@ -25,3 +25,7 @@
 .matrix-question-container {
   padding: 0px 16px 16px;
 }
+
+span.required {
+  color: red;
+}
