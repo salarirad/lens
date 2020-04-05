@@ -130,7 +130,14 @@ export default function GoNoGo({content, onStore, onNext, showStudyNav}) {
   },[state]);
 
   const startTask = () => {
-    setState({...state, trialResponses: [], trial: 0, timeouts: 0, step: 'fixation', taskStartedAt: Date.now()})
+    setState({
+      ...state, 
+      trialResponses: [], 
+      trial: 0, 
+      timeouts: 0, 
+      step: 'fixation', 
+      taskStartedAt: Date.now()
+    })
   }
 
   const handleResponse = (choice) => {

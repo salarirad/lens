@@ -31,7 +31,8 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
     finished: false,
     trial: null,
     step: null,
-    correct: null
+    correct: null,
+    timeouts: 0
   });
 
   // on mount and unmount
@@ -60,32 +61,41 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
         });
       }, fixationDuration)
       //return clearTimeout(clock);
+    }
 
-    } else if (state.step === 'stimulus') {
-      console.log('stroop: stimulus');
+    if (state.step === 'stimulus') {
       clearTimeout(clock);
-      clock = setTimeout(() => {
-        setState({
-          ...state,
-          step: 'feedback',
-          trialResponses: [...state.trialResponses, {
-            trial: state.trial,
-            choice: null,
-            correct: null,
-            respondedAt: null,
-            trialStartedAt: state.trialStartedAt,
-            rt: null}
-          ]
-        });
-      }, stimulusDuration);
-    } else if (state.step === 'feedback') {
-      clearTimeout(clock);
-      clock = setTimeout(() => {
-        setState({
-          ...state,
-          step: 'fixation',
-        });
-      }, feedbackDuration);
+
+      if (state.timeouts<timeoutsBeforeReset) {
+        clock = setTimeout(() => {
+          setState({
+            ...state,
+            step: 'feedback',
+            trialResponses: [...state.trialResponses, {
+              trial: state.trial,
+              choice: null,
+              correct: null,
+              respondedAt: null,
+              trialStartedAt: state.trialStartedAt,
+              rt: null}
+            ],
+            timeouts: state.timeouts + 1,
+            correct: false
+          });
+        }, stimulusDuration);
+      } else {
+        setState({...state, step: 'reset', timeouts: 0})
+      }
+    }
+
+    if (state.step === 'feedback') {
+        clearTimeout(clock);
+        clock = setTimeout(() => {
+          setState({
+            ...state,
+            step: 'fixation',
+          });
+        }, feedbackDuration);
     }
 
     if (state.finished) {
@@ -109,6 +119,8 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
     setState({
       ...state,
       trial:0,
+      timeouts: 0,
+      trialResponses: [],
       step:'fixation', 
       taskStartedAt: Date.now() //timestamp
     });
@@ -185,6 +197,22 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
 
       </Grid>
     )
+  }
+
+  const renderResetScreen = () => {
+    return (
+      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
+        <Grid item><Markdown source={t('stroop.too_many_timeouts')} escapeHtml={false} /></Grid>
+        <Grid item>
+          <Button variant='text' color='primary' onClick={() => startTask()}>{t('stroop.restart')}</Button>
+        </Grid>
+      </Grid>
+    )
+  }
+
+  // show reset screen on timeouts reaching a threshold
+  if (state.step === 'reset') {
+    return renderResetScreen();
   }
 
   if (state.trial === null) {
