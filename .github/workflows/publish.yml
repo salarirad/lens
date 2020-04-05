@@ -25,9 +25,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: git config --global user.email "ansarinia@me.com"
-    - run: git config --global user.name "morteza"
-    - run: git remote set-url origin https://ce5c7878d3295c3725eb574c1c61dc88cfc7b25f@github.com/morteza/lens.git
-    - run: npm run deploy
+    - run: |
+            git config --global user.email "ansarinia@me.com"
+            git config --global user.name "morteza"
+            git remote set-url origin https://ce5c7878d3295c3725eb574c1c61dc88cfc7b25f@github.com/morteza/lens.git
+            npm run deploy
       env:
         CI: true
