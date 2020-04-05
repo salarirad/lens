@@ -15,7 +15,7 @@ export default function Submission({submission, submissionNote}) {
   return (
     <Grid container direction='column' className='Text-container'>
       <Grid item xs className="submission-container">
-        <Markdown source={t(submissionNote)} escapeHtml={false} />
+        <Markdown source={t(submissionNote, {submissionCode: state.submissionCode})} escapeHtml={false} />
       </Grid>
       {state.debug && 
       <Grid item xs>
