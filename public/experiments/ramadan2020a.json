@@ -7,14 +7,6 @@
     "maintainer": "salar.rad@gmail.com"
   },
   "views": [
-    
-    {
-      "id": "sample choice",
-      "type": "choice",
-      "text": "age.q",
-      "choices": [ "sex.c1", "sex.c2", "sex.c3", "sex.c4" ],
-      "required": true
-    },
     {
       "id": "email",
       "type": "text",
