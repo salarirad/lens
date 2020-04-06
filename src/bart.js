@@ -27,8 +27,12 @@ export default function BART({content, onStore, onNext, showStudyNav}) {
   // on mount and unmount
   useEffect(() => {
     showStudyNav(false);
+    document.body.style['touch-action'] = "none";
+    document.documentElement.style['touch-action'] = "none";
     return () => {
       showStudyNav(true);
+      document.body.style['touch-action'] = null;
+      document.documentElement.style['touch-action'] = null;  
       onStore({
         'view': content,
         'response': response.current
