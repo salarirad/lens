@@ -19,10 +19,10 @@
     {
       "id": "sample-likerts",
       "type": "matrix",
-      "text": "sex.q?",
+      "text": "Choose the answer that reflects what you think?",
       "requiredQuestions": [0,1,2],
       "direction": "vertical",
-      "choices": [ "sex.c1", "sex.c2", "sex.c3", "sex.c4"],
+      "choices": [ "Never", "Almost never", "Neutral", "Sometimes", "Always" ],
       "questions": [
         "Question one",
         "Question two",
