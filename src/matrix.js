@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next';
 export default function Matrix({content, onStore}) {
 
   const {t} = useTranslation();
-  const {questions, choices, direction } = content;
+  const {questions, choices, direction, text } = content;
 
   const response = useRef({
     values: Array.from({ length: questions.length })
@@ -58,10 +58,15 @@ export default function Matrix({content, onStore}) {
   }
 
   return (
-    <Grid container direction='column'>
-    {questions
-      .map((q,i) => renderQuestion(q,i))
-      .reduce((q1, q2) => [q1,<Divider key={Math.random().toString()} className='matrix-spacer'/>,q2])}
+    <Grid container direction='column' alignItems='stretch' justify='flex-start' className='Text-container'>
+      {text && 
+      <Grid item>
+        <Markdown source={t(text)} escapeHtml={false} />
+      </Grid>
+      }
+      {questions
+        .map((q,i) => renderQuestion(q,i))
+        .reduce((q1, q2) => [q1,<Divider key={Math.random().toString()} className='matrix-spacer'/>,q2])}
     </Grid>
   );
 }
