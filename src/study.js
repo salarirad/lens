@@ -58,7 +58,7 @@ export default function Study(props) {
   const renderView = (view) => {
 
     if (finished) {
-      return <Submission submission={responses} submissionNote={experiment.submissionNote} />;
+      return <Submission submission={{responses: responses}} studyId={studyId} submissionNote={experiment.submissionNote} />;
     }
 
     switch(view?.type) {
