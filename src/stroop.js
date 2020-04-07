@@ -22,8 +22,9 @@ let clock
 
 export default function Stroop({content, onStore, onNext, showStudyNav}) {
 
-  const {rule, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
+  const {rule, colors, words, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
   const {t} = useTranslation();
+  const separator = ''; // character that separates word and color in trials[i].stimulus and trials[i].choices
 
   const response = useRef({});
   const [state, setState] = useState({
@@ -147,11 +148,11 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
   }
 
   const renderStimulus = (stimulus) => {
-    let [word, color] = stimulus.split(',')
+    let [word, color] = stimulus.split('')
     return (
       <Grid container item direction='column' alignItems='center' justify='flex-start'>
-      <Typography className='stroop-stimulus' variant='h1' style={{color: color}}>
-        {t(word)}
+      <Typography className='stroop-stimulus' variant='h1' style={{color: colors[color]}}>
+        {t(words[word])}
       </Typography>
       </Grid>
 
@@ -163,11 +164,11 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
     return (
       <Grid container direction='row' justify='space-between' alignItems='stretch' className='stroop-choices'>
       {choices.map((choice,i) => {
-        let [word, color] = choice.split(',')
+        let [word, color] = choice.split('')
         return (
           <Grid item xs key={i}>
-          <Button style={{color: color}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
-            {t(word)}
+          <Button style={{color: colors[color]}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
+            {t(words[word])}
           </Button>
           </Grid>
         );
