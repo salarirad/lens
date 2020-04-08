@@ -63,15 +63,15 @@ export default function Study(props) {
 
     switch(view?.type) {
       case 'text': 
-        return <Text onStore={storeData} content={view}>{props.children}</Text>;
+        return <Text onStore={storeData} content={view} key={view.id}>{props.children}</Text>;
       case 'bart': 
-        return <BART onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} />;
+        return <BART onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} key={view.id} />;
       case 'gonogo': 
-        return <GoNoGo onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} />;
+        return <GoNoGo onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} key={view.id} />;
       case 'stroop': 
-        return <Stroop onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} />;
+        return <Stroop onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} key={view.id} />;
       case 'matrix':
-        return <Matrix onStore={storeData} content={view}></Matrix>
+        return <Matrix onStore={storeData} content={view} key={view.id} ></Matrix>
       default:
         return <div>Not Implemented!</div>;
     }
