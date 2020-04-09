@@ -21,12 +21,11 @@ import './gonogo.css';
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-export default function GoNoGo({content, onStore, onNext, showStudyNav}) {
+export default function GoNoGo({content, onStore}) {
 
   const {t} = useTranslation();
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
 
-  const response = useRef({});
   const [state, setState] = useState({
     finished: false,
     trialResponses: [],
@@ -41,18 +40,6 @@ export default function GoNoGo({content, onStore, onNext, showStudyNav}) {
     trial: null,
     timeouts: 0
   })
-
-  // on mount and unmount
-  useEffect(() => {
-    showStudyNav(false);
-    return () => {
-      showStudyNav(true);
-      onStore({
-        'view': content,
-        'response': response.current
-      });
-    }
-  },[]);
 
   useEffect(() => {
 
@@ -120,11 +107,14 @@ export default function GoNoGo({content, onStore, onNext, showStudyNav}) {
       clearTimeout(state.clock);
       
       // timestamps
-      response.current.trials = state.trialResponses;
-      response.current.taskStartedAt = state.taskStartedAt;
-      response.current.taskFinishedAt = state.taskFinishedAt;
-      response.current.taskDuration = state.taskFinishedAt - state.taskStartedAt;
-      onNext();
+      let response = {trials: state.trialResponses};
+      response.taskStartedAt = state.taskStartedAt;
+      response.taskFinishedAt = state.taskFinishedAt;
+      response.taskDuration = state.taskFinishedAt - state.taskStartedAt;
+      onStore({
+        'view': content,
+        'response': response
+      }, true); // store + next
     }
 
   },[state]);

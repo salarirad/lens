@@ -20,13 +20,12 @@ import './stroop.css';
 //FIXME keep this var as a ref
 let clock
 
-export default function Stroop({content, onStore, onNext, showStudyNav}) {
+export default function Stroop({content, onStore}) {
 
   const {rule, colors, words, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
   const {t} = useTranslation();
   const separator = ''; // character that separates word and color in trials[i].stimulus and trials[i].choices
 
-  const response = useRef({});
   const [state, setState] = useState({
     trialResponses: [],
     finished: false,
@@ -35,18 +34,6 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
     correct: null,
     timeouts: 0
   });
-
-  // on mount and unmount
-  useEffect(() => {
-    showStudyNav(false);
-    return () => {
-      showStudyNav(true);
-      onStore({
-        'view': content,
-        'response': response.current
-      });
-    }
-  },[]);
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
@@ -103,11 +90,14 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
       clearTimeout(state.clock);
       
       // add timestamps
-      response.current.trials = state.trialResponses;
-      response.current.taskStartedAt = state.taskStartedAt;
-      response.current.taskFinishedAt = state.taskFinishedAt;
-      response.current.taskDuration = state.taskFinishedAt - state.taskStartedAt;
-      onNext();
+      let response = {trials: state.trialResponses};
+      response.taskStartedAt = state.taskStartedAt;
+      response.taskFinishedAt = state.taskFinishedAt;
+      response.taskDuration = state.taskFinishedAt - state.taskStartedAt;
+      onStore({
+        'view': content,
+        'response': response
+      }, true); // store + next
     }
 
     if (state.trial>=trials.length) {
@@ -119,7 +109,7 @@ export default function Stroop({content, onStore, onNext, showStudyNav}) {
   const startTask = () => {
     setState({
       ...state,
-      trial:0,
+      trial: 0,
       timeouts: 0,
       trialResponses: [],
       step:'fixation', 

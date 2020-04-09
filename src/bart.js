@@ -8,12 +8,11 @@ import { useTranslation } from 'react-i18next';
 
 import './bart.css';
 
-export default function BART({content, onStore, onNext, showStudyNav}) {
+export default function BART({content, onStore}) {
   
   const { t } = useTranslation();
   const {reward, maxPumps, safePumps, trials} = content;
 
-  const response = useRef({})
   const [state, setState] = useState({
     pumps: 0,
     finished: false,
@@ -26,17 +25,11 @@ export default function BART({content, onStore, onNext, showStudyNav}) {
 
   // on mount and unmount
   useEffect(() => {
-    showStudyNav(false);
     document.body.style['touch-action'] = "none";
     document.documentElement.style['touch-action'] = "none";
     return () => {
-      showStudyNav(true);
       document.body.style['touch-action'] = null;
       document.documentElement.style['touch-action'] = null;  
-      onStore({
-        'view': content,
-        'response': response.current
-      });
     }
   },[]);
   
@@ -45,11 +38,14 @@ export default function BART({content, onStore, onNext, showStudyNav}) {
     if (state.finished && !state.dialogIsOpen) {
       const now = Date.now()
       // add timestamps
-      response.current.trials = state.trialResponses;
-      response.current.taskStartedAt = state.taskStartedAt;
-      response.current.taskFinishedAt = now;
-      response.current.taskDuration = now - state.taskStartedAt;
-      onNext();
+      let response = {trials: state.trialResponses};
+      response.taskStartedAt = state.taskStartedAt;
+      response.taskFinishedAt = now;
+      response.taskDuration = now - state.taskStartedAt;
+      onStore({
+        'view': content,
+        'response': response
+      }, true); // store + next
     }
   }, [state]);
 

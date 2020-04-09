@@ -30,9 +30,11 @@ export default function Study(props) {
   const [finished, setFinished] = useState(false);
   const [storingData, setStoringData] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [showNav, setShowNav] = useState(true);
 
-  const storeData = (data) => {
+  const storeData = (data, autoNext=false) => {
+    if (autoNext) {
+      onNext();
+    }
     console.log('study.storeData', data);
     setResponses(responses.concat([data]));
     setStoringData(false);
@@ -47,8 +49,8 @@ export default function Study(props) {
     setProgress(100 * nextViewIndex / experiment.views.length);
 
     if (nextViewIndex < experiment.views.length) {
-      setView(experiment.views[nextViewIndex])
-      setCurrentViewIndex(nextViewIndex)  
+      setView(experiment.views[nextViewIndex]);
+      setCurrentViewIndex(nextViewIndex);
     } else {
       setFinished(true);
     }
@@ -62,14 +64,14 @@ export default function Study(props) {
     }
 
     switch(view?.type) {
-      case 'text': 
+      case 'text':
         return <Text onStore={storeData} content={view} key={view.id}>{props.children}</Text>;
-      case 'bart': 
-        return <BART onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} key={view.id} />;
+      case 'bart':
+        return <BART onStore={storeData} content={view} key={view.id} />;
       case 'gonogo': 
-        return <GoNoGo onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} key={view.id} />;
+        return <GoNoGo onStore={storeData} content={view} key={view.id} />;
       case 'stroop': 
-        return <Stroop onStore={storeData} onNext={onNext} content={view} showStudyNav={setShowNav} key={view.id} />;
+        return <Stroop onStore={storeData} content={view} key={view.id} />;
       case 'matrix':
         return <Matrix onStore={storeData} content={view} key={view.id} ></Matrix>
       default:
@@ -114,7 +116,7 @@ export default function Study(props) {
           {!storingData && renderView(view)}
           </Paper>
         </Grid>
-        { showNav && !storingData &&
+        {!['gonogo','bart','stroop'].includes(view.type) && !storingData &&
         <Grid item>
           <Navigation onNext={onNext} finished={finished} redirectTo={experiment.redirectTo} />
         </Grid>
