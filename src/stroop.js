@@ -39,7 +39,7 @@ export default function Stroop({content, onStore}) {
   useEffect(() => {
 
     if (state.step==='fixation') {
-      console.log('stroop: fixation');
+
       clock = setTimeout(() => {
         setState({
           ...state,
@@ -58,7 +58,7 @@ export default function Stroop({content, onStore}) {
         clock = setTimeout(() => {
           setState({
             ...state,
-            step: 'feedback',
+            step: (feedbackDuration>0)?'feedback':'fixation',
             trialResponses: [...state.trialResponses, {
               trial: state.trial,
               choice: null,
@@ -125,7 +125,7 @@ export default function Stroop({content, onStore}) {
 
     setState({
       ...state,
-      step: 'feedback',
+      step: (feedbackDuration>0)?'feedback':'fixation',
       trialResponses: [...state.trialResponses,{
         trial: state.trial,
         choice: choice,

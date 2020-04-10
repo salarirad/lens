@@ -89,7 +89,7 @@ export default function GoNoGo({content, onStore}) {
             }],
             timeouts: state.timeouts + 1,
             correct: false,
-            step: 'feedback'
+            step: (feedbackDuration>0)?'feedback':'fixation'
           });
         }, stimuliDuration)
       } else {
@@ -151,7 +151,7 @@ export default function GoNoGo({content, onStore}) {
         'trialStartedAt': state.trialStartedAt,
         'rt': respondedAt - state.trialStartedAt
       }],
-      step: 'feedback'
+      step: (feedbackDuration>0)?'feedback':'fixation'
     })
   }
 
