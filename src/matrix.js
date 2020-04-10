@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef, Fragment} from 'react';
 
 import {Grid, Radio, RadioGroup, FormControlLabel, Divider} from '@material-ui/core';
 
-import Markdown from 'react-markdown';
+import Markdown from 'react-markdown/with-html';
 import {useTranslation} from 'react-i18next';
 
 export default function Matrix({content, onStore}) {

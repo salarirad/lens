@@ -7,7 +7,7 @@ import theme from './utils/theme';
 
 import {Grid, Paper, ThemeProvider, CssBaseline, Container} from '@material-ui/core';
 
-import Markdown from 'react-markdown';
+import Markdown from 'react-markdown/with-html';
 
 import {languages} from './utils/i18n';
 

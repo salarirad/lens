@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import {Grid, Button} from '@material-ui/core';
-import Markdown from 'react-markdown';
+import Markdown from 'react-markdown/with-html';
 import {useTranslation} from 'react-i18next';
 
 export default function Submission({submission, studyId, submissionNote}) {

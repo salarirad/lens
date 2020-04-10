@@ -11,7 +11,7 @@ import {
   Clear as Incorrect
 } from '@material-ui/icons';
 
-import Markdown from 'react-markdown';
+import Markdown from 'react-markdown/with-html';
 
 import {sample, shuffle} from './utils/random';
 import { useTranslation } from 'react-i18next';

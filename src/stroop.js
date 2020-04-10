@@ -11,7 +11,7 @@ import {
 
 import Image from 'material-ui-image';
 
-import Markdown from 'react-markdown';
+import Markdown from 'react-markdown/with-html';
 
 import {useTranslation} from 'react-i18next';
 

@@ -3,7 +3,7 @@ import { Typography, Divider, Box, TextField, Grid } from '@material-ui/core';
 
 import { useTranslation } from 'react-i18next';
 
-import Markdown from 'react-markdown';
+import Markdown from 'react-markdown/with-html';
 
 export default function Text({content, onStore}) {
   //props: title, text, placeholder, help, required, pattern, instruction
