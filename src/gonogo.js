@@ -158,9 +158,11 @@ export default function GoNoGo({content, onStore}) {
   const renderStimulus = (stimulus) => {
     return (
       <Fragment>
-      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='star gng-icon' />}
+      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='yellow gng-icon' />}
       {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='empty gng-icon'> </div>}
-      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='circle gng-icon' />}
+      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='blue gng-icon' />}
+      {stimulus==='blue-star' && <Star fontSize='large' onClick={() => handleResponse('blue-star')} className='blue gng-icon' />}
+      {stimulus==='yellow-circle' && <Star fontSize='large' onClick={() => handleResponse('yellow-circle')} className='yellow gng-icon' />}
       </Fragment>
     );
   }
