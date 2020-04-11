@@ -48,11 +48,11 @@ export default function Study(props) {
 
     setProgress(100 * nextViewIndex / experiment.views.length);
 
+    setFinished(nextViewIndex >= experiment.views.length)
+
     if (nextViewIndex < experiment.views.length) {
       setView(experiment.views[nextViewIndex]);
       setCurrentViewIndex(nextViewIndex);
-    } else {
-      setFinished(true);
     }
 
   }
@@ -60,7 +60,9 @@ export default function Study(props) {
   const renderView = (view) => {
 
     if (finished) {
-      return <Submission submission={{responses: responses}} studyId={studyId} submissionNote={experiment.submissionNote} />;
+      return (
+        <Submission submission={{responses: responses}} studyId={studyId} submissionNote={experiment.submissionNote} />
+      );
     }
 
     switch(view?.type) {

@@ -5,8 +5,8 @@ import { Box, Button, Grid, Typography, Divider} from '@material-ui/core';
 
 import { 
   Add,
-  Check as Correct,
-  Clear as Incorrect,
+  Check as CorrectIcon,
+  Clear as IncorrectIcon,
 } from '@material-ui/icons';
 
 import Image from 'material-ui-image';
@@ -117,15 +117,20 @@ export default function Stroop({content, onStore}) {
     });
   }
 
-  const handleResponse = (choice) => {
+  const handleResponse = (choice, stimulus) => {
     let respondedAt = Date.now(); //timestamp
-    let correct = true //(choice.word === trial[].color)
 
+    let [choiceWord, choiceColor] = choice.split('')
+    let [stimulusWord, stimulusColor] = stimulus.split('')
+    let correct = (choiceWord === stimulusColor)
+
+    console.log(choiceColor, stimulusWord, correct)
     clearTimeout(clock);
 
     setState({
       ...state,
       step: (feedbackDuration>0)?'feedback':'fixation',
+      correct: correct,
       trialResponses: [...state.trialResponses,{
         trial: state.trial,
         choice: choice,
@@ -149,7 +154,7 @@ export default function Stroop({content, onStore}) {
     );
   }
 
-  const renderChoices = (choices) => {
+  const renderChoices = (choices, stimulus) => {
     
     return (
       <Grid container direction='row' justify='space-between' alignItems='stretch' className='stroop-choices'>
@@ -157,7 +162,7 @@ export default function Stroop({content, onStore}) {
         let [word, color] = choice.split('')
         return (
           <Grid item xs key={i}>
-          <Button style={{color: colors[color]}} onClick={() => handleResponse(choice)} size="large" fullWidth variant='text'>
+          <Button style={{color: colors[color]}} onClick={() => handleResponse(choice, stimulus)} size="large" fullWidth variant='text'>
             {t(words[word])}
           </Button>
           </Grid>
@@ -168,11 +173,11 @@ export default function Stroop({content, onStore}) {
   }
 
   const renderFeedback = () => {
-    let {correct} = state;
+    console.log('correct', state.correct)
     return (
       <Grid item container direction='row' justify='space-around' alignItems='center'>
-        {correct && <Correct fontSize='large' className='correct gng-icon' />}
-        {!correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
+        {state.correct && <CorrectIcon fontSize='large' className='correct gng-icon' />}
+        {!state.correct && <IncorrectIcon fontSize='large' className='incorrect gng-icon' />}
       </Grid>
     )
 
@@ -219,9 +224,9 @@ export default function Stroop({content, onStore}) {
           </Grid>
 
           {state.step === 'stimulus' && renderStimulus(trials[state.trial-1].stimulus) }
-          {state.step === 'stimulus' && renderChoices(trials[state.trial-1].choices) }
+          {state.step === 'stimulus' && renderChoices(trials[state.trial-1].choices, trials[state.trial-1].stimulus) }
 
-          {state.step === 'feedback' && renderFeedback()}
+          {state.step === 'feedback' && renderFeedback(state.correct)}
 
           {state.step === 'fixation' && 
             <Grid item container direction="row" justify="space-around" alignItems="center">
