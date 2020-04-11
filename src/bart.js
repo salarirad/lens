@@ -165,10 +165,13 @@ export default function BART({content, onStore}) {
         
         <Grid item container direction="column" alignContent='center' alignItems='center'> 
           <div className="bubble-container" style={{
+            cursor: 'pointer',
             width: (state.pumps+1) * 20,
             height: (state.pumps+1) * 20,
             transition: (state.pumps===0)?'':'width 1s, height 1s' //explosition and pumping effects
-          }}>
+          }}
+          onClick={onInflate}
+          >
             <figure className="bubble"></figure>
           </div>
         </Grid>
