@@ -163,7 +163,7 @@ export default function BART({content, onStore}) {
         </Grid>
 
         
-        <Grid item container direction="column" alignContent='center'> 
+        <Grid item container direction="column" alignContent='center' alignItems='center'> 
           <div className="bubble-container" style={{
             width: (state.pumps+1) * 20,
             height: (state.pumps+1) * 20,
