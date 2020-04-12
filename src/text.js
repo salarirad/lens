@@ -35,7 +35,7 @@ export default function Text({content, onStore}) {
   return (
     <Grid container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
       <Grid item>
-        <Markdown source={t(content.text)} escapeHtml={false} />
+        <Markdown source={t(content.text)} escapeHtml={false} className='markdown-text' />
       </Grid>
       {!(content.instruction || false) &&
         <Grid item>

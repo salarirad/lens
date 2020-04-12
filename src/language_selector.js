@@ -32,7 +32,7 @@ export default function LanguageSelector(props) {
         >
           <Paper className='languages-container'>
 
-          <Markdown source={t('language_selector.text')} escapeHtml={false} />
+          <Markdown source={t('language_selector.text')} escapeHtml={false}  className='markdown-text' />
           <Grid container direction='column'>
           {Object.entries(languages).map(([key, val]) => 
             <Grid item key={key}><Link to={`/${studyId}/${key}`}>{val}</Link></Grid>

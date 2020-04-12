@@ -36,7 +36,7 @@ export default function Submission({submission, studyId, submissionNote}) {
       
       {state.submissionCode &&
       <Grid item xs className="submission-container">
-        <Markdown source={t(submissionNote, {submissionCode: state.submissionCode})} escapeHtml={false} />
+        <Markdown source={t(submissionNote, {submissionCode: state.submissionCode})} escapeHtml={false}  className='markdown-text' />
       </Grid>
       }
 

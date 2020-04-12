@@ -45,7 +45,7 @@ export default function Matrix({content, onStore}) {
     return (
       <Grid item key={index} className='matrix-question-container'>
       <RadioGroup name={`q${index}`} value={response.current.values[index]} onChange={(e) => handleChange(e, index)}>
-      <Markdown source={t(q)} escaleHtml/>
+      <Markdown source={t(q)} escapeHtml={false} className='markdown-text' />
       <Grid container 
         direction={direction==='vertical'?'column':'row'} 
         alignItems='flex-start' 
@@ -61,7 +61,7 @@ export default function Matrix({content, onStore}) {
     <Grid container direction='column' alignItems='stretch' justify='flex-start' className='Text-container'>
       {text && 
       <Grid item>
-        <Markdown source={t(text)} escapeHtml={false} />
+        <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
       </Grid>
       }
       {questions
