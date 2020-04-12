@@ -197,7 +197,7 @@ export default function GoNoGo({content, onStore}) {
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('gonogo.too_many_timeouts')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button variant='text' color='primary' onClick={() => startTask()}>{t('gonogo.restart')}</Button>
+          <Button variant='outlined' color='secondary' onClick={() => startTask()}>{t('gonogo.restart')}</Button>
         </Grid>
       </Grid>
 
@@ -210,7 +210,7 @@ export default function GoNoGo({content, onStore}) {
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('gonogo.are_you_ready')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button variant='text' color='primary' onClick={() => startTask()}>{t('gonogo.start')}</Button>
+          <Button variant='outlined' onClick={() => startTask()}>{t('gonogo.start')}</Button>
         </Grid>
 
       </Grid>
