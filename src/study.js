@@ -20,48 +20,67 @@ export default function Study(props) {
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
 
-  const [subjectId, setSubjectId] = useState(0);
-  const [session, setSession] = useState({});
-  const [view, setView] = useState({});
-  const [experiment, setExperiment] = useState({});
-  const [responses, setResponses] = useState([]);
-  const [showProgress, setShowProgress] = useState(true);
-  const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const [storingData, setStoringData] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [state, setState] = useState({
+    subject: undefined,
+    session: undefined,
+    progress: 0,
+    finished: false,
+    loading: false,
+    view: {},
+    currentViewIndex: 0,
+    responses: [],
+    experiment: {}
+  })
 
   const storeData = (data, autoNext=false) => {
+    console.log('study.storeData', data);
+
     if (autoNext) {
       onNext();
     }
-    console.log('study.storeData', data);
-    setResponses(responses.concat([data]));
-    setStoringData(false);
+    
+    setState(prev => {
+      return {
+        ...prev,
+        responses: [...prev.responses, data],
+        loading: false
+      }
+    });
   }
 
   const onNext = () => {
     console.log('study.onNext');
-    setStoringData(true);
 
-    const nextViewIndex = currentViewIndex + 1;
 
-    setProgress(100 * nextViewIndex / experiment.views.length);
 
-    setFinished(nextViewIndex >= experiment.views.length)
+    setState(prev => {
+      const nextViewIndex = prev.currentViewIndex + 1;
 
-    if (nextViewIndex < experiment.views.length) {
-      setView(experiment.views[nextViewIndex]);
-      setCurrentViewIndex(nextViewIndex);
-    }
+      if (nextViewIndex < prev.experiment.views.length) {  
+        return {
+          ...prev,
+          loading: true,
+          progress: 100 * nextViewIndex / prev.experiment.views.length,
+          view: prev.experiment.views[nextViewIndex],
+          currentViewIndex: nextViewIndex
+        }
+      } else { //finished
+        return {
+          ...prev,
+          progress: 100,
+          finished: true,
+          loading: false
+        }
+      }
+    })
 
   }
   
   const renderView = (view) => {
 
-    if (finished) {
+    if (state.finished) {
       return (
-        <Submission submission={{responses: responses}} studyId={studyId} submissionNote={experiment.submissionNote} />
+        <Submission submission={{responses: state.responses}} studyId={studyId} submissionNote={state.experiment.submissionNote} />
       );
     }
 
@@ -84,9 +103,14 @@ export default function Study(props) {
   
   const startExperiment = (experiment) => {
     console.log("starting experiment", experiment);
-    setExperiment(experiment);
-    setCurrentViewIndex(0);
-    setView(experiment.views[currentViewIndex]);
+    setState(prev => {
+      return {
+        ...prev,
+        experiment: experiment,
+        currentViewIndex: 0,
+        view: experiment.views[0]
+      }
+    });
   }
 
   //load experiment
@@ -103,7 +127,7 @@ export default function Study(props) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
 
-      {showProgress && <LinearProgress variant="determinate" value={progress} />}
+      <LinearProgress variant="determinate" value={state.progress} />
 
     <Container maxWidth="sm" className='study-container'>
       <Grid container
@@ -114,13 +138,13 @@ export default function Study(props) {
       >
         <Grid item>
           <Paper className='view-container'>
-          {!finished && storingData && <div>{t('loading')}</div>}
-          {!storingData && renderView(view)}
+          {!state.finished && state.loading && <div>{t('loading')}</div>}
+          {!state.loading && renderView(state.view)}
           </Paper>
         </Grid>
-        {!['gonogo','bart','stroop'].includes(view.type) && !storingData &&
+        {!['gonogo','bart','stroop'].includes(state.view.type) && !state.loading &&
         <Grid item>
-          <Navigation onNext={onNext} finished={finished} redirectTo={experiment.redirectTo} />
+          <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
         </Grid>
         }
       </Grid>
