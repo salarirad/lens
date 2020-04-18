@@ -4,7 +4,8 @@ import {useParams} from 'react-router-dom';
 
 import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper} from '@material-ui/core';
 
-import theme from './utils/theme';
+import {ltrTheme, rtlTheme} from './utils/theme';
+import {languages} from './utils/i18n';
 
 import Navigation from './navigation';
 import Text from './text';
@@ -19,6 +20,7 @@ export default function Study(props) {
 
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
+  const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
 
   const [state, setState] = useState({
     subject: undefined,
@@ -125,30 +127,32 @@ export default function Study(props) {
   return (
 
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      <div dir={languages[lang].direction}>
+        <CssBaseline />
 
-      <LinearProgress variant="determinate" value={state.progress} />
+        <LinearProgress variant="determinate" value={state.progress} />
 
-    <Container maxWidth="sm" className='study-container'>
-      <Grid container
-        spacing={2}
-        direction="column"
-        justify="flex-start"
-        alignItems="stretch"
-      >
-        <Grid item>
-          <Paper className='view-container'>
-          {!state.finished && state.loading && <div>{t('loading')}</div>}
-          {!state.loading && renderView(state.view)}
-          </Paper>
-        </Grid>
-        {!['gonogo','bart','stroop'].includes(state.view.type) && !state.loading &&
-        <Grid item>
-          <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
-        </Grid>
-        }
-      </Grid>
-    </Container>
+        <Container maxWidth="sm" className='study-container'>
+          <Grid container
+            spacing={2}
+            direction="column"
+            justify="flex-start"
+            alignItems="stretch"
+          >
+            <Grid item>
+              <Paper className='view-container'>
+              {!state.finished && state.loading && <div>{t('loading')}</div>}
+              {!state.loading && renderView(state.view)}
+              </Paper>
+            </Grid>
+            {!['gonogo','bart','stroop'].includes(state.view.type) && !state.loading &&
+            <Grid item>
+              <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
+            </Grid>
+            }
+          </Grid>
+        </Container>
+      </div>
     </ThemeProvider>
   );
 }

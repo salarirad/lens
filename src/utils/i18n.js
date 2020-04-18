@@ -3,9 +3,9 @@ import { initReactI18next } from "react-i18next";
 import Backend from "i18next-xhr-backend";
 
 export const languages = {
-  'en': 'English',
-  'fa': 'فارسی',
-  'ar': 'عربی'
+  'en': {title: 'English', direction: 'ltr'},
+  'fa': {title: 'فارسی', direction: 'rtl'},
+  'ar': {title: 'عربی', direction: 'rtl'}
 }
 
 

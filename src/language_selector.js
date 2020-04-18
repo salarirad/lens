@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import {useParams, Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 
-import theme from './utils/theme';
+import {ltrTheme} from './utils/theme';
 
 import {Grid, Paper, Button, ThemeProvider, CssBaseline, Container} from '@material-ui/core';
 
@@ -20,7 +20,7 @@ export default function LanguageSelector(props) {
 
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ltrTheme}>
       <CssBaseline />
 
       <Container maxWidth="sm" className='study-container'>
@@ -36,7 +36,7 @@ export default function LanguageSelector(props) {
           <Grid container direction='row' spacing={3} justify='space-around'>
           {Object.entries(languages).map(([key, val]) => 
             <Grid item key={key} xs={4}>
-              <Button component={Link} to={`/${studyId}/${key}`} fullWidth variant='outlined'>{val}</Button>
+              <Button component={Link} to={`/${studyId}/${key}`} fullWidth variant='outlined'>{val.title}</Button>
             </Grid>
           )}
           </Grid>
