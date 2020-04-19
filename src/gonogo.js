@@ -158,11 +158,11 @@ export default function GoNoGo({content, onStore}) {
   const renderStimulus = (stimulus) => {
     return (
       <Fragment>
-      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='yellow gng-icon' />}
-      {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='empty gng-icon'> </div>}
-      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='blue gng-icon' />}
-      {stimulus==='blue-star' && <Star fontSize='large' onClick={() => handleResponse('blue-star')} className='blue gng-icon' />}
-      {stimulus==='yellow-circle' && <Star fontSize='large' onClick={() => handleResponse('yellow-circle')} className='yellow gng-icon' />}
+      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='yellow gng-stimulus' />}
+      {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='empty gng-stimulus'> </div>}
+      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='blue gng-stimulus' />}
+      {stimulus==='blue-star' && <Star fontSize='large' onClick={() => handleResponse('blue-star')} className='blue gng-stimulus' />}
+      {stimulus==='yellow-circle' && <Star fontSize='large' onClick={() => handleResponse('yellow-circle')} className='yellow gng-stimulus' />}
       </Fragment>
     );
   }
@@ -189,6 +189,14 @@ export default function GoNoGo({content, onStore}) {
       </Grid>
     )
 
+  }
+
+  const renderFixation = () => {
+    return (
+      <Grid item container direction="row" justify="space-around" alignItems="center">
+        <Add fontSize='large' className='fixation gng-icon' />
+      </Grid>
+    );
   }
 
   // show reset screen on timeouts reaching a threshold
@@ -225,15 +233,9 @@ export default function GoNoGo({content, onStore}) {
             <Markdown source={t(text)} escapeHtml={false} />
           </Grid>
 
-          {state.step === 'stimuli' && renderStimuli(state.stimuli[state.trial-1])}
-
+          {state.step === 'stimuli'  && renderStimuli(state.stimuli[state.trial-1])}
           {state.step === 'feedback' && renderFeedback()}
-
-          {state.step === 'fixation' && 
-            <Grid item container direction="row" justify="space-around" alignItems="center">
-              <Add fontSize='large' className='fixation gng-icon' />
-            </Grid>
-          }
+          {state.step === 'fixation' && renderFixation()}
 
         </Grid>
 

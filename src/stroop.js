@@ -157,12 +157,12 @@ export default function Stroop({content, onStore}) {
   const renderChoices = (choices, stimulus) => {
     
     return (
-      <Grid container direction='row' justify='space-between' alignItems='stretch' className='stroop-choices'>
+      <Grid container direction='row' justify='space-between' spacing={2} alignItems='stretch' className='stroop-choices'>
       {choices.map((choice,i) => {
         let [word, color] = choice.split('')
         return (
           <Grid item xs key={i}>
-          <Button style={{color: colors[color]}} onClick={() => handleResponse(choice, stimulus)} size="large" fullWidth variant='text'>
+          <Button style={{color: colors[color]}} onClick={() => handleResponse(choice, stimulus)} size="large" fullWidth variant='outlined'>
             {t(words[word])}
           </Button>
           </Grid>
@@ -188,7 +188,7 @@ export default function Stroop({content, onStore}) {
       <Grid container direction='column' spacing={2} alignItems='center'>
         <Grid item><Markdown source={t('stroop.are_you_ready')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button variant='text' color='primary' onClick={() => startTask()}>{t('yes')}</Button>
+          <Button variant='outlined' onClick={() => startTask()}>{t('stroop.start')}</Button>
         </Grid>
 
       </Grid>
@@ -200,7 +200,7 @@ export default function Stroop({content, onStore}) {
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('stroop.too_many_timeouts')} escapeHtml={false} /></Grid>
         <Grid item>
-          <Button variant='text' color='primary' onClick={() => startTask()}>{t('stroop.restart')}</Button>
+          <Button variant='outlined' color='secondary' onClick={() => startTask()}>{t('stroop.restart')}</Button>
         </Grid>
       </Grid>
     )
