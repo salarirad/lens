@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 export default function Submission({submission, studyId, submissionNote}) {
 
   const {t} = useTranslation();
-  const submissionApi = `http://cut-lens.herokuapp.com/v1/${studyId}/responses`;
+  const submissionApi = `https://cut-lens.herokuapp.com/v1/${studyId}/responses`;
 
   const [state, setState] = useState({
     submissionCode: undefined,
