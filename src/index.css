@@ -33,3 +33,7 @@ span.required {
 .markdown-text {
   font-size: 1rem;
 }
+
+.country-select {
+  padding-bottom: 16px !important;
+}

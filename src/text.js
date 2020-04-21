@@ -37,11 +37,13 @@ export default function Text({content, onStore}) {
   }
 
 
-
+  /**
+   * Componenet to select a country from a dropdown list.
+   * Enable this feature by adding `autoComplete:'coutries'` to the view.
+   */
   const CountryAutoComplete = () => {
 
-    // ISO 3166-1 alpha-2
-    // No support for IE 11
+    // ISO 3166-1 alpha-2 (No support for IE 11)
     const countryToFlag = (isoCode) => {
       return typeof String.fromCodePoint !== 'undefined'
         ? isoCode
@@ -73,6 +75,7 @@ export default function Text({content, onStore}) {
               ...params.inputProps,
               autoComplete: 'new-password', // disable autocomplete and autofill
             }}
+            className='country-select'
           />
         )}
       />
