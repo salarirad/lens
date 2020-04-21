@@ -4,8 +4,9 @@
   "private": true,
   "homepage": "https://lens.cut.social",
   "dependencies": {
-    "@material-ui/core": "4.x",
+    "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "4.x",
+    "@material-ui/lab": "4.0.0-alpha.49",
     "gh-pages": "2.x",
     "i18next": "^19.3.4",
     "i18next-xhr-backend": "^3.2.2",
