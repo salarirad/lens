@@ -11,6 +11,7 @@ import countries from './utils/countries';
 
 export default function Text({content, onStore}) {
   //props: title, text, placeholder, help, required, pattern, instruction, autoComplete
+  //i18n: text.choose_a_country, text.no_options
 
   const { t } = useTranslation();
 
@@ -36,26 +37,18 @@ export default function Text({content, onStore}) {
   }
 
 
-  // ISO 3166-1 alpha-2
-  // No support for IE 11
-  const countryToFlag = (isoCode) => {
-    return typeof String.fromCodePoint !== 'undefined'
-      ? isoCode
-          .toUpperCase()
-          .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
-      : isoCode;
-  }
 
-  const getLabel = (country) => {
-    return (
-      <React.Fragment>
-        <span>{countryToFlag(country.code)}</span>
-        {country.label}
-      </React.Fragment>
-    );
-  }
+  const CountryAutoComplete = () => {
 
-  const CountrySelect = () => {
+    // ISO 3166-1 alpha-2
+    // No support for IE 11
+    const countryToFlag = (isoCode) => {
+      return typeof String.fromCodePoint !== 'undefined'
+        ? isoCode
+            .toUpperCase()
+            .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
+        : isoCode;
+    }
 
     return (
       <Autocomplete
@@ -66,12 +59,16 @@ export default function Text({content, onStore}) {
         onChange={handleChange}
         value={state.value}
         getOptionLabel={(option) => option.label}
-        noOptionsText={t('no_options')}
-        renderOption={(option) => getLabel(option)}
+        noOptionsText={t('text.no_options')}
+        renderOption={(option) => (
+          <Fragment>
+            <span>{countryToFlag(option.code)}</span> {option.label}
+          </Fragment>
+        )}
         renderInput={(params) => (
           <TextField
             {...params}
-            label={t('choose_a_country')}
+            label={t('text.choose_a_country')}
             variant="outlined"
             inputProps={{
               ...params.inputProps,
@@ -92,7 +89,7 @@ export default function Text({content, onStore}) {
 
       {!(content.instruction || false) &&
         <Grid item>
-          {content.autoComplete === 'countries' && <CountrySelect />}
+          {content.autoComplete === 'countries' && <CountryAutoComplete />}
           {!content.autoComplete && <TextField label={t(content.placeholder)} variant="filled" fullWidth onChange={handleChange} />}
         </Grid>
       }
