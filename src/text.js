@@ -25,7 +25,7 @@ export default function Text({content, onStore}) {
     return () => {
       onStore({
         'view': content,
-        'response': response.current.code
+        'response': response.current?.code || response.current
       })
     };
   },[]);
@@ -55,7 +55,6 @@ export default function Text({content, onStore}) {
         id="country-select"
         options={countries}
         autoHighlight
-        fullWidth
         onChange={handleChange}
         value={state.value}
         getOptionLabel={(option) => option.label}
