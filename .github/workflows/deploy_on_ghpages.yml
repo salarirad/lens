@@ -23,6 +23,8 @@ jobs:
     - run: npm install
     - name: deploy on gh-pages
       run: |
+            git config --global user.email "support@cut.social"
+            git config --global user.name "cutsocial"
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cutsocial/lens.git
             npm run deploy
       env:
