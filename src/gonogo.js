@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Fragment, useRef} from 'react';
+import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
 
 
 import { Button, Grid, Typography, Divider} from '@material-ui/core';
@@ -40,6 +40,35 @@ export default function GoNoGo({content, onStore}) {
     trial: null,
     timeouts: 0
   })
+
+  /**
+   * callback to handle keypress events
+   */
+  const handleKeyPress = (event) => {
+    const { key, keyCode } = event;
+    
+    const current = state.stimuli[state.trial-1];
+    let choice = undefined;
+
+    let empty = (key==='ArrowLeft' && current.startsWith('right')) || 
+                (key==='ArrowRight' && current.startsWith('left'))
+    let go = (key==='ArrowLeft' && current==='left-go') ||
+             (key==='ArrowRight' && current==='right-go') 
+
+    choice = go?choices.go:(empty?'empty':choices.nogo)
+
+    handleResponse(choice)
+    
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
 
   useEffect(() => {
 
