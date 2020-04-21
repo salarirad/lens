@@ -81,7 +81,7 @@ export default function BART({content, onStore}) {
     let risk = 100 / (maxPumps - state.pumps + 1);
     let prob = Math.ceil(Math.random() * 100);
 
-    console.log(risk, prob)
+    console.log('risk', risk, 'random_explosion_prob', prob)
     if ((prob <= risk) && state.pumps > safePumps) {
       newTrial(false, prob);
     } else {
@@ -134,7 +134,7 @@ export default function BART({content, onStore}) {
       <Fragment>
         {state.dialogIsOpen && renderDialog()}
   
-        <Grid container direction='column' spacing={2} justify="space-between" alignItems='stretch'>
+        <Grid container direction='column' spacing={2} justify="space-between" alignItems='stretch' className='bart-container'>
   
         <Grid item container direction='row' justify="space-around" alignItems='center'>
   
@@ -155,13 +155,7 @@ export default function BART({content, onStore}) {
             </Grid></Grid>
         </Grid>
   
-        <Grid item><Divider /></Grid>
-
-        <Grid item container direction="row" justify="space-around" alignItems='center'>
-          <Fab onClick={onInflate} color='primary'>{t('bart.pump')}</Fab>
-          <Fab onClick={onCashIn} color='primary'>{t('bart.cash')}</Fab>
-        </Grid>
-
+        {/*<Grid item><Divider /></Grid>*/}
         
         <Grid item container direction="column" alignContent='center' alignItems='center'> 
           <div className="bubble-container" style={{
@@ -176,6 +170,11 @@ export default function BART({content, onStore}) {
           </div>
         </Grid>
   
+        <Grid item container direction="row" justify="space-around" alignItems='center'>
+          {/*<Fab onClick={onInflate} color='primary'>{t('bart.pump')}</Fab>*/}
+          <Button size='small' variant='outlined' onClick={onCashIn}>{t('bart.cash')}</Button>
+        </Grid>
+
   
         </Grid>
       </Fragment>

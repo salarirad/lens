@@ -1,3 +1,6 @@
+.bart-container {
+  height: calc(100vh - 40px)
+}
 
 .bubble-container {
   width: 300px;
