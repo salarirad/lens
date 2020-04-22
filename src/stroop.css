@@ -2,9 +2,13 @@
   min-height: 20vh;
 }
 
+
+.stroop-container {
+  padding: 0 24px 0 24px;
+}
+
 .stroop-board {
-  min-height: 20vh;
-  flex-grow: 1;
+  height: calc(100vh - 40px);
 }
 
 .stroop-choices {

@@ -173,7 +173,6 @@ export default function Stroop({content, onStore}) {
   }
 
   const renderFeedback = () => {
-    console.log('correct', state.correct)
     return (
       <Grid item container direction='row' justify='space-around' alignItems='center'>
         {state.correct && <CorrectIcon fontSize='large' className='correct gng-icon' />}
@@ -218,7 +217,7 @@ export default function Stroop({content, onStore}) {
   
   //const render = () => {
     return (
-        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container stroop-board'>
+        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='stroop-container stroop-board'>
           <Grid item>
             <Markdown source={t(rule)} escapeHtml={false} />
           </Grid>

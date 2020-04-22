@@ -8,7 +8,7 @@
   width: 45% !important;
   height: 100px !important;
   font-size: 100px !important;
-  background-color: #00000022;
+  background-color: #ffffff22;
 }
 
 .correct {
@@ -35,4 +35,9 @@
 
 .empty {
   cursor: pointer;
+}
+
+.gonogo-container {
+  padding: 0 24px 0 24px;
+  height: calc(100vh - 40px);
 }

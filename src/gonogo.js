@@ -257,7 +257,7 @@ export default function GoNoGo({content, onStore}) {
 
   //const render = () => {
     return (
-        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
+        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='gonogo-container'>
           <Grid item>
             <Markdown source={t(text)} escapeHtml={false} />
           </Grid>
