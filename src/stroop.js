@@ -22,7 +22,7 @@ let clock
 
 export default function Stroop({content, onStore}) {
 
-  const {rule, colors, words, trials, stimulusDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
+  const {rule, colors, words, trials, stimulusDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration} = content;
   const {t} = useTranslation();
   const separator = ''; // character that separates word and color in trials[i].stimulus and trials[i].choices
 
@@ -34,6 +34,29 @@ export default function Stroop({content, onStore}) {
     correct: null,
     timeouts: 0
   });
+
+    /**
+   * callback to handle keypress events
+   */
+  const handleKeyPress = (event) => {
+    const { key, keyCode } = event;
+    
+    let choices = trials[state.trial-1].choices
+    let stimulus = trials[state.trial-1].stimulus
+
+    let choice = (key==='ArrowLeft')?choices[0]:choices[1]
+
+    handleResponse(choice, stimulus)
+    
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
@@ -124,7 +147,7 @@ export default function Stroop({content, onStore}) {
     let [stimulusWord, stimulusColor] = stimulus.split('')
     let correct = (choiceWord === stimulusColor)
 
-    console.log(choiceColor, stimulusWord, correct)
+    //DEBUG console.log(choiceColor, stimulusWord, correct)
     clearTimeout(clock);
 
     setState({
