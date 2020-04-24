@@ -187,11 +187,11 @@ export default function GoNoGo({content, onStore}) {
   const renderStimulus = (stimulus) => {
     return (
       <Fragment>
-      {stimulus==='star' && <Star fontSize='large' onClick={() => handleResponse('star')} className='yellow gng-stimulus' />}
-      {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='empty gng-stimulus'> </div>}
-      {stimulus==='circle' && <Circle fontSize='large' onClick={() => handleResponse('circle')} className='blue gng-stimulus' />}
-      {stimulus==='blue-star' && <Star fontSize='large' onClick={() => handleResponse('blue-star')} className='blue gng-stimulus' />}
-      {stimulus==='yellow-circle' && <Star fontSize='large' onClick={() => handleResponse('yellow-circle')} className='yellow gng-stimulus' />}
+      {stimulus==='star' && <div onClick={() => handleResponse('star')} className='gng-stimulus'><Star fontSize='large' className='yellow' /></div>}
+      {stimulus==='empty' && <div onClick={() => handleResponse('empty')} className='gng-stimulus'> </div>}
+      {stimulus==='circle' && <div onClick={() => handleResponse('circle')} className='gng-stimulus'><Circle fontSize='large' className='blue' /></div>}
+      {stimulus==='blue-star' && <div onClick={() => handleResponse('blue-star')} className='gng-stimulus'><Star fontSize='large' className='blue' /></div>}
+      {stimulus==='yellow-circle' && <div onClick={() => handleResponse('yellow-circle')} className='gng-stimulus'><Star fontSize='large' className='yellow' /></div>}
       </Fragment>
     );
   }
