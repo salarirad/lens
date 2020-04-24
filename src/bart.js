@@ -172,7 +172,7 @@ export default function BART({content, onStore}) {
   
         <Grid item container direction="row" justify="space-around" alignItems='center'>
           {/*<Fab onClick={onInflate} color='primary'>{t('bart.pump')}</Fab>*/}
-          <Button size='small' variant='outlined' onClick={onCashIn}>{t('bart.cash')}</Button>
+          <Button size='large' variant='outlined' onClick={onCashIn}>{t('bart.cash')}</Button>
         </Grid>
 
   
