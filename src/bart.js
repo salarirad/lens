@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment, useRef} from 'react';
 
-import {Button, Fab, Grid, Typography, Divider} from '@material-ui/core';
+import {Button, Fab, Grid, Typography, Divider, Tooltip} from '@material-ui/core';
 
 import {Dialog, DialogActions, DialogTitle, DialogContentText, DialogContent} from '@material-ui/core';
 
@@ -20,7 +20,8 @@ export default function BART({content, onStore}) {
     totalScore: 0,
     trialResponses: [],
     dialogIsOpen: false,
-    taskStartedAt: Date.now()
+    taskStartedAt: Date.now(),
+    showTooltip: true
   });
 
   // on mount and unmount
@@ -66,6 +67,7 @@ export default function BART({content, onStore}) {
         score: cashed? state.pumps * reward : 0,
         result: cashed? "cashed" : "exploded"
       }],
+      showTooltip: true,
       finished: (state.trial>=trials),
       pumps: 0,
       trial: state.trial+1,
@@ -87,6 +89,7 @@ export default function BART({content, onStore}) {
     } else {
       setState({
         ...state,
+        showTooltip: false,
         pumps: state.pumps+1
       });
     }
@@ -158,6 +161,7 @@ export default function BART({content, onStore}) {
         {/*<Grid item><Divider /></Grid>*/}
         
         <Grid item container direction="column" alignContent='center' alignItems='center'> 
+          <Tooltip title={t('bart.balloon_tooltip')} arrow open={!state.dialogIsOpen && state.showTooltip}>
           <div className="bubble-container" style={{
             cursor: 'pointer',
             width: (state.pumps+1) * 20,
@@ -168,10 +172,10 @@ export default function BART({content, onStore}) {
           >
             <figure className="bubble"></figure>
           </div>
+          </Tooltip>
         </Grid>
   
         <Grid item container direction="row" justify="space-around" alignItems='center'>
-          {/*<Fab onClick={onInflate} color='primary'>{t('bart.pump')}</Fab>*/}
           <Button size='large' variant='outlined' onClick={onCashIn}>{t('bart.cash')}</Button>
         </Grid>
 
