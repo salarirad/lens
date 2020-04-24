@@ -15,6 +15,7 @@ export default function Matrix({content, onStore}) {
   });
 
   useEffect(() => {
+    window.scrollTo({top: 0, behavior: "smooth"});
     return () => {
       onStore({
         'view': content,
