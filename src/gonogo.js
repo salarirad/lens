@@ -47,6 +47,9 @@ export default function GoNoGo({content, onStore}) {
   const handleKeyPress = (event) => {
     const { key, keyCode } = event;
     
+    if (state.step !== 'stimuli')
+      return;
+
     const current = state.stimuli[state.trial-1];
     let choice = undefined;
 

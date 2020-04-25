@@ -41,6 +41,9 @@ export default function Stroop({content, onStore}) {
   const handleKeyPress = (event) => {
     const { key, keyCode } = event;
     
+    if (state.step !== 'stimulus')
+      return;
+
     let choices = trials[state.trial-1].choices
     let stimulus = trials[state.trial-1].stimulus
 
