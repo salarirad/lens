@@ -45,3 +45,11 @@ span.required {
   font-size: 0.85rem;
   color: #ffffffbb;
 }
+
+.matrix-slider {
+  padding-top: 20px;
+}
+
+.MuiTooltip-tooltip {
+  font-size: .85rem !important;
+}

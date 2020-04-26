@@ -179,8 +179,8 @@ export default function BART({content, onStore}) {
           <Tooltip title={t('bart.balloon_tooltip')} arrow open={!state.dialogIsOpen && state.showTooltip}>
           <div className="bubble-container" style={{
             cursor: 'pointer',
-            width: (state.pumps+1) * 10,
-            height: (state.pumps+1) * 10,
+            width: (state.pumps+1) * 20,
+            height: (state.pumps+1) * 20,
             transition: (state.pumps===0)?'':'width 1s, height 1s' //explosition and pumping effects
           }}
           onClick={onInflate}
@@ -191,7 +191,7 @@ export default function BART({content, onStore}) {
         </Grid>
   
         <Grid item container direction="row" justify="space-around" alignItems='center'>
-          <Button size='large' variant='outlined' onClick={onCashIn}>{t('bart.cash')}</Button>
+          <Button size='large' color='primary' variant='outlined' onClick={onCashIn}>{t('bart.cash')}</Button>
         </Grid>
 
   
