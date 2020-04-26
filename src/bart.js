@@ -24,8 +24,20 @@ export default function BART({content, onStore}) {
     showTooltip: true
   });
 
+  const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
   // on mount and unmount
   useEffect(() => {
+
+    // create a list of random numbers and shuffle it
+    state.randomNumbers = shuffle(Array.from({length: maxPumps}, (_, i) => i));
+
     document.body.style['touch-action'] = "none";
     document.documentElement.style['touch-action'] = "none";
     return () => {
@@ -55,15 +67,13 @@ export default function BART({content, onStore}) {
    * @param {*} cashed either cashed or exploded
    * @param {*} explosionProbability last probability of balloon getting exploded
    */
-  const newTrial = (cashed, explosionProbability) => {
+  const newTrial = (cashed, randomNumber) => {
     setState({
       ...state, 
       dialogIsOpen: true,
       trialResponses: [...state.trialResponses, {
         trial: state.trial,
-        risk: 100 / (maxPumps - state.pumps + 1),
         pumps: state.pumps,
-        explosionProbability: explosionProbability,
         score: cashed? state.pumps * reward : 0,
         result: cashed? "cashed" : "exploded"
       }],
@@ -80,19 +90,22 @@ export default function BART({content, onStore}) {
    */
   const onInflate = () => {
 
-    let risk = 100 / (maxPumps - state.pumps + 1);
-    let prob = Math.ceil(Math.random() * 100);
+    const isSafe = safePumps>0 && state.pumps<safePumps
+    let randomIndex = Math.floor(Math.random() * state.randomNumbers.length);
+    let randomNumber = state.randomNumbers.splice(randomIndex, isSafe?0:1);  
+    console.log('random number: ', randomNumber[0], '(must be 1 to explode)')
 
-    console.log('risk', risk, 'random_explosion_prob', prob)
-    if ((prob <= risk) && state.pumps > safePumps) {
-      newTrial(false, prob);
+    // if the randomly picked number is 1, then explode
+    if (randomNumber[0] === 1) {
+      newTrial(false, randomNumber);
     } else {
-      setState({
+        setState({
         ...state,
         showTooltip: false,
         pumps: state.pumps+1
       });
     }
+
   };
 
   /**
