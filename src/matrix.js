@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef, Fragment} from 'react';
 
-import {Grid, Radio, RadioGroup, FormControlLabel, Divider} from '@material-ui/core';
+import {Grid, Radio, RadioGroup, FormControlLabel, Divider, Slider} from '@material-ui/core';
 
 import Markdown from 'react-markdown/with-html';
 import {useTranslation} from 'react-i18next';
@@ -8,7 +8,7 @@ import {useTranslation} from 'react-i18next';
 export default function Matrix({content, onStore, onValidate}) {
 
   const {t} = useTranslation();
-  const {questions, choices, direction, text } = content;
+  const {questions, choices, direction, text, slider } = content;
 
   const response = useRef({
     values: Array.from({ length: questions.length })
@@ -27,7 +27,25 @@ export default function Matrix({content, onStore, onValidate}) {
     };
   },[]);
 
-  
+  const renderSlider = (choices, index) => {
+    return (
+      <Grid item container xs key={index} className='matrix-slider'>
+        <Slider
+          defaultValue={response.current.values[index]}
+          value={response.current.values[index]}
+          valueLabelFormat={(v) => t(choices[v-1])}
+          aria-labelledby={"question"+index}
+          onChangeCommitted={(e, value) => handleChange(e, index, value)}
+          step={1}
+          min={1}
+          max={choices.length}
+          valueLabelDisplay="on"
+          marks={choices.map((c, i) => {return {value: i+1, label: (i===0 || i==choices.length-1)?t(c):''}})}
+        />
+      </Grid>
+    )
+  }
+
   const renderChoice = (c, index) => {
     return (
       <Grid item xs key={index}>
@@ -41,29 +59,33 @@ export default function Matrix({content, onStore, onValidate}) {
     )
   }
 
-  const handleChange = (e, index) => {
-    response.current.values[index] = e.target.value;
+  const handleChange = (e, index, value) => {
+    response.current.values[index] = e.target.value || value;
 
+    console.log(response.current.values[index]);
     const n_null = response.current.values.filter((v,i) => {
-      console.log(v,i)
+      //console.log(v,i)
       return content.requiredQuestions.includes(i) && (v === null || v===undefined)
     }).length
-    console.log('n_null', n_null)
+    //console.log('n_null', n_null)
     onValidate(n_null === 0)
   }
 
   const renderQuestion = (q, index) => {
     return (
       <Grid item key={index} className='matrix-question-container'>
-      <RadioGroup name={`q${index}`} value={response.current.values[index]} onChange={(e) => handleChange(e, index)}>
       <Markdown source={t(q)} escapeHtml={false} className='markdown-text' />
-      <Grid container 
-        direction={direction==='vertical'?'column':'row'} 
-        alignItems='flex-start' 
-        justify="space-between">
-        {choices.map((c, j) => renderChoice(c, j))}
-      </Grid>
-      </RadioGroup>
+      {slider && renderSlider(choices, index)}
+      {!slider && 
+        <RadioGroup name={`q${index}`} value={response.current.values[index]} onChange={(e) => handleChange(e, index)}>
+        <Grid container 
+          direction={direction==='vertical'?'column':'row'} 
+          alignItems='flex-start' 
+          justify="space-between">
+          {choices.map((c, j) => renderChoice(c, j))}
+        </Grid>
+        </RadioGroup>
+      }
       </Grid>
     ) 
   }
