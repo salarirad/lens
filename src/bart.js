@@ -36,7 +36,7 @@ export default function BART({content, onStore}) {
   useEffect(() => {
 
     // create a list of random numbers and shuffle it
-    state.randomNumbers = shuffle(Array.from({length: maxPumps}, (_, i) => i));
+    state.randomNumbers = shuffle(Array.from({length: maxPumps}, (_, i) => i+1));
 
     document.body.style['touch-action'] = "none";
     document.documentElement.style['touch-action'] = "none";
@@ -81,7 +81,8 @@ export default function BART({content, onStore}) {
       finished: (state.trial>=trials),
       pumps: 0,
       trial: state.trial+1,
-      totalScore: state.totalScore + (cashed?state.pumps*reward:0)
+      totalScore: state.totalScore + (cashed?state.pumps*reward:0),
+      randomNumbers: shuffle(Array.from({length: maxPumps}, (_, i) => i+1))
     });
   }
 
@@ -89,6 +90,7 @@ export default function BART({content, onStore}) {
    * action to inflate the baloon
    */
   const onInflate = () => {
+    console.log(state.randomNumbers)
 
     const isSafe = safePumps>0 && state.pumps<safePumps
     let randomIndex = Math.floor(Math.random() * state.randomNumbers.length);
@@ -177,8 +179,8 @@ export default function BART({content, onStore}) {
           <Tooltip title={t('bart.balloon_tooltip')} arrow open={!state.dialogIsOpen && state.showTooltip}>
           <div className="bubble-container" style={{
             cursor: 'pointer',
-            width: (state.pumps+1) * 20,
-            height: (state.pumps+1) * 20,
+            width: (state.pumps+1) * 10,
+            height: (state.pumps+1) * 10,
             transition: (state.pumps===0)?'':'width 1s, height 1s' //explosition and pumping effects
           }}
           onClick={onInflate}
