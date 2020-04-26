@@ -1,9 +1,19 @@
 import React, {useEffect, useState, useRef, Fragment} from 'react';
 
-import {Grid, Radio, RadioGroup, FormControlLabel, Divider, Slider} from '@material-ui/core';
+import {Grid, Radio, Tooltip, RadioGroup, FormControlLabel, Divider, Slider} from '@material-ui/core';
 
 import Markdown from 'react-markdown/with-html';
 import {useTranslation} from 'react-i18next';
+
+function ValueLabelComponent(props) {
+  const { children, open, value } = props;
+
+  return (
+    <Tooltip open={open} enterTouchDelay={0} placement="top" title={value} arrow>
+      {children}
+    </Tooltip>
+  );
+}
 
 export default function Matrix({content, onStore, onValidate}) {
 
@@ -35,13 +45,18 @@ export default function Matrix({content, onStore, onValidate}) {
           value={response.current.values[index]}
           valueLabelFormat={(v) => t(choices[v-1])}
           aria-labelledby={"question"+index}
+          ValueLabelComponent={ValueLabelComponent}
           onChangeCommitted={(e, value) => handleChange(e, index, value)}
           step={1}
           min={1}
           max={choices.length}
           valueLabelDisplay="on"
-          marks={choices.map((c, i) => {return {value: i+1, label: (i===0 || i==choices.length-1)?t(c):''}})}
         />
+        <Grid container direction='row' alignItems='stretch' justify='space-between'>
+          <Grid item className='mark'><em>{t(choices[0])}</em></Grid>
+          <Grid item className='mark'><em>{t(choices[choices.length-1])}</em></Grid>
+        </Grid>
+
       </Grid>
     )
   }

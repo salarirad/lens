@@ -17,9 +17,11 @@
   padding: 12px 24px 12px 24px;
 }
 
-.matrix-spacer {
-  margin-top: 24px;
-  margin-bottom: 24px;
+.MuiDivider-root.matrix-spacer {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: -24px;
+  margin-right: -24px;
 }
 
 .matrix-question-container {
@@ -38,7 +40,8 @@ span.required {
   padding-bottom: 16px !important;
 }
 
-
-.matrix-slider {
-  padding-top: 32px;
+.matrix-slider .mark {
+  color: red;
+  font-size: 0.85rem;
+  color: #ffffffbb;
 }
