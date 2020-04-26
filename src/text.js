@@ -33,10 +33,12 @@ export default function Text({content, onStore, onValidate}) {
 
   const handleChange = (e, value) => {
     response.current = value
-    setState({...state, value: response.current});
+    setState({...state, value: value});
 
-    const resp = response.current?.code || response.current
-    onValidate(resp !== null && resp.length>0);
+    const resp = value?.code || response.current
+    console.log(resp)
+
+    onValidate(resp !== undefined && resp.length>0);
   }
 
 
@@ -60,7 +62,7 @@ export default function Text({content, onStore, onValidate}) {
         id="country-select"
         options={countries}
         autoHighlight
-        onChange={handleChange}
+        onChange={(e, v) => handleChange(e, v)}
         value={state.value}
         getOptionLabel={(option) => option.label}
         noOptionsText={t('text.no_options')}
@@ -95,7 +97,7 @@ export default function Text({content, onStore, onValidate}) {
       {!(content.instruction || false) &&
         <Grid item>
           {content.autoComplete === 'countries' && <CountryAutoComplete />}
-          {!content.autoComplete && <TextField label={t(content.placeholder)} variant="filled" fullWidth onChange={handleChange} />}
+          {!content.autoComplete && <TextField label={t(content.placeholder)} variant="filled" fullWidth onChange={(e) => handleChange(e, e.target.value)} />}
         </Grid>
       }
     </Grid>
