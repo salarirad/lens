@@ -235,7 +235,7 @@ export default function GoNoGo({content, onStore}) {
   if (state.step === 'reset') {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
-        <Grid item><Markdown source={t('gonogo.too_many_timeouts')} escapeHtml={false} /></Grid>
+        <Grid item><Markdown source={t('gonogo.too_many_timeouts')} escapeHtml={false}  className='markdown-text' /></Grid>
         <Grid item>
           <Button variant='outlined' color='secondary' onClick={() => startTask()}>{t('gonogo.restart')}</Button>
         </Grid>
@@ -248,7 +248,7 @@ export default function GoNoGo({content, onStore}) {
   if (state.trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
-        <Grid item><Markdown source={t('gonogo.are_you_ready')} escapeHtml={false} /></Grid>
+        <Grid item><Markdown source={t('gonogo.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
         <Grid item>
           <Button variant='outlined' onClick={() => startTask()}>{t('gonogo.start')}</Button>
         </Grid>
@@ -262,7 +262,7 @@ export default function GoNoGo({content, onStore}) {
     return (
         <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='gonogo-container'>
           <Grid item>
-            <Markdown source={t(text)} escapeHtml={false} />
+            <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
           </Grid>
 
           {state.step === 'stimuli'  && renderStimuli(state.stimuli[state.trial-1])}
