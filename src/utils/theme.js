@@ -4,10 +4,10 @@ const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: '#757ce8'
+      main: '#039be5'
     },
     secondary: {
-      main: '#ff7961'
+      main: '#f06292'
     }
   },
   typography: {
@@ -32,10 +32,10 @@ const rtlDarkTheme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: '#757ce8'
+      main: '#039be5'
     },
     secondary: {
-      main: '#ff7961'
+      main: '#f06292'
     }
   },
   typography: {
