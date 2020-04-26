@@ -5,7 +5,7 @@ import {Grid, Radio, RadioGroup, FormControlLabel, Divider} from '@material-ui/c
 import Markdown from 'react-markdown/with-html';
 import {useTranslation} from 'react-i18next';
 
-export default function Matrix({content, onStore}) {
+export default function Matrix({content, onStore, onValidate}) {
 
   const {t} = useTranslation();
   const {questions, choices, direction, text } = content;
@@ -15,6 +15,9 @@ export default function Matrix({content, onStore}) {
   });
 
   useEffect(() => {
+    if (content.requiredQuestions.length>0)
+      onValidate(false);
+    
     window.scrollTo({top: 0, behavior: "smooth"});
     return () => {
       onStore({
@@ -40,6 +43,13 @@ export default function Matrix({content, onStore}) {
 
   const handleChange = (e, index) => {
     response.current.values[index] = e.target.value;
+
+    const n_null = response.current.values.filter((v,i) => {
+      console.log(v,i)
+      return content.requiredQuestions.includes(i) && (v === null || v===undefined)
+    }).length
+    console.log('n_null', n_null)
+    onValidate(n_null === 0)
   }
 
   const renderQuestion = (q, index) => {

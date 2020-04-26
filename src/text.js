@@ -9,7 +9,7 @@ import Markdown from 'react-markdown/with-html';
 
 import countries from './utils/countries';
 
-export default function Text({content, onStore}) {
+export default function Text({content, onStore, onValidate}) {
   //props: title, text, placeholder, help, required, pattern, instruction, autoComplete
   //i18n: text.choose_a_country, text.no_options
 
@@ -34,6 +34,9 @@ export default function Text({content, onStore}) {
   const handleChange = (e, value) => {
     response.current = value
     setState({...state, value: response.current});
+
+    const resp = response.current?.code || response.current
+    onValidate(resp !== null && resp.length>0);
   }
 
 

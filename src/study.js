@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 import {useParams} from 'react-router-dom';
 
-import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper} from '@material-ui/core';
+import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper, Snackbar} from '@material-ui/core';
+import {Alert} from '@material-ui/lab';
 
 import {ltrTheme, rtlTheme} from './utils/theme';
 import {languages} from './utils/i18n';
@@ -21,6 +22,7 @@ export default function Study(props) {
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
   const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
+  const responseIsValid = useRef(false);
 
   const [state, setState] = useState({
     subject: undefined,
@@ -33,6 +35,8 @@ export default function Study(props) {
     responses: [],
     experiment: {}
   })
+
+  const [notification, setNotification] = useState(undefined);
 
   const storeData = (data, autoNext=false) => {
     console.log('study.storeData', data);
@@ -51,9 +55,13 @@ export default function Study(props) {
   }
 
   const onNext = () => {
-    console.log('study.onNext');
 
+    if ((state.view.required || state.view.requiredQuestions?.length>0) && !responseIsValid.current) {
+      setNotification(t('errors.required'))
+      return;
+    }
 
+    responseIsValid.current = false;
 
     setState(prev => {
       const nextViewIndex = prev.currentViewIndex + 1;
@@ -88,7 +96,7 @@ export default function Study(props) {
 
     switch(view?.type) {
       case 'text':
-        return <Text onStore={storeData} content={view} key={view.id}>{props.children}</Text>;
+        return <Text onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />;
       case 'bart':
         return <BART onStore={storeData} content={view} key={view.id} />;
       case 'gonogo': 
@@ -96,7 +104,7 @@ export default function Study(props) {
       case 'stroop': 
         return <Stroop onStore={storeData} content={view} key={view.id} />;
       case 'matrix':
-        return <Matrix onStore={storeData} content={view} key={view.id} ></Matrix>
+        return <Matrix onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />
       default:
         return <div>Not Implemented!</div>;
     }
@@ -139,6 +147,14 @@ export default function Study(props) {
             justify="flex-start"
             alignItems="stretch"
           >
+            <Snackbar 
+              open={notification !== undefined} 
+              autoHideDuration={5000} 
+              onClose={() => setNotification(undefined)}
+            >
+              <Alert onClose={() => setNotification(undefined)} severity="error">{t(notification)}</Alert>
+            </Snackbar>
+
             <Grid item>
               <Paper className='view-container'>
               {!state.finished && state.loading && <div>{t('loading')}</div>}
