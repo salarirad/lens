@@ -13,7 +13,7 @@
 			"reward": 10,
 			"maxPumps": 20,
 			"safePumps": 1,
-			"trials": 8
+			"trials": 25
 		}
 
   ]
