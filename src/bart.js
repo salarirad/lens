@@ -90,7 +90,6 @@ export default function BART({content, onStore}) {
    * action to inflate the baloon
    */
   const onInflate = () => {
-    console.log(state.randomNumbers)
 
     const isSafe = safePumps>0 && state.pumps<safePumps
     let randomIndex = Math.floor(Math.random() * state.randomNumbers.length);
@@ -144,6 +143,14 @@ export default function BART({content, onStore}) {
       </Dialog>);
   }
 
+  const balloonSize = (pumps, maxPumps) => {
+    //TODO let volume = 20/(1+Math.pow(Math.E, -3*(pumps/maxPumps))) // logit(3*pumps/maxPumps)
+    //TODO calc radius
+    let rad = Math.sqrt((pumps+1)*500/Math.PI)
+    console.log(rad)
+    return Math.ceil(2*rad)
+  }
+
   /**
    * Render BART component (main render)
    */
@@ -179,8 +186,8 @@ export default function BART({content, onStore}) {
           <Tooltip title={t('bart.balloon_tooltip')} arrow open={!state.dialogIsOpen && state.showTooltip}>
           <div className="bubble-container" style={{
             cursor: 'pointer',
-            width: (state.pumps+1) * 20,
-            height: (state.pumps+1) * 20,
+            width: balloonSize(state.pumps, maxPumps),
+            height: balloonSize(state.pumps, maxPumps),
             transition: (state.pumps===0)?'':'width 1s, height 1s' //explosition and pumping effects
           }}
           onClick={onInflate}
