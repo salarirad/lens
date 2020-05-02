@@ -24,7 +24,7 @@ let clock
 
 export default function Stroop({content, onStore}) {
 
-  const {rule, colors, words, trials, randomizeTrials, stimulusDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration} = content;
+  const {rule, colors, words, trials, randomizeTrials, randomizeChoices, stimulusDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration} = content;
 
 
   const {t} = useTranslation();
@@ -66,13 +66,25 @@ export default function Stroop({content, onStore}) {
     };
   }, [handleKeyPress]);
 
+
+  const randomize = (trials/*use props instead of: , randomizeTrials, randomizeChoices*/) => {
+    let _trials = (randomizeTrials || false)?shuffle(trials):trials
+    if (randomizeChoices)
+      _trials = _trials.map(t=> {
+        let _t = Object.assign({},t); // copy
+        _t.choices = shuffle(t.choices);
+        return _t;
+      })
+    return _trials
+  }
+
   // when finished, store responses and proceed to the next view
   useEffect(() => {
 
     if (state.stimuli===null) {
       setState({
         ...state,
-        stimuli: (randomizeTrials || false)?shuffle(trials):trials
+        stimuli: randomize(trials, randomizeTrials, randomizeChoices)
       })
     }
 
