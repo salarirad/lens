@@ -9,6 +9,8 @@ import {
   Clear as IncorrectIcon,
 } from '@material-ui/icons';
 
+import shuffle from './utils/shuffle';
+
 import Image from 'material-ui-image';
 
 import Markdown from 'react-markdown/with-html';
@@ -22,7 +24,9 @@ let clock
 
 export default function Stroop({content, onStore}) {
 
-  const {rule, colors, words, trials, stimulusDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration} = content;
+  const {rule, colors, words, trials, randomizeTrials, stimulusDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration} = content;
+
+
   const {t} = useTranslation();
   const separator = ''; // character that separates word and color in trials[i].stimulus and trials[i].choices
 
@@ -32,7 +36,8 @@ export default function Stroop({content, onStore}) {
     trial: null,
     step: null,
     correct: null,
-    timeouts: 0
+    timeouts: 0,
+    stimuli: null
   });
 
     /**
@@ -44,8 +49,8 @@ export default function Stroop({content, onStore}) {
     if (state.step !== 'stimulus')
       return;
 
-    let choices = trials[state.trial-1].choices
-    let stimulus = trials[state.trial-1].stimulus
+    let choices = state.stimuli[state.trial-1].choices
+    let stimulus = state.stimuli[state.trial-1].stimulus
 
     let choice = (key==='ArrowLeft')?choices[0]:choices[1]
 
@@ -64,8 +69,17 @@ export default function Stroop({content, onStore}) {
   // when finished, store responses and proceed to the next view
   useEffect(() => {
 
-    if (state.step==='fixation') {
+    console.log('step', state.step)
+    if (state.stimuli===null) {
+      console.log('randomizging trials')
+      setState({
+        ...state,
+        stimuli: (randomizeTrials || false)?shuffle(trials):trials
+      })
+    }
 
+    if (state.step==='fixation') {
+      clearTimeout(clock);  
       clock = setTimeout(() => {
         setState({
           ...state,
@@ -73,8 +87,14 @@ export default function Stroop({content, onStore}) {
           trial: state.trial+1, 
           trialStartedAt: Date.now()
         });
-      }, fixationDuration)
-      //return clearTimeout(clock);
+      }, fixationDuration);
+    }
+
+    if (state.step === 'feedback') {
+      clearTimeout(clock);
+      clock = setTimeout(() => {
+        setState({...state, step: 'fixation'})
+      }, feedbackDuration)
     }
 
     if (state.step === 'stimulus') {
@@ -87,6 +107,7 @@ export default function Stroop({content, onStore}) {
             step: (feedbackDuration>0)?'feedback':'fixation',
             trialResponses: [...state.trialResponses, {
               trial: state.trial,
+              stimulus: state.stimuli[state.trial-1].stimulus,
               choice: null,
               correct: null,
               respondedAt: null,
@@ -102,20 +123,15 @@ export default function Stroop({content, onStore}) {
       }
     }
 
-    if (state.step === 'feedback') {
-        clearTimeout(clock);
-        clock = setTimeout(() => {
-          setState({
-            ...state,
-            step: 'fixation',
-          });
-        }, feedbackDuration);
+    if (state.trial>trials.length) {
+      console.log('------------ FINISHED -------')
+      setState({...state, finished: true, taskFinishedAt: Date.now()})
     }
 
     if (state.finished) {
-      clearTimeout(state.clock);
-      
-      // add timestamps
+      clearTimeout(clock);
+
+      // timestamps
       let response = {trials: state.trialResponses};
       response.taskStartedAt = state.taskStartedAt;
       response.taskFinishedAt = state.taskFinishedAt;
@@ -124,10 +140,6 @@ export default function Stroop({content, onStore}) {
         'view': content,
         'response': response
       }, true); // store + next
-    }
-
-    if (state.trial>=trials.length) {
-      setState({...state, taskFinishedAt: Date.now(), finished: true})
     }
 
   }, [state]);
@@ -146,12 +158,13 @@ export default function Stroop({content, onStore}) {
   const handleResponse = (choice, stimulus) => {
     let respondedAt = Date.now(); //timestamp
 
+    clearTimeout(clock);
+
     let [choiceWord, choiceColor] = choice.split('')
     let [stimulusWord, stimulusColor] = stimulus.split('')
     let correct = (choiceWord === stimulusColor)
 
     //DEBUG console.log(choiceColor, stimulusWord, correct)
-    clearTimeout(clock);
 
     setState({
       ...state,
@@ -159,6 +172,7 @@ export default function Stroop({content, onStore}) {
       correct: correct,
       trialResponses: [...state.trialResponses,{
         trial: state.trial,
+        stimulus: state.stimuli[state.trial-1].stimulus,
         choice: choice,
         correct: correct,
         respondedAt: respondedAt,
@@ -248,8 +262,13 @@ export default function Stroop({content, onStore}) {
             <Markdown source={t(rule)} escapeHtml={false} className='markdown-text' />
           </Grid>
 
-          {state.step === 'stimulus' && renderStimulus(trials[state.trial-1].stimulus) }
-          {state.step === 'stimulus' && renderChoices(trials[state.trial-1].choices, trials[state.trial-1].stimulus) }
+          {state.trial<=trials.length && 
+            state.step === 'stimulus' && 
+            renderStimulus(state.stimuli[state.trial-1].stimulus) }
+            
+          {state.trial<=trials.length && 
+            state.step === 'stimulus' && 
+            renderChoices(state.stimuli[state.trial-1].choices, state.stimuli[state.trial-1].stimulus) }
 
           {state.step === 'feedback' && renderFeedback(state.correct)}
 

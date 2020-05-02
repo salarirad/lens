@@ -90,13 +90,20 @@ export default function GoNoGo({content, onStore}) {
     }
 
 
+    // # FIXATION
     if (state.step === 'fixation') {
       clearTimeout(clock);  
       clock = setTimeout(() => {
-          setState({...state, trial: state.trial+1, trialStartedAt: Date.now(), step: 'stimuli'});
+          setState({
+            ...state, 
+            trial: state.trial+1, 
+            trialStartedAt: Date.now(), 
+            step: 'stimuli'
+          });
         }, fixationDuration);
     }
 
+    // # FEEDBACK
     if (state.step === 'feedback') {
       clearTimeout(clock);
       clock = setTimeout(() => {
@@ -125,18 +132,19 @@ export default function GoNoGo({content, onStore}) {
           });
         }, stimuliDuration)
       } else {
-        setState({...state, step: 'reset'})
+        setState({...state, step: 'reset', timeouts: 0})
       }
     }
 
 
     if (state.trial>trials.total) {
+      console.log('------------ FINISHED -------')
       setState({...state, finished: true, taskFinishedAt: Date.now()})
     }
 
     // on finish
     if (state.finished) {
-      clearTimeout(state.clock);
+      clearTimeout(clock);
       
       // timestamps
       let response = {trials: state.trialResponses};
