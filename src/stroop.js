@@ -69,9 +69,7 @@ export default function Stroop({content, onStore}) {
   // when finished, store responses and proceed to the next view
   useEffect(() => {
 
-    console.log('step', state.step)
     if (state.stimuli===null) {
-      console.log('randomizging trials')
       setState({
         ...state,
         stimuli: (randomizeTrials || false)?shuffle(trials):trials
@@ -124,7 +122,6 @@ export default function Stroop({content, onStore}) {
     }
 
     if (state.trial>trials.length) {
-      console.log('------------ FINISHED -------')
       setState({...state, finished: true, taskFinishedAt: Date.now()})
     }
 
