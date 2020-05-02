@@ -14,3 +14,7 @@
 .stroop-choices {
   padding-bottom: 16px;
 }
+
+.stroop-choices .MuiButton-label {
+  font-size: 1.4rem;
+}
