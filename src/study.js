@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 
-import {useParams} from 'react-router-dom';
+import {useParams,useLocation} from 'react-router-dom';
 
 import {Container, ThemeProvider, CssBaseline, LinearProgress, Grid, Paper, Snackbar} from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
@@ -17,10 +17,18 @@ import GoNoGo from './gonogo';
 import Stroop from './stroop';
 import { useTranslation } from 'react-i18next';
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function Study(props) {
 
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
+
+  // prolific shits
+  let query = useQuery();
+
   const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
   const responseIsValid = useRef(false);
 
@@ -90,7 +98,12 @@ export default function Study(props) {
 
     if (state.finished) {
       return (
-        <Submission submission={{responses: state.responses}} studyId={studyId} submissionNote={state.experiment.submissionNote} />
+        <Submission submission={{
+          PROLIFIC_PID: query.get('PROLIFIC_PID'),
+          STUDY_ID: query.get('STUDY_ID'),
+          SESSION_ID: query.get('SESSION_ID'),
+          responses: state.responses}}
+          studyId={studyId} submissionNote={state.experiment.submissionNote} />
       );
     }
 
