@@ -4,7 +4,7 @@
 	"redirectTo": "https://app.prolific.co/submissions/complete?cc=720B7C21",
 	"submissionNote": "submission.note",
 	"metadata": {
-		"maintainer": "salarirad@gmail.com"
+		"maintainer": "salarirad@gmail.com" 
 	},
 	"views": [{
 			"id": "introduction",
