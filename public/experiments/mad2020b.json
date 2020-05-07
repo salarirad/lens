@@ -1,7 +1,7 @@
 {
 	"studyId": "ramadan2020",
 	"conditon": "b",
-	"redirectTo": "https://app.prolific.co/submissions/complete?cc=8E12992D",
+	"redirectTo": "https://app.prolific.co/submissions/complete?cc=720B7C21",
 	"submissionNote": "submission.note",
 	"metadata": {
 		"maintainer": "salarirad@gmail.com"
@@ -198,6 +198,16 @@
 			"placeholder": "Points I request",
 			"pattern": ""
         },
+	{
+			"id": "social dilemma 6",
+			"type": "text",
+			"instruction": false,
+			"required": true,
+			"text": "social.dilemma.q6",
+			"help": "",
+			"placeholder": "Points I request",
+			"pattern": ""
+        },
 		{
 			"id": "bart intro",
 			"type": "text",
@@ -350,30 +360,6 @@
 				
 			],
 			"questions": ["patience.q"]
-		},
-		{
-			"id": "religiosity",
-			"type": "matrix",
-			"text": "",
-			"slider": true,
-			"requiredQuestions": [0],
-			"direction": "vertical",
-			"choices": [
-				"religiosity.c0",
-				"religiosity.c1",
-				"religiosity.c2",
-				"religiosity.c3",
-				"religiosity.c4",
-				"religiosity.c5",
-				"religiosity.c6",
-				"religiosity.c7",
-				"religiosity.c8",
-				"religiosity.c9",
-				"religiosity.c10",
-				"religiosity.c11"
-				
-			],
-			"questions": ["religiosity.q"]
 		},
 		{
 			"id": "trust.fehr",
@@ -831,7 +817,7 @@
 			"feedbackDuration": 1000,
 			"timeoutsBeforeReset": 10,
 			"randomizeTrials": true,
-			"randomizeChoices": false
+			"randomizeChoices": true
 
 		},
 		{
@@ -972,7 +958,7 @@
 			"feedbackDuration": 0,
 			"timeoutsBeforeReset": 10,
 			"randomizeTrials": true,
-			"randomizeChoices": false
+			"randomizeChoices": true
 
         },
 	{
@@ -1060,6 +1046,40 @@
 				
 			],
 			"questions": ["hunger.q"]
+		},
+		{
+			"id": "religion",
+			"type": "text",
+			"instruction": false,
+			"required": true,
+			"text": "religion.q",
+			"help": "",
+			"placeholder": "",
+			"pattern": ""
+	        }, 
+		{
+			"id": "religiosity",
+			"type": "matrix",
+			"text": "",
+			"slider": true,
+			"requiredQuestions": [0],
+			"direction": "vertical",
+			"choices": [
+				"religiosity.c0",
+				"religiosity.c1",
+				"religiosity.c2",
+				"religiosity.c3",
+				"religiosity.c4",
+				"religiosity.c5",
+				"religiosity.c6",
+				"religiosity.c7",
+				"religiosity.c8",
+				"religiosity.c9",
+				"religiosity.c10",
+				"religiosity.c11"
+				
+			],
+			"questions": ["religiosity.q"]
 		},
 		{
 			"id": "fasting.ramadan",
