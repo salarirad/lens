@@ -18,7 +18,7 @@ function ValueLabelComponent(props) {
 export default function Matrix({content, onStore, onValidate}) {
 
   const {t} = useTranslation();
-  const {questions, choices, direction, text, slider } = content;
+  const {questions, choices, direction, text, slider, showMidMark } = content;
 
   const response = useRef({
     values: Array.from({ length: questions.length })
@@ -54,6 +54,7 @@ export default function Matrix({content, onStore, onValidate}) {
         />
         <Grid container direction='row' alignItems='stretch' justify='space-between'>
           <Grid item className='mark'><em>{t(choices[0])}</em></Grid>
+          {showMidMark && <Grid item className='mark'><em>{t(choices[Math.floor(choices.length/2)])}</em></Grid>}
           <Grid item className='mark'><em>{t(choices[choices.length-1])}</em></Grid>
         </Grid>
 
