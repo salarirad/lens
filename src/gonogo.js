@@ -46,8 +46,15 @@ export default function GoNoGo({content, onStore}) {
    */
   const handleKeyPress = (event) => {
     const { key, keyCode } = event;
-    
-    if (state.step !== 'stimuli')
+
+    // press space to start the task
+    if (state.trial === null && (keyCode===32 || key===' ')) {
+      startTask()
+      return;
+    }
+
+    // ignore invalid keys and invalid trial steps
+    if (state.step !== 'stimuli' || !['ArrowLeft', 'ArrowRight'].includes(key))
       return;
 
     const current = state.stimuli[state.trial-1];

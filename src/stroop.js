@@ -45,8 +45,15 @@ export default function Stroop({content, onStore}) {
    */
   const handleKeyPress = (event) => {
     const { key, keyCode } = event;
-    
-    if (state.step !== 'stimulus')
+
+    // press space to start the task
+    if (state.trial === null && (keyCode===32 || key===' ')) {
+      startTask()
+      return;
+    }
+
+    // ignore invalid key press at invalid stage of the trial
+    if (state.step !== 'stimulus' || !['ArrowLeft', 'ArrowRight'].includes(key))
       return;
 
     let choices = state.stimuli[state.trial-1].choices
