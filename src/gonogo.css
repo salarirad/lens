@@ -26,11 +26,11 @@
 }
 
 .correct {
-  color: #0f860f;
+  color: #cecece;
 }
 
 .incorrect {
-  color: #bd1a1a;
+  color: #cecece;
 }
 
 .fixation {
