@@ -102,6 +102,7 @@ export default function Study(props) {
           PROLIFIC_PID: query.get('PROLIFIC_PID'),
           STUDY_ID: query.get('STUDY_ID'),
           SESSION_ID: query.get('SESSION_ID'),
+          startedAt: state.startedAt,
           responses: state.responses}}
           studyId={studyId} submissionNote={state.experiment.submissionNote} />
       );
@@ -129,6 +130,7 @@ export default function Study(props) {
     setState(prev => {
       return {
         ...prev,
+        startedAt: Date.now(),
         experiment: experiment,
         currentViewIndex: 0,
         view: experiment.views[0]
