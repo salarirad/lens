@@ -7,11 +7,21 @@
 		"maintainer": "salarirad@gmail.com"
 	},
 	"views": [{
+			"id": "prolific ID",
+			"type": "text",
+			"instruction": false,
+			"required": true,
+			"text": "p.id.intro",
+			"help": "",
+			"placeholder": "",
+			"pattern": ""
+		},
+		{
 			"id": "introduction",
 			"type": "text",
 			"instruction": true,
 			"text": "intro"
-		},
+		}, 
 		{
 			"id": "demographics",
 			"type": "text",
@@ -884,16 +894,6 @@
 			"placeholder": "",
 			"pattern": ""
 		},  
-		{
-			"id": "prolific ID",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "p.id.intro",
-			"help": "",
-			"placeholder": "",
-			"pattern": ""
-		},
 		{
 			"id": "done.statement",
 			"type": "text",
