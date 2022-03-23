@@ -893,6 +893,13 @@
 			"help": "",
 			"placeholder": "",
 			"pattern": ""
+		},
+		{
+			"id": "done.statement",
+			"type": "text",
+			"instruction": true,
+			"text": "done"
 		}
+		  
 	]
 }
