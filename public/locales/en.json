@@ -213,7 +213,6 @@
 	"risk.falk.q5": "In your career and social life, are you a person who takes risks (for example, switching jobs mid-career, disagreeing with your boss, moving to a city far from your family, etc.)?",
 	"risk.falk.q6": "Are you a person who takes risks with their safety and health (Walk alone at night in an unsafe part of town, not wear a seatbelt in a car or a helmet on a bike, etc.)?",
 
-
 	"risk.falk.c1": "not at all (0)",
 	"risk.falk.c2": "2",
 	"risk.falk.c3": "3",
@@ -324,12 +323,12 @@
 	"soc.dilemma4": "500",
 	"fasting.ramadan.q": "Do you fast during Ramadan?",
 
-	"social.dilemma.q1": "In this first task, you are randomly grouped with **4** other participants in this study. Your group is given some bonus points to share. You each privately request some of these points. You will not know how much the others are requesting and you cannot communicate with each other.<br /><br /> There are **500 points** available. <br /><br />We will add up the requests from all of you. If the total is less than the number of bonus points available, then you each receive the bonus points you requested. But if the sum of requests is more than the available points, none of you gets anything.<br /><br />So larger requests could get you more bonus points, but you might also end up with nothing if everyone makes large requests. How many points do you request?",
-	"social.dilemma.q2": "Now, we don’t know the exact number of points but we know it’s somewhere between **425 and 575 points**. How many points do you request now?<br /><br />Again, your request will be added to requests by 4 other subjects. If the sum of requests is more than the number of available points, then none of you get any points.<br /><br />How many points do you request?",
-	"social.dilemma.q3": "This time, we know the total number of points is **between 350 and 650**. How many points do you request?<br /><br />(The rules are the same. Your request will be added to request by 4 other participants and you get your requested points only if the sum is not more than the number of available points).",
-	"social.dilemma.q4": "The total number of points is now somewhere **between 275 and 725**. How many points do you request?<br /><br />(The rules are the same. Your request will be added to request by 4 other participants and you get your requested points only if the sum is not more than the number of available points).",
-	"social.dilemma.q5": "Now we know the total number of points is now somewhere **between 200 and 850**. How many points do you request?<br /><br />(The rules are the same. Your request will be added to request by 4 other participants and you get your requested points only if the sum is not more than the number of available points).",
-	"social.dilemma.q6": "Last one: This time, we know the total number of available points is **between 125 and 875 points**. How many points do you request?<br /><br />(The rules are the same. Your request will be added to request by 4 other participants and you get your requested points only if the sum is not more than the number of available points).",
+	"social.dilemma.q1": "In this first task, you are randomly grouped with **4** other participants in this study. Your group is given **500 bonus points** to share. You each privately request some of these points and will not what other group members requested.<br /><br />We will add up the requests from all of you. If the total is less than **500 points**, then you each receive the bonus points you requested. But if the sum of requests is more than the **500 points**, none of you gets anything.<br /><br />So larger requests could get you more bonus points, but you might also end up with nothing if everyone in your group makes large requests. How many points do you request?",
+	"social.dilemma.q2": "This time, you and your 4 group members are given somewhere between **425 and 575 bonus points** to share (exact number is unknown). How many points do you request now?<br /><br />Again, your requests will be added up. If the sum is more than the number of available points, then none of you gets any points.",
+	"social.dilemma.q3": "This time, the number of points available is **between 350 and 650** (exact number is unknown). How many points do you request?<br /><br />(The rules are the same: Requests will be added up and only if the sum is not more than the number of available points you get your points).",
+	"social.dilemma.q4": "The total number of points is now somewhere **between 275 and 725** (exact number is unknown). How many points do you request?<br /><br />(The rules are the same: Requests will be added up and only if the sum is not more than the number of available points you get your points).",
+	"social.dilemma.q5": "Now we know the total number of points is now somewhere **between 200 and 800** (exact number is unknown). How many points do you request?<br /><br />(The rules are the same: Requests will be added up and only if the sum is not more than the number of available points you get your points).",
+	"social.dilemma.q6": "Last one: The total number of available points is **between 125 and 875 points** (exact number is unknown). How many points do you request?<br /><br />(The rules are the same: Requests will be added up and only if the sum is not more than the number of available points you get your points).",
 
 	"p.id.intro": "Please enter your Prolifc ID here:",
 	"almost.done": "Thanks. Almost there, just a couple of questions about your diet and we'll be done for good.",
@@ -479,11 +478,11 @@
 	"BSCS.c2": "2",
 	"BSCS.c3": "3",
 	"BSCS.c4": "4",
-    "BSCS.c5": "very much (5)",
+	"BSCS.c5": "very much (5)",
     
 
 
-    "context.fasting":"Describe how common you believe fasting is in each of the following groups.",
+    "context.fasting":"Please specify how many people fast in each group. A rough estimate is sufficient.",
     "context.1":"Your family",
     "context.2":"Your close friends",
     "context.3":"Your distant friends",
@@ -491,7 +490,7 @@
     "context.5":"You other neighbors (living on the same street/block)",
     "context.6":"Your colleagues",
     "context.7":"People of the town you live in",
-    "context.8":"People of the region",
+    "context.8":"People of the province/region/state",
     "context.9":"People of the country you live in",
     
     "context.c1": "None",
