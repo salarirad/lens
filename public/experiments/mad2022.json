@@ -279,7 +279,7 @@
 		{
 			"id": ".flourishing",
 			"type": "matrix",
-			"text": "flourishing.q",
+			"text": "",
 			"slider": true,
 			"showMidMark": true,
 			"requiredQuestions": [
@@ -673,9 +673,9 @@
 			}
 		},
 		{
-			"id": ".flourishing",
+			"id": "t.selfcontrol",
 			"type": "matrix",
-			"text": "flourishing.q",
+			"text": "trust.q",
 			"slider": true,
 			"showMidMark": true,
 			"requiredQuestions": [
