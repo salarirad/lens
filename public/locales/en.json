@@ -483,11 +483,11 @@
 	"effort.1": "How difficult would you say fasting is for **you**?",
 	"effort.2": "How difficult would you say fasting is for **other people**?",
     
-	"motives.q": "How well does each statement describe you?"
+	"motives.q": "How well does each statement describe you?",
 	"motive.external": "I fast in Ramadan because somebody else wants you to or because the situation demands it.",
 	"motive.introjected": "I fast in Ramadan because I would feel ashamed, guilty, or anxious if I didn't.",
 	"motive.identified": "I fast in Ramadan because I really believe it's important to who I am.",
-	"motive.intrinsic": "I fast in Ramadan because of the fun and enjoyment that it provides me."
+	"motive.intrinsic": "I fast in Ramadan because of the fun and enjoyment that it provides me.",
 	
 	"motive.c1": "not at all (1)",
 	"motive.c2": "2",
@@ -498,20 +498,20 @@
 	"motive.c7": "very much (7)",
 	
 	
-	"cos1": "It bothers me when other people neglect my needs."
-	"cos2": "When making a decision, I take other people's needs and feelings into account."
-	"cos3": "I'm not especially sensitive to other people's feelings."
-	"cos4": "I don't consider myself to be a particularly helpful person."
-	"cos5": "I believe people should go out of their way to be helpful."
-	"cos6": "I don't especially enjoy giving others aid."
-	"cos7": "I expect people I know to be responsive to my needs and feelings."
-	"cos8": "I often go out of my way to help another person."
-	"cos9": "I believe it's best not to get involved in taking care of other people's personal needs."
-	"cos10": "I'm not the sort of person who often comes to the aid of others."
-	"cos11": "When I have a need, I turn to others I know for help."
-	"cos12": "When people get emotionally upset, I tend to avoid them."
-	"cos13": "People should keep their troubles to themselves."
-	"cos14": "When I have a need that others ignore, I'm hurt."
+	"cos1": "It bothers me when other people neglect my needs.",
+	"cos2": "When making a decision, I take other people's needs and feelings into account.",
+	"cos3": "I'm not especially sensitive to other people's feelings.",
+	"cos4": "I don't consider myself to be a particularly helpful person.",
+	"cos5": "I believe people should go out of their way to be helpful.",
+	"cos6": "I don't especially enjoy giving others aid.",
+	"cos7": "I expect people I know to be responsive to my needs and feelings.",
+	"cos8": "I often go out of my way to help another person.",
+	"cos9": "I believe it's best not to get involved in taking care of other people's personal needs.",
+	"cos10": "I'm not the sort of person who often comes to the aid of others.",
+	"cos11": "When I have a need, I turn to others I know for help.",
+	"cos12": "When people get emotionally upset, I tend to avoid them.",
+	"cos13": "People should keep their troubles to themselves.",
+	"cos14": "When I have a need that others ignore, I'm hurt.",
 	
 	"cos.c1": "not at all like me (1)",
 	"cos.c2": "2",
