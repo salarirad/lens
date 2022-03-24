@@ -631,6 +631,45 @@
 			]
 		},
 		{
+			"id": "cos",
+			"type": "matrix",
+			"text": "",
+			"slider": true,
+			"showMidMark": true,
+			"requiredQuestions": [
+				0,
+				1,
+				2
+			],
+			"direction": "vertical",
+			"choices": [
+				"cos.c1",
+				"cos.c2",
+				"cos.c3",
+				"cos.c4",
+				"cos.c5",
+				"cos.c6",
+				"cos.c7"
+			],
+			"questions": [
+				"cos1",
+				"cos2",
+				"cos3",
+				"cos4",
+				"cos5",
+				"cos6",
+				"cos7",
+				"cos8",
+				"cos.9",
+				"cos.10",
+				"cos.11",
+				"cos.12",
+				"cos.13",
+				"cos.14"
+
+			]
+		},
+		{
 			"id": "gonogo.practice.introduction",
 			"type": "text",
 			"instruction": true,
@@ -851,6 +890,59 @@
 			"placeholder": "",
 			"pattern": ""
 		},
+		{
+			"id": "motive",
+			"type": "matrix",
+			"text": "",
+			"slider": true,
+			"showMidMark": true,
+			"requiredQuestions": [
+				0,
+				1
+			],
+			"direction": "vertical",
+			"choices": [
+				"motive.c1",
+				"motive.c2",
+				"motive.c3",
+				"motive.c4",
+				"motive.c5",
+				"motive.c6",
+				"motive.c7"
+			],
+			"questions": [
+				"effort.1",
+				"effort.2"
+			]
+		},   		
+		{
+			"id": "motive",
+			"type": "matrix",
+			"text": "motives.q",
+			"slider": true,
+			"showMidMark": true,
+			"requiredQuestions": [
+				0,
+				1,
+				2
+			],
+			"direction": "vertical",
+			"choices": [
+				"motive.c1",
+				"motive.c2",
+				"motive.c3",
+				"motive.c4",
+				"motive.c5",
+				"motive.c6",
+				"motive.c7"
+			],
+			"questions": [
+				"motive.external",
+				"motive.introjected",
+				"motive.identified",
+				"motive.intrinsic"
+			]
+		},  
 		{
 			"id": "context",
 			"type": "matrix",
