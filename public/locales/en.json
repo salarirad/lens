@@ -513,6 +513,13 @@
 	"cos13": "People should keep their troubles to themselves."
 	"cos14": "When I have a need that others ignore, I'm hurt."
 	
+	"cos.c1": "not at all like me (1)",
+	"cos.c2": "2",
+	"cos.c3": "3",
+	"cos.c4": "4",
+	"cos.c5": "5",
+	"cos.c6": "6",
+	"cos.c7": "very much like me (7)",
 	
     "context.fasting":"Please specify how many people fast in each group. A rough estimate is sufficient.",
     "context.1":"Your family",
