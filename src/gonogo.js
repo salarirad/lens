@@ -21,7 +21,7 @@ import './gonogo.css';
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-export default function GoNoGo({content, onStore}) {
+export default function GoNoGo({content, onStore, onProgress}) {
 
   const {t} = useTranslation();
   const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
@@ -144,8 +144,11 @@ export default function GoNoGo({content, onStore}) {
     }
 
 
+    onProgress(100.0 * state.trial / trials.total)
+  
     if (state.trial>trials.total) {
       console.log('------------ FINISHED -------')
+      onProgress(100.0)
       setState({...state, finished: true, taskFinishedAt: Date.now()})
     }
 

@@ -62,6 +62,20 @@ export default function Study(props) {
     });
   }
 
+  const updateViewProgress = (currentViewProgressPct) => {
+
+    const currentViewProgress = currentViewProgressPct  / 100.0
+
+    setState(prev => {
+      return {
+        ...prev,
+        progress: 100 * (prev.currentViewIndex + currentViewProgress) / 
+                  prev.experiment.views.length
+                  
+      }
+    });
+  }
+
   const onNext = () => {
 
     if ((state.view.required || state.view.requiredQuestions?.length>0) && !responseIsValid.current) {
@@ -114,7 +128,7 @@ export default function Study(props) {
       case 'bart':
         return <BART onStore={storeData} content={view} key={view.id} />;
       case 'gonogo': 
-        return <GoNoGo onStore={storeData} content={view} key={view.id} />;
+        return <GoNoGo onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} />;
       case 'stroop': 
         return <Stroop onStore={storeData} content={view} key={view.id} />;
       case 'matrix':
