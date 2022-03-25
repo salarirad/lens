@@ -948,10 +948,10 @@
 			"direction": "vertical",
 			"choices": [
 				"situation.c1",
-				"situation.c1",
-				"situation.c1",
-				"situation.c1",
-				"situation.c1"
+				"situation.c2",
+				"situation.c3",
+				"situation.c4",
+				"situation.c5"
 			],
 			"questions": [
 				"situation.1",
