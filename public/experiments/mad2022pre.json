@@ -755,7 +755,7 @@
 				"t.selfcontrol.10",
 				"t.selfcontrol.11",
 				"t.selfcontrol.12",
-				"t.selfcontrol.13",
+				"t.selfcontrol.13"
 			]
 		},
 		{
@@ -933,7 +933,32 @@
 				"motive.identified",
 				"motive.intrinsic"
 			]
-		},  
+		}, 
+		{
+			"id": "situation",
+			"type": "matrix",
+			"text": "situation.q",
+			"slider": true,
+			"showMidMark": true,
+			"requiredQuestions": [
+				0,
+				1,
+				2
+			],
+			"direction": "vertical",
+			"choices": [
+				"situation.c1",
+				"situation.c1",
+				"situation.c1",
+				"situation.c1",
+				"situation.c1"
+			],
+			"questions": [
+				"situation.1",
+				"situation.2",
+				"situation.3"
+			]
+		},   
 		{
 			"id": "context",
 			"type": "matrix",
