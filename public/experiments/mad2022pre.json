@@ -876,17 +876,7 @@
 				"fasting.c1",
 				"fasting.c2"
 			],
-			"questions": ["fasting.q"]
-		},
-		{
-			"id": "fasted days",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "fasted.days",
-			"help": "",
-			"placeholder": "",
-			"pattern": ""
+			"questions": ["fast.plan"]
 		},
 		{
 			"id": "motive",
