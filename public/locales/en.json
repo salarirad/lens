@@ -331,7 +331,7 @@
 	"social.dilemma.q6": "Round 5 (Last one): The total number of available points available to you and your 4 group members is **between 125 and 875 points**. The exact number is unknown.<br /><br />How many points do you request?<br /><br />* The rules are the same: Requests will be added up. Only if the sum is not larger than the total number of available points, you each get your requested points. Otherwise none of you get anything.",
 
 	"p.id.intro": "Please enter your Prolifc ID here:",
-	"almost.done": "Thanks. Almost there, just a couple of questions about your diet and we'll be done for good.",
+	"almost.done": "Thanks. Almost there, just a couple of questions about you and we'll be done for good.",
 
 	"trust.fehr.1": "How often do you lend personal possessions to your friends (books, your car, bicycle etc.)?",
 	"trust.fehr.2": "How often do you lend money to your friends?",
@@ -569,11 +569,10 @@
     	"context.c4": "most",
     	"context.c5": "all",
 	
-	"fasting.q.control": "Do you ever fast for religous or helath reasons?",
+	"fasting.q.control": "Do you ever fast for religous or health reasons?",
 	
-    
 	"submission.note": "Thank you for your participation! Please press **Continue** to be redirected to the Prolific webpage.",
 	"submission.q_email": "Thank you for your participation. You can see your performance on the next page. Please write your email in the box below if you'd like to participate in similar studies.",
-	"done": "And we're done! Thanks for your participation. Please press continue to be redirected back to the Prolific.co webpage."	
+	"done": "And we're done! Thanks for your participation. Please press continue on the enxt page to be redirected back to the Prolific.co webpage."	
 
 }
