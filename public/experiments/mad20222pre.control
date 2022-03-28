@@ -856,7 +856,7 @@
 			"questions": ["religiosity.q"]
 		},
 		{
-			"id": "fasting.ramadan",
+			"id": "fasting.control",
 			"type": "matrix",
 			"text": "",
 			"slider": false,
@@ -866,78 +866,29 @@
 				"fasting.c1",
 				"fasting.c2"
 			],
-			"questions": ["fasting.ramadan.q"]
+			"questions": ["fasting.q.control"]
 		},
 		{
-			"id": "fasting",
+			"id": "knowledge.ramadan",
 			"type": "matrix",
 			"text": "",
 			"slider": false,
 			"requiredQuestions": [0],
 			"direction": "vertical",
 			"choices": [
-				"fasting.c1",
-				"fasting.c2"
+				"ramadan.knowledge.c1",
+				"ramadan.knowledge.c2",
+				"ramadan.knowledge.c3",
+				"ramadan.knowledge.c4",
+				"ramadan.knowledge.c5"
 			],
-			"questions": ["fast.plan"]
+			"questions": ["ramadan.knowledge"]
 		},
-		{
-			"id": "motive",
-			"type": "matrix",
-			"text": "",
-			"slider": true,
-			"showMidMark": true,
-			"requiredQuestions": [
-				0,
-				1
-			],
-			"direction": "vertical",
-			"choices": [
-				"motive.c1",
-				"motive.c2",
-				"motive.c3",
-				"motive.c4",
-				"motive.c5",
-				"motive.c6",
-				"motive.c7"
-			],
-			"questions": [
-				"effort.1",
-				"effort.2"
-			]
-		},   		
-		{
-			"id": "motive",
-			"type": "matrix",
-			"text": "motives.q",
-			"slider": true,
-			"showMidMark": true,
-			"requiredQuestions": [
-				0,
-				1,
-				2
-			],
-			"direction": "vertical",
-			"choices": [
-				"motive.c1",
-				"motive.c2",
-				"motive.c3",
-				"motive.c4",
-				"motive.c5",
-				"motive.c6",
-				"motive.c7"
-			],
-			"questions": [
-				"motive.external",
-				"motive.introjected",
-				"motive.identified",
-				"motive.intrinsic"
-			]
-		}, 
+		
 		{
 			"id": "situation",
 			"type": "matrix",
-			"text": "situation.q",
+			"text": "situation.control.q",
 			"slider": true,
 			"showMidMark": true,
 			"requiredQuestions": [
@@ -947,11 +898,11 @@
 			],
 			"direction": "vertical",
 			"choices": [
-				"situation.c1",
-				"situation.c2",
-				"situation.c3",
-				"situation.c4",
-				"situation.c5"
+				"situation.control.c1",
+				"situation.control.c2",
+				"situation.control.c3",
+				"situation.control.c4",
+				"situation.control.c5"
 			],
 			"questions": [
 				"situation.1",
@@ -962,7 +913,7 @@
 		{
 			"id": "context",
 			"type": "matrix",
-			"text": "context.fasting",
+			"text": "context.fasting.control",
 			"slider": true,
 			"showMidMark": true,
 			"requiredQuestions": [
@@ -991,16 +942,6 @@
 				"context.9"
 
 			]
-		},  
-		{
-			"id": "fast time",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "fast.time",
-			"help": "",
-			"placeholder": "",
-			"pattern": ""
 		},  
 		{
 			"id": "done.statement",
