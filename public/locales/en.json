@@ -398,6 +398,12 @@
 	"fast.time.2":"How many hours was the average day of fast where you live?",
 	
 	"fast.plan":"Do you plan to fast in the upcoming Ramadan? (2022)",
+	"ramadan.knowledge":"Are you familiar with Ramadan and its constituent rituals?",
+	"ramadan.knowledge.c1":"not at all",
+	"ramadan.knowledge.c2":"slightly",
+	"ramadan.knowledge.c3":"moderately",
+	"ramadan.knowledge.c4":"largely",
+	"ramadan.knowledge.c5":"a lot",
 	
 	"flourishing.1":"Overall, how satisfied are you with life as a whole these days?",
 	"flourishing.2":"In general, how happy or unhappy do you usually feel?",
@@ -524,6 +530,15 @@
 	"cos.c7": "very much like me (7)",
 	
 	
+	"situation.control.q": "Consider how each of these aspects of your daily life change during Ramadan, where you live.",
+
+	"situation.control.c1": "not at all",
+	"situation.control.c2": "slightly",
+	"situation.control.c3": "moderately",
+	"situation.control.c4": "largely",
+	"situation.control.c5": "a lot",
+	
+	
 	"situation.q": "Consider how each of these aspects of your daily life make fasting in Ramadan easier or more difficult.",
 	"situation.1": "The people who I spend the most time with",
 	"situation.2": "The situations/places where I spend the most time",
@@ -535,7 +550,8 @@
 	"situation.c4": "Makes slightly more difficult",
 	"situation.c5": "Makes much more difficult",
 	
-	
+	"context.fasting.control":"Please specify how many Ramadan fasters you know in each group. A rough estimate is sufficient.",
+
     	"context.fasting":"Please specify how many people fast in each group. A rough estimate is sufficient.",
     	"context.1":"Your family",
     	"context.2":"Your close friends",
@@ -552,6 +568,9 @@
     	"context.c3": "half", 
     	"context.c4": "most",
     	"context.c5": "all",
+	
+	"fasting.q.control": "Do you ever fast for religous or helath reasons?",
+	
     
 	"submission.note": "Thank you for your participation! Please press **Continue** to be redirected to the Prolific webpage.",
 	"submission.q_email": "Thank you for your participation. You can see your performance on the next page. Please write your email in the box below if you'd like to participate in similar studies.",
