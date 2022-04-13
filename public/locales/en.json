@@ -569,6 +569,11 @@
     	"context.c4": "most",
     	"context.c5": "all",
 	
+	"check.1": "This is an attenton check. Please select very much.",
+	"check.2": "This is an attenton check. Please select not at all like me.",
+	"check.3": "This is an attenton check. Please select moderately agree",
+	
+	
 	"fasting.q.control": "Do you ever fast for religous or health reasons?",
 	
 	"submission.note": "Thank you for your participation! Please press **Continue** to be redirected to the Prolific webpage.",
