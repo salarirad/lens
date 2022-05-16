@@ -206,8 +206,8 @@
 	"patience.c10": "10",
 	"patience.c11": "very willing (11)",
 
-	"risk.falk.q1": "Do you see yourself generally as a person who is fully prepared to take risks or do you try to avoid taking risks?",
-	"risk.falk.q2": "When driving a car, are you a person who takes risks or do you try to avoid taking risks as a driver?",
+	"risk.falk.q1": "Do you see yourself generally as a person who is fully prepared to take risks?",
+	"risk.falk.q2": "When driving a car, are you a person who takes risks?",
 	"risk.falk.q3": "In financial matters, are you a person who takes risks with money (for example, investing in speculative stocks)?",
 	"risk.falk.q4": "How about in sports/leisure choices, are you a person who participates in risky sports and activities (for example skiing, skydiving, camping in the wilderness, etc.)?",
 	"risk.falk.q5": "In your career and social life, are you a person who takes risks (for example, switching jobs mid-career, disagreeing with your boss, moving to a city far from your family, etc.)?",
@@ -394,7 +394,7 @@
 	"fasted.days":"How many days have you fasted this Ramadan?",
 	"fasted.days.2":"How many days did you fast in the past Ramadan?",
 
-	"fast.time":"How many hours is the average day of fast where you live?",
+	"fast.time":"How many hours was the average day of fast where you live (this past Raamdan)?",
 	"fast.time.2":"How many hours was the average day of fast where you live?",
 	
 	"fast.plan":"Do you plan to fast in the upcoming Ramadan? (2022)",
