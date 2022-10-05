@@ -122,7 +122,7 @@
 		],
 		"stimulusDuration": 1000,
 		"fixationDuration": 1000,
-		"feedbackDuration": 0,
+		"feedbackDuration": 1,
 		"timeoutsBeforeReset": 10,
 		"randomizeTrials": true,
 		"randomizeChoices": true
