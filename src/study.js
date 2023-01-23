@@ -15,6 +15,7 @@ import Submission from './submission';
 import BART from './bart';
 import GoNoGo from './gonogo';
 import Stroop from './stroop';
+import Ultimatum from './ultimatum';
 import { useTranslation } from 'react-i18next';
 
 function useQuery() {
@@ -133,6 +134,8 @@ export default function Study(props) {
         return <Stroop onStore={storeData} content={view} key={view.id} />;
       case 'matrix':
         return <Matrix onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />
+      case 'ultimatum':
+        return <Ultimatum onStore={storeData} content={view} key={view.id} />;
       default:
         return <div>Not Implemented!</div>;
     }
@@ -190,7 +193,7 @@ export default function Study(props) {
               {!state.loading && renderView(state.view)}
               </Paper>
             </Grid>
-            {!['gonogo','bart','stroop'].includes(state.view.type) && !state.loading &&
+            {!['gonogo','bart','stroop','ultimatum'].includes(state.view.type) && !state.loading &&
             <Grid item>
               <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
             </Grid>

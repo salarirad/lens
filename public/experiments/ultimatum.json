@@ -1,0 +1,26 @@
+{
+  "studyId": "ultimatum-demo",
+  "conditon": "a",
+  "redirectTo": "https://google.com?ID=123456",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@gmail.com"
+  },
+  "views": [
+		{
+			"id": "ultimatum",
+			"type": "ultimatum",
+      "rule.text" : "ultimatum_demo.rule.text",
+      "help.text" : "ultimatum_demo.help.text",
+      "itemsBox.text" : "ultimatum_demo.itemsBox.text",
+      "playerBox.text" : "ultimatum_demo.playerBox.text",
+      "othersBox.text" : "ultimatum_demo.othersBox.text",
+      "initialAmount" : 10,
+      "initialAmountRandomize" : false,
+      "initialAmountMin" : 5,
+      "initialAmountMax" : 20,
+			"trials": 2
+		}
+
+  ]
+}
