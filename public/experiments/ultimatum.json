@@ -19,7 +19,8 @@
       "initialAmountRandomize" : false,
       "initialAmountMin" : 5,
       "initialAmountMax" : 20,
-			"trials": 2
+			"trials": 2,
+      "tokens": 10
 		}
 
   ]
