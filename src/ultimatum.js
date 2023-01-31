@@ -11,7 +11,9 @@ import { useTranslation } from 'react-i18next';
 
 // Item types of draggable components which now are only one type
 const ItemTypes = {
-  TOKEN: 'token',
+  OPPONENT: 'opponent',
+  POT: 'pot',
+  PLAYER: 'player',
 }
 
 export default function Ultimatum({content, onStore}) {
@@ -34,9 +36,9 @@ export default function Ultimatum({content, onStore}) {
 
   const [boxes, setBoxes] = useState(
     [
-      {name: 'player' , amount : 0},
-      {name: 'pot' , amount : tokens},
-      {name: 'opponent' , amount : 0},
+      {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
+      {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
+      {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
     ]
   )
 
@@ -85,7 +87,7 @@ export default function Ultimatum({content, onStore}) {
   const canFinishTrial = () => {
     let result = false;
     boxes.forEach((box) => {
-      if(box.name == 'pot' && box.amount == 0)
+      if(box.name == ItemTypes.POT && box.amount == 0)
         result = true;
     });
     return result;
@@ -133,8 +135,9 @@ export default function Ultimatum({content, onStore}) {
           <Typography variant="h4">{t('ultimatum.rule.text')}</Typography>
         </Grid>
 
-        {boxes.map(({name, amount}, index) => (
+        {boxes.map(({name, amount, accepts}, index) => (
           <RepositoryBox
+            accept={accepts}
             name={name}
             amount={amount}
             onDrop={(item) => handleDrop(name, item)}
@@ -160,6 +163,7 @@ const RepositoryBox = memo(function RepositoryBox({
   name,
   amount,
   onDrop,
+  accept,
 })
 {
   const style = {
@@ -167,7 +171,7 @@ const RepositoryBox = memo(function RepositoryBox({
   }
 
   const [{ canDrop, isOver }, drop] = useDrop({
-    accept: ItemTypes.TOKEN,
+    accept,
     drop: onDrop,
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -186,7 +190,7 @@ const RepositoryBox = memo(function RepositoryBox({
 
   const tokensList = [];
   for(let i=0; i < amount; i++) {
-    tokensList.push(<MonetizedToken name={name+i.toString()} key={name+i.toString()} boxName={name} />);
+    tokensList.push(<MonetizedToken type={name} name={name+i.toString()} key={name+i.toString()} boxName={name} />);
   }
 
   return (
@@ -194,7 +198,7 @@ const RepositoryBox = memo(function RepositoryBox({
       <Paper className='view-container'>
         <Grid container>
           <Grid item xs={12}>
-            <Typography>{name}</Typography>
+            <Typography>{name} ({amount})</Typography>
             {isActive ? 'release to drop' : ''}
           </Grid>
           <Grid item xs={12}>
@@ -209,7 +213,7 @@ const RepositoryBox = memo(function RepositoryBox({
 /***
  * Component which renders coin tokens and handles dragging events
  */
-const MonetizedToken = memo(function MonetizedToken({name,boxName}) {
+const MonetizedToken = memo(function MonetizedToken({type, name, boxName}) {
 
   const style = {
     cursor: 'move',
@@ -218,7 +222,7 @@ const MonetizedToken = memo(function MonetizedToken({name,boxName}) {
 
   const [{ opacity }, drag] = useDrag(
     () => ({
-      type: ItemTypes.TOKEN,
+      type,
       item: { name, boxName },
       collect: (monitor) => ({
         opacity: monitor.isDragging() ? 0.4 : 1,
