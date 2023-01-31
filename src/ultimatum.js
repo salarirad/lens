@@ -42,6 +42,13 @@ export default function Ultimatum({content, onStore}) {
     ]
   )
 
+
+  // on mount and unmount
+  useEffect(() => {
+    // Nothing yet
+  },[]);
+
+
   // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (state.finished) {
@@ -61,24 +68,12 @@ export default function Ultimatum({content, onStore}) {
   //test action experiment
   const testAction = () => {
     //console.log('testAction', state);
-    console.log('canFinish: ', canFinishTrial());
-  }
-
-  /***
-   * DEPRECATED
-   * token has been moved by player to a different box
-   *
-   */
-  function handleTokenMove(fromBox, destBox) {
-    setBoxes(boxes.map(item => {
-      if(item.name === fromBox){
-        return {...item, amount: item.amount-1};
-      }else if(item.name === destBox){
-        return {...item, amount: item.amount+1};
-      }else{
-        return item;
-      }
-    }));
+    //console.log('canFinish: ', canFinishTrial());
+    if(!canFinishTrial())
+      alert('you have to move all tokens from POT box to other boxes');
+    else{
+      newTrial();
+    }
   }
 
   /***
@@ -96,6 +91,21 @@ export default function Ultimatum({content, onStore}) {
   /***
    * token has been moved by player to a different box
    */
+  function handleTokenMove(fromBox, destBox) {
+    setBoxes(boxes.map(item => {
+      if(item.name === fromBox){
+        return {...item, amount: item.amount-1};
+      }else if(item.name === destBox){
+        return {...item, amount: item.amount+1};
+      }else{
+        return item;
+      }
+    }));
+  }
+
+  /***
+   * token has been moved by player to a different box
+   */
   const handleDrop = useCallback(
     (name, item) => {
       // item is the entity that is dropped and has {name, boxName}
@@ -104,35 +114,69 @@ export default function Ultimatum({content, onStore}) {
       const destBox = name;
       //console.log('dropped on: ',destBox);
       //console.log('from : ',fromBox);
-      const updatedBoxes = boxes.map(box => {
-        if(box.name === fromBox){
-          return {...box, amount: box.amount-1};
-        }else if(box.name === destBox){
-          return {...box, amount: box.amount+1};
-        }else{
-          return box;
-        }
-      })
-      setBoxes(updatedBoxes);
+      handleTokenMove(fromBox, destBox);
     },
     [boxes],
   )
 
-  //Testing moveToken but has bugs
-  useEffect(() => {
-      //handleTokenMove('pot','player');
-      //handleTokenMove('pot','opponent');
-  },[]);
+  /**
+   * Produce a proper trialResponse object from states and boxes
+   */
+  function produceTrialResponse(){
+    const playerShare = boxes.find(box => box.name === ItemTypes.PLAYER).amount;
+    const oppShare = boxes.find(box => box.name === ItemTypes.OPPONENT).amount;
+    let trialResp = {
+      trial: state.trial,
+      playerShare: playerShare,
+      opponentShare: oppShare
+    }
+    return trialResp;
+  }
+
+  /**
+   * Store trial responses, then proceed to the next trial or finish the game
+   * @param {*} cashed either cashed or exploded
+   * @param {*} explosionProbability last probability of balloon getting exploded
+   */
+  const newTrial = () => {
+    if(!canFinishTrial()){
+      alert('you have to move all tokens from POT box to other boxes');
+      return;
+    }
+    const trialResp = produceTrialResponse();
+    setState({
+      ...state,
+      trialResponses: [...state.trialResponses, trialResp],
+      showTooltip: true,
+      finished: (state.trial>=trials),
+      trial: state.trial+1,
+    });
+
+    // when the trial finished the tokens in boxes should reset
+    setBoxes(
+      [
+        {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
+        {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
+        {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
+      ]
+    );
+  }
+
 
   /***
    * Main render part of the ultimatum experiment
    *
    */
   return (
-    <Grid container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='Text-container'>
+    <Grid container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='ultimatum-container'>
       <DndProvider backend={HTML5Backend}>
         <Grid item>
           <Typography variant="h4">{t('ultimatum.rule.text')}</Typography>
+        </Grid>
+        <Grid item container direction='row' justify="space-around" alignItems='center'>
+          <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
+            <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:state.trial, trials:trials})}</Typography>
+          </Grid></Grid>
         </Grid>
 
         {boxes.map(({name, amount, accepts}, index) => (
