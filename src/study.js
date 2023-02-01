@@ -135,7 +135,7 @@ export default function Study(props) {
       case 'matrix':
         return <Matrix onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />
       case 'ultimatum':
-        return <Ultimatum onStore={storeData} content={view} key={view.id} />;
+        return <Ultimatum onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
       default:
         return <div>Not Implemented!</div>;
     }

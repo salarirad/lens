@@ -16,13 +16,13 @@ const ItemTypes = {
   PLAYER: 'player',
 }
 
-export default function Ultimatum({content, onStore}) {
+export default function Ultimatum({content, onStore, onNotification}) {
   //props:   rule.text , help.text , itemsBox.text , playerBox.text, othersBox.text
   //props:   initialAmount ,initialAmountRandomize ,initialAmountMin ,initialAmountMax , trials
 
   //i18n:
   const { t } = useTranslation();
-  const {tokens, trials} = content;
+  const {tokens, trials, opponentTypes} = content;
 
   const response = useRef(null);
 
@@ -42,6 +42,7 @@ export default function Ultimatum({content, onStore}) {
     ]
   )
 
+  let persons = require(`../public/experiments/${content.id}.json`).persons;
 
   // on mount and unmount
   useEffect(() => {
@@ -70,7 +71,8 @@ export default function Ultimatum({content, onStore}) {
     //console.log('testAction', state);
     //console.log('canFinish: ', canFinishTrial());
     if(!canFinishTrial())
-      alert('you have to move all tokens from POT box to other boxes');
+      //alert('you have to move all tokens from POT box to other boxes');
+      onNotification(t('errors.required'));
     else{
       newTrial();
     }

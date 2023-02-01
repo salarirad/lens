@@ -15,13 +15,51 @@
       "potBox.text" : "ultimatum_demo.potBox.text",
       "playerBox.text" : "ultimatum_demo.playerBox.text",
       "opponentBox.text" : "ultimatum_demo.opponentBox.text",
-      "initialAmount" : 10,
       "initialAmountRandomize" : false,
       "initialAmountMin" : 5,
       "initialAmountMax" : 20,
 			"trials": 3,
-      "tokens": 10
+      "tokens": 10,
+      "opponentTypes": ["occupied","female"]
 		}
 
+  ],
+  "persons":[
+    {
+      "id": 1,
+      "name": "Marry Stone",
+      "age": 27,
+      "sex": "Female",
+      "occupation": "Nurse",
+      "avatar": "marry-avatar.jpg",
+      "tags": ["occupied","single","female","young"]
+    },
+    {
+      "id": 2,
+      "name": "Joe Peterson",
+      "age": 46,
+      "sex": "Male",
+      "occupation": "Unemployed",
+      "avatar": "joe-avatar.jpg",
+      "tags": ["unemployed","married","male"]
+    },
+    {
+      "id": 3,
+      "name": "Peter Rossling",
+      "age": 37,
+      "sex": "Male",
+      "occupation": "Software Developer",
+      "avatar": "peter-avatar.jpg",
+      "tags": ["occupied","single","male","rich","young"]
+    },
+    {
+      "id": 4,
+      "name": "Jane Austin",
+      "age": 71,
+      "sex": "Female",
+      "occupation": "Writer",
+      "avatar": "marry-avatar.jpg",
+      "tags": ["occupied","married","female","old"]
+    }
   ]
 }
