@@ -20,46 +20,118 @@
       "initialAmountMax" : 20,
 			"trials": 3,
       "tokens": 10,
-      "opponentTypes": ["occupied","female"]
+      "opponentTypes": ["occupied","female"],
+      "persons": [
+        {
+          "id": 1,
+          "name": "Marry Stone",
+          "age": 27,
+          "sex": "Female",
+          "occupation": "Nurse",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["occupied","single","female","young"]
+        },
+        {
+          "id": 2,
+          "name": "Joe Peterson",
+          "age": 46,
+          "sex": "Male",
+          "occupation": "Unemployed",
+          "avatar": "joe-avatar.jpg",
+          "tags": ["unemployed","married","male"]
+        },
+        {
+          "id": 3,
+          "name": "Peter Rossling",
+          "age": 37,
+          "sex": "Male",
+          "occupation": "Software Developer",
+          "avatar": "peter-avatar.jpg",
+          "tags": ["occupied","single","male","rich","young"]
+        },
+        {
+          "id": 4,
+          "name": "Jane Austin",
+          "age": 71,
+          "sex": "Female",
+          "occupation": "Writer",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["occupied","married","female","old"]
+        },
+        {
+          "id": 5,
+          "name": "Jessica Riley",
+          "age": 15,
+          "sex": "Female",
+          "occupation": "Student",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["unemployed","single","female","underage"]
+        },
+        {
+          "id": 6,
+          "name": "Jack Black",
+          "age": 19,
+          "sex": "Male",
+          "occupation": "Unemployed",
+          "avatar": "joe-avatar.jpg",
+          "tags": ["unemployed","single","male","teenage"]
+        },
+        {
+          "id": 7,
+          "name": "Mostafa Salarirad",
+          "age": 38,
+          "sex": "Male",
+          "occupation": "Psychology Professor",
+          "avatar": "peter-avatar.jpg",
+          "tags": ["occupied","single","male","rich","young"]
+        },
+        {
+          "id": 8,
+          "name": "Sarah Alisons",
+          "age": 52,
+          "sex": "Female",
+          "occupation": "Housewife",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["housewife","occupied","married","female","middleaged"]
+        },
+        {
+          "id": 9,
+          "name": "Sophie Larson",
+          "age": 20,
+          "sex": "Female",
+          "occupation": "Student",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["undergrad","student","single","female","young","rich"]
+        },
+        {
+          "id": 10,
+          "name": "Larry Beck",
+          "age": 15,
+          "sex": "Male",
+          "occupation": "Student",
+          "avatar": "joe-avatar.jpg",
+          "tags": ["single","student","underage","male"]
+        },
+        {
+          "id": 11,
+          "name": "Arman Radmanesh",
+          "age": 37,
+          "sex": "Male",
+          "occupation": "Software Developer",
+          "avatar": "peter-avatar.jpg",
+          "tags": ["occupied","married","male","rich","young"]
+        },
+        {
+          "id": 12,
+          "name": "Roxana Sajedi",
+          "age": 31,
+          "sex": "Female",
+          "occupation": "Actor",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["occupied","single","female","young","actor"]
+        }
+      ]
 		}
 
-  ],
-  "persons":[
-    {
-      "id": 1,
-      "name": "Marry Stone",
-      "age": 27,
-      "sex": "Female",
-      "occupation": "Nurse",
-      "avatar": "marry-avatar.jpg",
-      "tags": ["occupied","single","female","young"]
-    },
-    {
-      "id": 2,
-      "name": "Joe Peterson",
-      "age": 46,
-      "sex": "Male",
-      "occupation": "Unemployed",
-      "avatar": "joe-avatar.jpg",
-      "tags": ["unemployed","married","male"]
-    },
-    {
-      "id": 3,
-      "name": "Peter Rossling",
-      "age": 37,
-      "sex": "Male",
-      "occupation": "Software Developer",
-      "avatar": "peter-avatar.jpg",
-      "tags": ["occupied","single","male","rich","young"]
-    },
-    {
-      "id": 4,
-      "name": "Jane Austin",
-      "age": 71,
-      "sex": "Female",
-      "occupation": "Writer",
-      "avatar": "marry-avatar.jpg",
-      "tags": ["occupied","married","female","old"]
-    }
   ]
 }

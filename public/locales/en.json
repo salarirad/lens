@@ -579,6 +579,9 @@
 	"submission.note": "Thank you for your participation! Please press **Continue** to be redirected to the Prolific webpage.",
 	"submission.q_email": "Thank you for your participation. You can see your performance on the next page. Please write your email in the box below if you'd like to participate in similar studies.",
 	"done": "And we're done! Thanks for your participation. Please press continue on the enxt page to be redirected back to the Prolific.co webpage.",
-	"ultimatum.rule.text": "In this experiment you shoud distribute the amount given between yourself and the other participant."
+	
+	"ultimatum.rule.text": "In this experiment you shoud distribute the amount given between yourself and the other participant.",
+	"ultimatum.finish.button": "Collect",
+	"ultimatum.errors.required": "You have to move all tokens from POT box to other boxes"
 
 }

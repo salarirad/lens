@@ -22,13 +22,13 @@ export default function Ultimatum({content, onStore, onNotification}) {
 
   //i18n:
   const { t } = useTranslation();
-  const {tokens, trials, opponentTypes} = content;
+  const {tokens, trials, opponentTypes, persons} = content;
 
   const response = useRef(null);
 
   const [state, setState] = useState({
     finished: false,
-    trial: 1,
+    trial: null,
     trialResponses: [],
     taskStartedAt: Date.now(),
     showTooltip: true,
@@ -41,8 +41,16 @@ export default function Ultimatum({content, onStore, onNotification}) {
       {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
     ]
   )
+  const shuffle = (a) => {
+    console.log('shuffling');
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 
-  let persons = require(`../public/experiments/${content.id}.json`).persons;
+  const [shuffledPersons, setShuffledPersons] = useState(undefined);
 
   // on mount and unmount
   useEffect(() => {
@@ -68,11 +76,16 @@ export default function Ultimatum({content, onStore, onNotification}) {
 
   //test action experiment
   const testAction = () => {
-    //console.log('testAction', state);
+    console.log('testAction', state);
+    console.log('shuffled : ',shuffledPersons);
     //console.log('canFinish: ', canFinishTrial());
-    if(!canFinishTrial())
-      //alert('you have to move all tokens from POT box to other boxes');
-      onNotification(t('errors.required'));
+  }
+
+  const finishTrialAction = () => {
+    if(!canFinishTrial()){
+      onNotification(t('ultimatum.errors.required'));
+      //onNotification(t('errors.required'));
+    }
     else{
       newTrial();
     }
@@ -84,25 +97,10 @@ export default function Ultimatum({content, onStore, onNotification}) {
   const canFinishTrial = () => {
     let result = false;
     boxes.forEach((box) => {
-      if(box.name == ItemTypes.POT && box.amount == 0)
+      if(box.name === ItemTypes.POT && box.amount === 0)
         result = true;
     });
     return result;
-  }
-
-  /***
-   * token has been moved by player to a different box
-   */
-  function handleTokenMove(fromBox, destBox) {
-    setBoxes(boxes.map(item => {
-      if(item.name === fromBox){
-        return {...item, amount: item.amount-1};
-      }else if(item.name === destBox){
-        return {...item, amount: item.amount+1};
-      }else{
-        return item;
-      }
-    }));
   }
 
   /***
@@ -116,10 +114,34 @@ export default function Ultimatum({content, onStore, onNotification}) {
       const destBox = name;
       //console.log('dropped on: ',destBox);
       //console.log('from : ',fromBox);
-      handleTokenMove(fromBox, destBox);
+      setBoxes(boxes.map(item => {
+        if(item.name === fromBox){
+          return {...item, amount: item.amount-1};
+        }else if(item.name === destBox){
+          return {...item, amount: item.amount+1};
+        }else{
+          return item;
+        }
+      }));
     },
     [boxes],
   )
+
+  /***
+   * starts the task after showing help screen
+   */
+  const startTask = () => {
+    /**
+     * TODO: if persons are less than the number of trials it should fill the array
+     */
+    setShuffledPersons(shuffle(persons));
+    setState({
+      ...state,
+      trial: 0,
+      trialResponses: [],
+      taskStartedAt: Date.now() //timestamp
+    });
+  }
 
   /**
    * Produce a proper trialResponse object from states and boxes
@@ -142,7 +164,8 @@ export default function Ultimatum({content, onStore, onNotification}) {
    */
   const newTrial = () => {
     if(!canFinishTrial()){
-      alert('you have to move all tokens from POT box to other boxes');
+      console.log('it should never come to this, because before calling newTrial, canFinishTrial has been checked!!!!');
+      onNotification(t('ultimatum.errors.required'));
       return;
     }
     const trialResp = produceTrialResponse();
@@ -150,7 +173,7 @@ export default function Ultimatum({content, onStore, onNotification}) {
       ...state,
       trialResponses: [...state.trialResponses, trialResp],
       showTooltip: true,
-      finished: (state.trial>=trials),
+      finished: (state.trial>=trials-1),
       trial: state.trial+1,
     });
 
@@ -163,8 +186,30 @@ export default function Ultimatum({content, onStore, onNotification}) {
       ]
     );
   }
+  /**
+   * Renders instructions before the trials begin
+   * @returns React elements
+   */
+  const renderStartScreen = () => {
+    return (
+      <Grid container direction='column' spacing={2} alignItems='center'>
+        <Grid item><Markdown source={t('stroop.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
+        <Grid item>
+          <Button variant='outlined' onClick={() => startTask()}>{t('stroop.start')}</Button>
+        </Grid>
 
+      </Grid>
+    )
+  }
 
+  if (state.trial === null) {
+    return renderStartScreen();
+  }
+
+  var personIndex = state.trial;
+  if(state.trial!==null && state.trial>=shuffledPersons.length){
+    personIndex = state.trial % shuffledPersons.length;
+  }
   /***
    * Main render part of the ultimatum experiment
    *
@@ -177,7 +222,7 @@ export default function Ultimatum({content, onStore, onNotification}) {
         </Grid>
         <Grid item container direction='row' justify="space-around" alignItems='center'>
           <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-            <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:state.trial, trials:trials})}</Typography>
+            <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
           </Grid></Grid>
         </Grid>
 
@@ -188,11 +233,13 @@ export default function Ultimatum({content, onStore, onNotification}) {
             amount={amount}
             onDrop={(item) => handleDrop(name, item)}
             key={index}
+            person={shuffledPersons[personIndex]}
           />
         ))}
 
         <Grid item container direction="row" justify="space-around" alignItems='center'>
-          <Button size='large' color='primary' variant='outlined' onClick={testAction}>{t('test')}</Button>
+          <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
+          <Button size='small' color='secondary' variant='outlined' onClick={testAction}>test</Button>
         </Grid>
       </DndProvider>
     </Grid>
@@ -210,6 +257,7 @@ const RepositoryBox = memo(function RepositoryBox({
   amount,
   onDrop,
   accept,
+  person,
 })
 {
   const style = {
@@ -244,6 +292,7 @@ const RepositoryBox = memo(function RepositoryBox({
       <Paper className='view-container'>
         <Grid container>
           <Grid item xs={12}>
+            {name===ItemTypes.OPPONENT && <Typography>{person.name}</Typography> }
             <Typography>{name} ({amount})</Typography>
             {isActive ? 'release to drop' : ''}
           </Grid>
