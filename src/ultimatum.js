@@ -22,7 +22,7 @@ export default function Ultimatum({content, onStore, onNotification}) {
 
   //i18n:
   const { t } = useTranslation();
-  const {tokens, trials, opponentTypes, persons} = content;
+  const {tokens, trials, opponentTypes, showStartScreen, persons} = content;
 
   const response = useRef(null);
 
@@ -31,7 +31,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
     trial: null,
     trialResponses: [],
     taskStartedAt: Date.now(),
-    showTooltip: true,
   });
 
   const [boxes, setBoxes] = useState(
@@ -42,7 +41,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
     ]
   )
   const shuffle = (a) => {
-    console.log('shuffling');
     for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
@@ -131,9 +129,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
    * starts the task after showing help screen
    */
   const startTask = () => {
-    /**
-     * TODO: if persons are less than the number of trials it should fill the array
-     */
     setShuffledPersons(shuffle(persons));
     setState({
       ...state,
@@ -152,7 +147,8 @@ export default function Ultimatum({content, onStore, onNotification}) {
     let trialResp = {
       trial: state.trial,
       playerShare: playerShare,
-      opponentShare: oppShare
+      opponentShare: oppShare,
+      opponent: shuffledPersons[personIndex]
     }
     return trialResp;
   }
@@ -172,7 +168,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
     setState({
       ...state,
       trialResponses: [...state.trialResponses, trialResp],
-      showTooltip: true,
       finished: (state.trial>=trials-1),
       trial: state.trial+1,
     });
@@ -192,24 +187,29 @@ export default function Ultimatum({content, onStore, onNotification}) {
    */
   const renderStartScreen = () => {
     return (
-      <Grid container direction='column' spacing={2} alignItems='center'>
-        <Grid item><Markdown source={t('stroop.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
+      <Grid container direction='column' spacing={2} alignItems='center' className='Text-container'>
+        <Grid item><Markdown source={t('ultimatum.start.help')} escapeHtml={false} className='markdown-text' /></Grid>
         <Grid item>
           <Button variant='outlined' onClick={() => startTask()}>{t('stroop.start')}</Button>
         </Grid>
-
       </Grid>
     )
   }
 
   if (state.trial === null) {
-    return renderStartScreen();
+    if(showStartScreen !== true){
+      startTask();
+    }else{
+      return renderStartScreen();
+    }
   }
-
+   
+  // If persons are less than the number of trials it should fill the array
   var personIndex = state.trial;
   if(state.trial!==null && state.trial>=shuffledPersons.length){
     personIndex = state.trial % shuffledPersons.length;
   }
+
   /***
    * Main render part of the ultimatum experiment
    *
@@ -237,7 +237,7 @@ export default function Ultimatum({content, onStore, onNotification}) {
           />
         ))}
 
-        <Grid item container direction="row" justify="space-around" alignItems='center'>
+        <Grid item container direction="row" alignItems='center'>
           <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
           <Button size='small' color='secondary' variant='outlined' onClick={testAction}>test</Button>
         </Grid>

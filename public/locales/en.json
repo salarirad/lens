@@ -582,6 +582,7 @@
 	
 	"ultimatum.rule.text": "In this experiment you shoud distribute the amount given between yourself and the other participant.",
 	"ultimatum.finish.button": "Collect",
-	"ultimatum.errors.required": "You have to move all tokens from POT box to other boxes"
+	"ultimatum.errors.required": "You have to move all tokens from POT box to other boxes",
+	"ultimatum.start.help": "In the next task, you'll see three slots (Yours, Pot, and your Opponent).<br /> You shoud distribute the amount given by dragging and dropping the tokens between yourself and the presented opponent, leaving nothing in the \"Pot\" slot. <br /> After distributing the tokens your opponent can decide whatever it's a reasonable payoff and accept so you will both get paid based upon what you chose, Or the whole result can be nullified and none of you will get anything at all. <br /> <img src='/images/joe-avatar' width='30px' height='30px' /> "
 
 }

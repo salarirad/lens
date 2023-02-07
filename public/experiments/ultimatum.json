@@ -15,11 +15,12 @@
       "potBox.text" : "ultimatum_demo.potBox.text",
       "playerBox.text" : "ultimatum_demo.playerBox.text",
       "opponentBox.text" : "ultimatum_demo.opponentBox.text",
+			"trials": 3,
+      "tokens": 10,
+      "showStartScreen" : true,
       "initialAmountRandomize" : false,
       "initialAmountMin" : 5,
       "initialAmountMax" : 20,
-			"trials": 3,
-      "tokens": 10,
       "opponentTypes": ["occupied","female"],
       "persons": [
         {
