@@ -360,8 +360,8 @@ const OpponentInfoBar = memo(function OpponentInfoBar({person}){
   const classes = useStyles(theme);
   return (
     <>
-      <Avatar alt="Marry Stone" src="/images/marry-avatar.jpg" className={classes.large} />
-      <Typography variant="body1" color="textPrimary" component="p"> {person.name}</Typography>
+      <Avatar alt={person.name} src={"/images/"+person.avatar} className={classes.large} />
+      <Typography variant="body1" color="textPrimary" component="p">{person.name}</Typography>
       <Typography variant="body2" color="textSecondary" component="p">{person.age}</Typography>
       <Typography variant="body2" color="textSecondary" component="p">{person.occupation}</Typography>
     </>
