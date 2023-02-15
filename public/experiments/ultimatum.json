@@ -22,6 +22,7 @@
       "initialAmountMin" : 5,
       "initialAmountMax" : 20,
       "opponentTypes": ["occupied","female"],
+      "useOpponentTypes": false,
       "persons": [
         {
           "id": 1,

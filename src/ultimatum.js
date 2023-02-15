@@ -1,13 +1,19 @@
 import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
-import { Typography, Button, Divider, Box, TextField, Grid, Paper } from '@material-ui/core';
+import { Typography, Button, Grid, Paper, makeStyles, Avatar } from '@material-ui/core';
 import Markdown from 'react-markdown/with-html';
 import { DndProvider, useDrag , useDrop} from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+//import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { languages } from './utils/i18n';
+import { useParams } from 'react-router-dom';
 
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 
 import { useTranslation } from 'react-i18next';
+import { ltrTheme, rtlTheme } from './utils/theme';
 
+//css
+import "./ultimatum.css";
 
 // Item types of draggable components which now are only one type
 const ItemTypes = {
@@ -16,13 +22,38 @@ const ItemTypes = {
   PLAYER: 'player',
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 0,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    //textAlign: 'center'
+  },
+  large: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+  },
+  height100: {
+    height: '100%',
+  }
+}));
+
+var language = undefined;
+
 export default function Ultimatum({content, onStore, onNotification}) {
   //props:   rule.text , help.text , itemsBox.text , playerBox.text, othersBox.text
   //props:   initialAmount ,initialAmountRandomize ,initialAmountMin ,initialAmountMax , trials
-
   //i18n:
+
+  let {lang, studyId} = useParams();
+  language = lang;
+
+  //const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
+
   const { t } = useTranslation();
-  const {tokens, trials, opponentTypes, showStartScreen, persons} = content;
+  const {tokens, trials, useOpponentTypes, opponentTypes, showStartScreen, persons} = content;
+  //const classes = useStyles();
 
   const response = useRef(null);
 
@@ -70,12 +101,13 @@ export default function Ultimatum({content, onStore, onNotification}) {
         'response': response
       }, true); // store + next
     }
-  }, [state]);
+  }, [state, onStore, content]);
 
   //test action experiment
   const testAction = () => {
     console.log('testAction', state);
     console.log('shuffled : ',shuffledPersons);
+    console.log('personTypes: ', opponentTypes);
     //console.log('canFinish: ', canFinishTrial());
   }
 
@@ -125,11 +157,19 @@ export default function Ultimatum({content, onStore, onNotification}) {
     [boxes],
   )
 
+  const filterPersonsByType = (persons, personTypes ) => {
+    if(useOpponentTypes !== true)
+      return persons;
+    //if(personTypes===undefined || personTypes.type)
+    return persons;
+  }
+
   /***
    * starts the task after showing help screen
    */
   const startTask = () => {
-    setShuffledPersons(shuffle(persons));
+    let filterredPersons = filterPersonsByType(persons,opponentTypes);
+    setShuffledPersons(shuffle(filterredPersons));
     setState({
       ...state,
       trial: 0,
@@ -215,17 +255,17 @@ export default function Ultimatum({content, onStore, onNotification}) {
    *
    */
   return (
-    <Grid container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='ultimatum-container'>
-      <DndProvider backend={HTML5Backend}>
-        <Grid item>
-          <Typography variant="h4">{t('ultimatum.rule.text')}</Typography>
-        </Grid>
-        <Grid item container direction='row' justify="space-around" alignItems='center'>
-          <Grid item><Grid container direction='column' justify="space-around" alignItems='center'>
-            <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
-          </Grid></Grid>
-        </Grid>
+    <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ultimatum-container'>
+      <Grid item>
+        <Typography variant="body2">{t('ultimatum.rule.text')}</Typography>
+      </Grid>
+      <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
+        <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+          <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
+        </Grid></Grid>
+      </Grid>
 
+      <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
         {boxes.map(({name, amount, accepts}, index) => (
           <RepositoryBox
             accept={accepts}
@@ -236,16 +276,13 @@ export default function Ultimatum({content, onStore, onNotification}) {
             person={shuffledPersons[personIndex]}
           />
         ))}
-
-        <Grid item container direction="row" alignItems='center'>
-          <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
-          <Button size='small' color='secondary' variant='outlined' onClick={testAction}>test</Button>
-        </Grid>
       </DndProvider>
+      <Grid item container direction="row" alignItems='center' justifyContent='center' >
+        <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
+        <Button size='small' color='secondary' variant='outlined' onClick={testAction}>test</Button>
+      </Grid>
     </Grid>
-
   );
-
 }
 
 
@@ -260,6 +297,8 @@ const RepositoryBox = memo(function RepositoryBox({
   person,
 })
 {
+  const theme = (languages[language].direction === 'rtl')?rtlTheme:ltrTheme;
+  const classes = useStyles(theme);
   const style = {
     lineHeight: 'normal',
   }
@@ -288,20 +327,45 @@ const RepositoryBox = memo(function RepositoryBox({
   }
 
   return (
-    <Grid ref={drop} item xs={12} style={{ ...style, backgroundColor }} data-test-id={"repository"+name} >
-      <Paper className='view-container'>
-        <Grid container>
-          <Grid item xs={12}>
-            {name===ItemTypes.OPPONENT && <Typography>{person.name}</Typography> }
-            <Typography>{name} ({amount})</Typography>
-            {isActive ? 'release to drop' : ''}
+    <Grid item xs={12}>
+      <Paper ref={drop} className={classes.paper} style={{ ...style, backgroundColor }} elevation={3} >
+        <Grid container direction="row">
+          <Grid item xs={4}>
+            {console.log(person)}
+            {name === ItemTypes.OPPONENT &&
+              <OpponentInfoBar person={person}/>
+            }
+            {name !== ItemTypes.OPPONENT &&
+              <Typography>{name}</Typography>
+            }
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={8}>
+            <Grid container direction="row" justifyContent="flex-start" alignItems="center" className={classes.height100}>
               {tokensList}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid container direction='row' justifyContent="flex-end" alignItems='center'>
+          <Grid item>
+            <Typography variant="caption" color="textSecondary" component="span">Total: {amount}</Typography>
           </Grid>
         </Grid>
       </Paper>
     </Grid>
+  );
+})
+
+const OpponentInfoBar = memo(function OpponentInfoBar({person}){
+  console.log(person);
+  const theme = (languages[language].direction === 'rtl')?rtlTheme:ltrTheme;
+  const classes = useStyles(theme);
+  return (
+    <>
+      <Avatar alt="Marry Stone" src="/images/marry-avatar.jpg" className={classes.large} />
+      <Typography variant="body1" color="textPrimary" component="p"> {person.name}</Typography>
+      <Typography variant="body2" color="textSecondary" component="p">{person.age}</Typography>
+      <Typography variant="body2" color="textSecondary" component="p">{person.occupation}</Typography>
+    </>
   );
 })
 
@@ -312,7 +376,6 @@ const MonetizedToken = memo(function MonetizedToken({type, name, boxName}) {
 
   const style = {
     cursor: 'move',
-    color: 'black'
   }
 
   const [{ opacity }, drag] = useDrag(
@@ -326,9 +389,9 @@ const MonetizedToken = memo(function MonetizedToken({type, name, boxName}) {
     [name],
   )
   return (
-    <span ref={drag} data-test-id={`token`}>
-      <MonetizationOnIcon style={{ ...style, opacity }} />
-    </span>
+    <Grid item key={name}>
+      <MonetizationOnIcon ref={drag} style={{ ...style, opacity }} />
+    </Grid>
   )
 
 })
