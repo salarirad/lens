@@ -15,7 +15,7 @@ import { ltrTheme, rtlTheme } from './utils/theme';
 //css
 import "./ultimatum.css";
 
-// Item types of draggable components which now are only one type
+// Item types of draggable components
 const ItemTypes = {
   OPPONENT: 'opponent',
   POT: 'pot',
@@ -279,7 +279,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
       </DndProvider>
       <Grid item container direction="row" alignItems='center' justifyContent='center' >
         <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
-        <Button size='small' color='secondary' variant='outlined' onClick={testAction}>test</Button>
       </Grid>
     </Grid>
   );
