@@ -1,14 +1,11 @@
 import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
 import { Typography, Button, Grid, Paper, makeStyles, Avatar } from '@material-ui/core';
-import Markdown from 'react-markdown/with-html';
 import { DndProvider, useDrag , useDrop} from 'react-dnd';
 //import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { languages } from './utils/i18n';
 import { useParams } from 'react-router-dom';
-
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-
 import { useTranslation } from 'react-i18next';
 import { ltrTheme, rtlTheme } from './utils/theme';
 
@@ -40,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 var language = undefined;
+var personLangPrefix = undefined;
 
 export default function Ultimatum({content, onStore, onNotification}) {
   //props:   rule.text , help.text , itemsBox.text , playerBox.text, othersBox.text
@@ -48,12 +46,14 @@ export default function Ultimatum({content, onStore, onNotification}) {
 
   let {lang, studyId} = useParams();
   language = lang;
-
-  //const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
-
+  
   const { t } = useTranslation();
-  const {tokens, trials, useOpponentTypes, opponentTypes, showStartScreen, persons} = content;
-  //const classes = useStyles();
+  const {tokens, trials, useOpponentTypes, opponentTypes, text, personsPrefix, persons} = content;
+  
+  personLangPrefix = personsPrefix;
+  
+  const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
+  const classes = useStyles(theme);
 
   const response = useRef(null);
 
@@ -66,9 +66,9 @@ export default function Ultimatum({content, onStore, onNotification}) {
 
   const [boxes, setBoxes] = useState(
     [
-      {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
-      {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
       {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
+      {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
+      {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
     ]
   )
   const shuffle = (a) => {
@@ -85,7 +85,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
   useEffect(() => {
     // Nothing yet
   },[]);
-
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
@@ -114,7 +113,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
   const finishTrialAction = () => {
     if(!canFinishTrial()){
       onNotification(t('ultimatum.errors.required'));
-      //onNotification(t('errors.required'));
     }
     else{
       newTrial();
@@ -157,18 +155,39 @@ export default function Ultimatum({content, onStore, onNotification}) {
     [boxes],
   )
 
-  const filterPersonsByType = (persons, personTypes ) => {
+  /**
+   * Filters persons to return only the persons that have any of the given tags 
+   * @param {*} persons 
+   * @param {*} tags 
+   * @returns 
+   */
+  const filterPersonsByTags = (persons, tags ) => {
     if(useOpponentTypes !== true)
       return persons;
-    //if(personTypes===undefined || personTypes.type)
-    return persons;
+    const filterredPersons = persons.filter(person => {return checkPersonHasTags(person,tags)});
+    return filterredPersons;
+  }
+
+  /**
+   * Checks if the given person has any of the the given tags
+   * @param {*} person 
+   * @param {*} tags 
+   * @returns true if the person has any of the given tags
+   */
+  function checkPersonHasTags(person, tags) {
+    var checkResult = false;
+    for (let i = 0; i < person.tags.length; i++) {
+      if(tags.inclue(person.tags[i]))
+        checkResult = true;
+    }
+    return checkResult;
   }
 
   /***
-   * starts the task after showing help screen
+   * Starts the task for the first time
    */
   const startTask = () => {
-    let filterredPersons = filterPersonsByType(persons,opponentTypes);
+    let filterredPersons = filterPersonsByTags(persons,opponentTypes);
     setShuffledPersons(shuffle(filterredPersons));
     setState({
       ...state,
@@ -195,8 +214,6 @@ export default function Ultimatum({content, onStore, onNotification}) {
 
   /**
    * Store trial responses, then proceed to the next trial or finish the game
-   * @param {*} cashed either cashed or exploded
-   * @param {*} explosionProbability last probability of balloon getting exploded
    */
   const newTrial = () => {
     if(!canFinishTrial()){
@@ -215,33 +232,17 @@ export default function Ultimatum({content, onStore, onNotification}) {
     // when the trial finished the tokens in boxes should reset
     setBoxes(
       [
-        {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
-        {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
         {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
+        {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
+        {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
       ]
     );
   }
-  /**
-   * Renders instructions before the trials begin
-   * @returns React elements
-   */
-  const renderStartScreen = () => {
-    return (
-      <Grid container direction='column' spacing={2} alignItems='center' className='Text-container'>
-        <Grid item><Markdown source={t('ultimatum.start.help')} escapeHtml={false} className='markdown-text' /></Grid>
-        <Grid item>
-          <Button variant='outlined' onClick={() => startTask()}>{t('stroop.start')}</Button>
-        </Grid>
-      </Grid>
-    )
-  }
 
   if (state.trial === null) {
-    if(showStartScreen !== true){
-      startTask();
-    }else{
-      return renderStartScreen();
-    }
+    console.log('ultimatum starting...');
+    startTask();
+    return;
   }
    
   // If persons are less than the number of trials it should fill the array
@@ -257,11 +258,11 @@ export default function Ultimatum({content, onStore, onNotification}) {
   return (
     <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ultimatum-container'>
       <Grid item>
-        <Typography variant="body2">{t('ultimatum.rule.text')}</Typography>
+        <Typography variant="body2">{t(text)}</Typography>
       </Grid>
       <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
         <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-          <Typography color='textSecondary' variant='caption'>{t('bart.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
+          <Typography color='textSecondary' variant='caption'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
         </Grid></Grid>
       </Grid>
 
@@ -296,6 +297,7 @@ const RepositoryBox = memo(function RepositoryBox({
   person,
 })
 {
+  const { t } = useTranslation();
   const theme = (languages[language].direction === 'rtl')?rtlTheme:ltrTheme;
   const classes = useStyles(theme);
   const style = {
@@ -330,12 +332,11 @@ const RepositoryBox = memo(function RepositoryBox({
       <Paper ref={drop} className={classes.paper} style={{ ...style, backgroundColor }} elevation={3} >
         <Grid container direction="row">
           <Grid item xs={4}>
-            {console.log(person)}
             {name === ItemTypes.OPPONENT &&
               <OpponentInfoBar person={person}/>
             }
             {name !== ItemTypes.OPPONENT &&
-              <Typography>{name}</Typography>
+              <Typography>{t('ultimatum.'+name)}</Typography>
             }
           </Grid>
           <Grid item xs={8}>
@@ -346,7 +347,7 @@ const RepositoryBox = memo(function RepositoryBox({
         </Grid>
         <Grid container direction='row' justifyContent="flex-end" alignItems='center'>
           <Grid item>
-            <Typography variant="caption" color="textSecondary" component="span">Total: {amount}</Typography>
+            <Typography variant="caption" color="textSecondary" component="span" className={'box-label'}>{t('ultimatum.box.total_label',{amount: amount})}</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -354,16 +355,38 @@ const RepositoryBox = memo(function RepositoryBox({
   );
 })
 
+/**
+ * uses the persons id and the field key alongside experiment loaded personLangPrefix to produce the locales key
+ * @returns string for locales key
+ */
+function getPersonKey(key, id){
+  return personLangPrefix + id + '.' + key;
+}
+
 const OpponentInfoBar = memo(function OpponentInfoBar({person}){
-  console.log(person);
+  const { t } = useTranslation();
   const theme = (languages[language].direction === 'rtl')?rtlTheme:ltrTheme;
   const classes = useStyles(theme);
   return (
     <>
-      <Avatar alt={person.name} src={"/images/"+person.avatar} className={classes.large} />
-      <Typography variant="body1" color="textPrimary" component="p">{person.name}</Typography>
-      <Typography variant="body2" color="textSecondary" component="p">{person.age}</Typography>
-      <Typography variant="body2" color="textSecondary" component="p">{person.occupation}</Typography>
+      {person?.avatar && 
+        <Avatar alt={t(getPersonKey('field1',person.id))} src={"/images/"+person.avatar} className={classes.large} />
+      }
+      {!person?.avatar && 
+        <Avatar className={classes.large} />
+      }
+      <Typography variant="body1" color="textPrimary" component="p">
+        {person?.field1 && t(getPersonKey(person.field1,person.id))}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="p">
+        {person?.field2 && t(getPersonKey(person.field2,person.id))}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="p">
+        {person?.field3 && t(getPersonKey(person.field3,person.id))}
+      </Typography>
+      <Typography variant="body2" color="textSecondary" component="p">
+        {person?.field4 && t(getPersonKey(person.field4,person.id))}
+      </Typography>
     </>
   );
 })
