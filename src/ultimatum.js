@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
-import { Typography, Button, Grid, Paper, makeStyles, Avatar } from '@material-ui/core';
-import { DndProvider, useDrag , useDrop} from 'react-dnd';
+import { Typography, Button, Grid, Paper, makeStyles, Avatar, Badge, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
 //import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { languages } from './utils/i18n';
@@ -39,59 +39,51 @@ const useStyles = makeStyles((theme) => ({
 var language = undefined;
 var personLangPrefix = undefined;
 
-export default function Ultimatum({content, onStore, onNotification}) {
+export default function Ultimatum({ content, onStore, onNotification }) {
   //props:   rule.text , help.text , itemsBox.text , playerBox.text, othersBox.text
   //props:   initialAmount ,initialAmountRandomize ,initialAmountMin ,initialAmountMax , trials
   //i18n:
 
-  let {lang, studyId} = useParams();
+  let { lang, studyId } = useParams();
   language = lang;
-  
-  const { t } = useTranslation();
-  const {tokens, trials, useOpponentTypes, opponentTypes, text, personsPrefix, persons} = content;
-  
-  personLangPrefix = personsPrefix;
-  
-  const theme = (languages[lang].direction === 'rtl')?rtlTheme:ltrTheme;
-  const classes = useStyles(theme);
 
+  const { t } = useTranslation();
+  const { tokens, trials, useOpponentTypes, opponentTypes, text, personsPrefix, persons } = content;
+
+  personLangPrefix = personsPrefix;
+
+  const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
+  const classes = useStyles(theme);
   const response = useRef(null);
 
   const [state, setState] = useState({
     finished: false,
     trial: null,
+    totalScore: 0,
+    dialogIsOpen: false,
     trialResponses: [],
     taskStartedAt: Date.now(),
   });
-
   const [boxes, setBoxes] = useState(
     [
-      {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
-      {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
-      {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
+      { name: ItemTypes.OPPONENT, amount: 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER] },
+      { name: ItemTypes.POT, amount: tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT] },
+      { name: ItemTypes.PLAYER, amount: 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT] },
     ]
   )
-  const shuffle = (a) => {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
   const [shuffledPersons, setShuffledPersons] = useState(undefined);
 
   // on mount and unmount
   useEffect(() => {
     // Nothing yet
-  },[]);
+  }, []);
 
   // when finished, store responses and proceed to the next view
   useEffect(() => {
     if (state.finished) {
       const now = Date.now()
       // add timestamps
-      let response = {trials: state.trialResponses};
+      let response = { trials: state.trialResponses };
       response.taskStartedAt = state.taskStartedAt;
       response.taskFinishedAt = now;
       response.taskDuration = now - state.taskStartedAt;
@@ -102,21 +94,55 @@ export default function Ultimatum({content, onStore, onNotification}) {
     }
   }, [state, onStore, content]);
 
+  /**
+  * Shuffles any array and returns it
+  * @param {*any} a any array
+  * @returns shuffled array
+  */
+  const shuffle = (a) => {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+ /**
+   * Filters persons to return only the persons that have any of the given tags 
+   * @param {*persons} persons persons to be filtered by their tags
+   * @param {*} tags tags used to select the persons which their tags has at least one the tags given
+   * @returns 
+   */
+ const filterPersonsByTags = (persons, tags) => {
+  if (useOpponentTypes !== true)
+    return persons;
+  const filterredPersons = persons.filter(person => { return checkPersonHasTags(person, tags) });
+  return filterredPersons;
+}
+
+/**
+ * Checks if the given person has any of the the given tags
+ * @returns true if the person has any of the given tags
+ */
+function checkPersonHasTags(person, tags) {
+  var checkResult = false;
+  for (let i = 0; i < person.tags.length; i++) {
+    if (tags.inclue(person.tags[i]))
+      checkResult = true;
+  }
+  return checkResult;
+}
+
   //test action experiment
   const testAction = () => {
     console.log('testAction', state);
-    console.log('shuffled : ',shuffledPersons);
+    console.log('shuffled : ', shuffledPersons);
     console.log('personTypes: ', opponentTypes);
     //console.log('canFinish: ', canFinishTrial());
   }
 
   const finishTrialAction = () => {
-    if(!canFinishTrial()){
-      onNotification(t('ultimatum.errors.required'));
-    }
-    else{
-      newTrial();
-    }
+    canFinishTrial() ? newTrial() : onNotification(t('ultimatum.errors.required'));
   }
 
   /***
@@ -125,7 +151,7 @@ export default function Ultimatum({content, onStore, onNotification}) {
   const canFinishTrial = () => {
     let result = false;
     boxes.forEach((box) => {
-      if(box.name === ItemTypes.POT && box.amount === 0)
+      if (box.name === ItemTypes.POT && box.amount === 0)
         result = true;
     });
     return result;
@@ -143,11 +169,11 @@ export default function Ultimatum({content, onStore, onNotification}) {
       //console.log('dropped on: ',destBox);
       //console.log('from : ',fromBox);
       setBoxes(boxes.map(item => {
-        if(item.name === fromBox){
-          return {...item, amount: item.amount-1};
-        }else if(item.name === destBox){
-          return {...item, amount: item.amount+1};
-        }else{
+        if (item.name === fromBox) {
+          return { ...item, amount: item.amount - 1 };
+        } else if (item.name === destBox) {
+          return { ...item, amount: item.amount + 1 };
+        } else {
           return item;
         }
       }));
@@ -155,39 +181,11 @@ export default function Ultimatum({content, onStore, onNotification}) {
     [boxes],
   )
 
-  /**
-   * Filters persons to return only the persons that have any of the given tags 
-   * @param {*} persons 
-   * @param {*} tags 
-   * @returns 
-   */
-  const filterPersonsByTags = (persons, tags ) => {
-    if(useOpponentTypes !== true)
-      return persons;
-    const filterredPersons = persons.filter(person => {return checkPersonHasTags(person,tags)});
-    return filterredPersons;
-  }
-
-  /**
-   * Checks if the given person has any of the the given tags
-   * @param {*} person 
-   * @param {*} tags 
-   * @returns true if the person has any of the given tags
-   */
-  function checkPersonHasTags(person, tags) {
-    var checkResult = false;
-    for (let i = 0; i < person.tags.length; i++) {
-      if(tags.inclue(person.tags[i]))
-        checkResult = true;
-    }
-    return checkResult;
-  }
-
   /***
    * Starts the task for the first time
    */
   const startTask = () => {
-    let filterredPersons = filterPersonsByTags(persons,opponentTypes);
+    let filterredPersons = filterPersonsByTags(persons, opponentTypes);
     setShuffledPersons(shuffle(filterredPersons));
     setState({
       ...state,
@@ -198,43 +196,35 @@ export default function Ultimatum({content, onStore, onNotification}) {
   }
 
   /**
-   * Produce a proper trialResponse object from states and boxes
-   */
-  function produceTrialResponse(){
-    const playerShare = boxes.find(box => box.name === ItemTypes.PLAYER).amount;
-    const oppShare = boxes.find(box => box.name === ItemTypes.OPPONENT).amount;
-    let trialResp = {
-      trial: state.trial,
-      playerShare: playerShare,
-      opponentShare: oppShare,
-      opponent: shuffledPersons[personIndex]
-    }
-    return trialResp;
-  }
-
-  /**
    * Store trial responses, then proceed to the next trial or finish the game
    */
   const newTrial = () => {
-    if(!canFinishTrial()){
+    if (!canFinishTrial()) {
       console.log('it should never come to this, because before calling newTrial, canFinishTrial has been checked!!!!');
       onNotification(t('ultimatum.errors.required'));
       return;
     }
-    const trialResp = produceTrialResponse();
+    const playerShare = boxes.find(box => box.name === ItemTypes.PLAYER).amount;
     setState({
       ...state,
-      trialResponses: [...state.trialResponses, trialResp],
-      finished: (state.trial>=trials-1),
-      trial: state.trial+1,
+      trialResponses: [...state.trialResponses, {
+        trial: state.trial,
+        playerShare: playerShare,
+        opponentShare: tokens - playerShare,
+        opponent: shuffledPersons[personIndex]
+      }],
+      finished: (state.trial >= trials - 1),
+      trial: state.trial + 1,
+      totalScore: state.totalScore + playerShare,
+      dialogIsOpen: true,
     });
 
     // when the trial finished the tokens in boxes should reset
     setBoxes(
       [
-        {name: ItemTypes.OPPONENT , amount : 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER]},
-        {name: ItemTypes.POT , amount : tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT]},
-        {name: ItemTypes.PLAYER , amount : 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT]},
+        { name: ItemTypes.OPPONENT, amount: 0, accepts: [ItemTypes.POT, ItemTypes.PLAYER] },
+        { name: ItemTypes.POT, amount: tokens, accepts: [ItemTypes.PLAYER, ItemTypes.OPPONENT] },
+        { name: ItemTypes.PLAYER, amount: 0, accepts: [ItemTypes.POT, ItemTypes.OPPONENT] },
       ]
     );
   }
@@ -244,47 +234,83 @@ export default function Ultimatum({content, onStore, onNotification}) {
     startTask();
     return;
   }
-   
+
   // If persons are less than the number of trials it should fill the array
   var personIndex = state.trial;
-  if(state.trial!==null && state.trial>=shuffledPersons.length){
+  if (state.trial !== null && state.trial >= shuffledPersons.length) {
     personIndex = state.trial % shuffledPersons.length;
   }
+
+  /**
+   * render a dialog that shows trial summary.
+   */
+  const renderDialog = () => {
+    return (
+      <Dialog
+        open={state.dialogIsOpen}
+        onClose={() => setState({ ...state, dialogIsOpen: false })}
+        disableBackdropClick
+        disableEscapeKeyDown
+        aria-labelledby="dialog-title"
+      >
+        <DialogTitle id="dialog-title"><b>{t('ultimatum.cashed_title')}</b></DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t('ultimatum.trial_score_report', { score: state.trialResponses[state.trialResponses.length - 1].playerShare })}
+            {t('ultimatum.total_score_report', { score: state.trialResponses.map(r => r.playerShare).reduce((a, b) => a + b, 0) })}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setState({ ...state, dialogIsOpen: false })} color="primary" autoFocus size='large'>
+            {state.trial <= trials - 1 ? t('ultimatum.next_trial') : t('next')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }  
 
   /***
    * Main render part of the ultimatum experiment
    *
    */
   return (
-    <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ultimatum-container'>
-      <Grid item>
-        <Typography variant="body2">{t(text)}</Typography>
-      </Grid>
-      <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
-        <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-          <Typography color='textSecondary' variant='caption'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
-        </Grid></Grid>
-      </Grid>
+    <Fragment>
+      {state.dialogIsOpen && renderDialog() }
+      <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ultimatum-container'>
+        <Grid item>
+          <Typography variant="body2">{t(text)}</Typography>
+        </Grid>
+        <Grid item container direction='column' alignItems='stretch'>
+          <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
+            {boxes.map(({name, amount, accepts}, index) => (
+              <RepositoryBox
+                accept={accepts}
+                name={name}
+                amount={amount}
+                onDrop={(item) => handleDrop(name, item)}
+                key={index}
+                person={shuffledPersons[personIndex]}
+              />
+            ))}
+          </DndProvider>
+        </Grid>
+        <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
+          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Typography color='textSecondary' variant='caption'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
+          </Grid></Grid>
 
-      <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
-        {boxes.map(({name, amount, accepts}, index) => (
-          <RepositoryBox
-            accept={accepts}
-            name={name}
-            amount={amount}
-            onDrop={(item) => handleDrop(name, item)}
-            key={index}
-            person={shuffledPersons[personIndex]}
-          />
-        ))}
-      </DndProvider>
-      <Grid item container direction="row" alignItems='center' justifyContent='center' >
-        <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
+          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
+          </Grid></Grid>
+
+          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Typography variant="body1">{t('ultimatum.total_points',{score:state.totalScore})}</Typography>
+          </Grid></Grid>
+        </Grid>
       </Grid>
-    </Grid>
+    </Fragment>
   );
 }
-
 
 /***
  * Container box for monetized entities and their interactions
@@ -295,10 +321,9 @@ const RepositoryBox = memo(function RepositoryBox({
   onDrop,
   accept,
   person,
-})
-{
+}) {
   const { t } = useTranslation();
-  const theme = (languages[language].direction === 'rtl')?rtlTheme:ltrTheme;
+  const theme = (languages[language].direction === 'rtl') ? rtlTheme : ltrTheme;
   const classes = useStyles(theme);
   const style = {
     lineHeight: 'normal',
@@ -323,8 +348,8 @@ const RepositoryBox = memo(function RepositoryBox({
   }
 
   const tokensList = [];
-  for(let i=0; i < amount; i++) {
-    tokensList.push(<MonetizedToken type={name} name={name+i.toString()} key={name+i.toString()} boxName={name} />);
+  for (let i = 0; i < amount; i++) {
+    tokensList.push(<MonetizedToken type={name} name={name + i.toString()} key={name + i.toString()} boxName={name} />);
   }
 
   return (
@@ -333,21 +358,24 @@ const RepositoryBox = memo(function RepositoryBox({
         <Grid container direction="row">
           <Grid item xs={4}>
             {name === ItemTypes.OPPONENT &&
-              <OpponentInfoBar person={person}/>
+              <OpponentInfoBar person={person} />
             }
             {name !== ItemTypes.OPPONENT &&
-              <Typography>{t('ultimatum.'+name)}</Typography>
+              <Typography>{t('ultimatum.' + name)}</Typography>
             }
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Grid container direction="row" justifyContent="flex-start" alignItems="center" className={classes.height100}>
               {tokensList}
             </Grid>
           </Grid>
-        </Grid>
-        <Grid container direction='row' justifyContent="flex-end" alignItems='center'>
-          <Grid item>
-            <Typography variant="caption" color="textSecondary" component="span" className={'box-label'}>{t('ultimatum.box.total_label',{amount: amount})}</Typography>
+          <Grid item xs={1}>
+            <Grid container direction="column" justifyContent="center" alignItems="center">
+              {/* <Typography variant="caption" color="textSecondary">{t('ultimatum.box.total_label', { amount: amount })}</Typography> */}
+              <Badge color="secondary" badgeContent={amount} showZero>
+                <MonetizationOnIcon color={name === ItemTypes.PLAYER ? "primary" : "disabled"} fontSize="large" />
+              </Badge>
+            </Grid>
           </Grid>
         </Grid>
       </Paper>
@@ -359,33 +387,33 @@ const RepositoryBox = memo(function RepositoryBox({
  * uses the persons id and the field key alongside experiment loaded personLangPrefix to produce the locales key
  * @returns string for locales key
  */
-function getPersonKey(key, id){
+function getPersonKey(key, id) {
   return personLangPrefix + id + '.' + key;
 }
 
-const OpponentInfoBar = memo(function OpponentInfoBar({person}){
+const OpponentInfoBar = memo(function OpponentInfoBar({ person }) {
   const { t } = useTranslation();
-  const theme = (languages[language].direction === 'rtl')?rtlTheme:ltrTheme;
+  const theme = (languages[language].direction === 'rtl') ? rtlTheme : ltrTheme;
   const classes = useStyles(theme);
   return (
     <>
-      {person?.avatar && 
-        <Avatar alt={t(getPersonKey('field1',person.id))} src={"/images/"+person.avatar} className={classes.large} />
+      {person?.avatar &&
+        <Avatar alt={t(getPersonKey('field1', person.id))} src={"/images/" + person.avatar} className={classes.large} />
       }
-      {!person?.avatar && 
+      {!person?.avatar &&
         <Avatar className={classes.large} />
       }
       <Typography variant="body1" color="textPrimary" component="p">
-        {person?.field1 && t(getPersonKey(person.field1,person.id))}
+        {person?.field1 && t(getPersonKey(person.field1, person.id))}
       </Typography>
       <Typography variant="body2" color="textSecondary" component="p">
-        {person?.field2 && t(getPersonKey(person.field2,person.id))}
+        {person?.field2 && t(getPersonKey(person.field2, person.id))}
       </Typography>
       <Typography variant="body2" color="textSecondary" component="p">
-        {person?.field3 && t(getPersonKey(person.field3,person.id))}
+        {person?.field3 && t(getPersonKey(person.field3, person.id))}
       </Typography>
       <Typography variant="body2" color="textSecondary" component="p">
-        {person?.field4 && t(getPersonKey(person.field4,person.id))}
+        {person?.field4 && t(getPersonKey(person.field4, person.id))}
       </Typography>
     </>
   );
@@ -394,7 +422,7 @@ const OpponentInfoBar = memo(function OpponentInfoBar({person}){
 /***
  * Component which renders coin tokens and handles dragging events
  */
-const MonetizedToken = memo(function MonetizedToken({type, name, boxName}) {
+const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
 
   const style = {
     cursor: 'move',

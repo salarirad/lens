@@ -573,13 +573,13 @@
 	"check.2": "This is an attenton check. Please select not at all like me.",
 	"check.3": "This is an attenton check. Please select moderately agree",
 	
-	
 	"fasting.q.control": "Do you ever fast for religous or health reasons?",
 	
 	"submission.note": "Thank you for your participation! Please press **Continue** to be redirected to the Prolific webpage.",
 	"submission.q_email": "Thank you for your participation. You can see your performance on the next page. Please write your email in the box below if you'd like to participate in similar studies.",
 	"done": "And we're done! Thanks for your participation. Please press continue on the enxt page to be redirected back to the Prolific.co webpage.",
-	
+
+
 	"ultimatum.rule.text": "Please distribute the amount given between yourself and the other participant.",
 	"ultimatum.finish.button": "Collect",
 	"ultimatum.errors.required": "You have to move all tokens from POT box to other boxes",
@@ -587,10 +587,16 @@
 	"ultimatum.player": "Your Share",
 	"ultimatum.pot": "Pot",
 	"ultimatum.trial_label": "Round {{trial}} of {{trials}}",
+	"ultimatum.total_points": "Total reward: {{score}}",
 	"ultimatum.box.total_label": "Total: {{amount}}",
+	"ultimatum.cashed_title": "Cashed!",
+	"ultimatum.trial_score_report": "You scored {{score}} points in this round.",
+	"ultimatum.total_score_report": " In total, you have {{score}} points.",
+	"ultimatum.next_trial": "Next Round",
+
 	"ultimatum.intro1.text": "In this task, some coins are placed between you and another participant in this study. You decide how to divide these coins between the two of you.<br /> <br /> You can do so by dragging the coins from the box in the middle and dropping them either in your own box (on the bottom) or the other player's (on the top). You're free to distribute the coins however you like. Just make sure you allocate all of the coins. Otherwise, you cannot move to the next stage. <br /> <br /> Press **Next** to continue",
 	"ultimatum.intro2.text": "In this task, some coins are placed between you and another participant in this study. You decide how to divide these coins between the two of you.<br /> <br /> You can do so by dragging the coins from the box in the middle and dropping them either in your own box (on the bottom) or the other player's (on the top). You're free to distribute the coins however you like. Just make sure you allocate all of the coins. Otherwise, you cannot move to the next stage. <br /> <img src='/images/joe-avatar.jpg' width='100%' />",
-	"ultimatum.intro3.text": "Ok <br /><img src='/images/joe-avatar.jpg' width='100%' /> ",
+	"ultimatum.intro3.text": "In this task, some coins are placed between you and another participant in this study.<br /> <img src='/images/joe-avatar.jpg' width='100%' />",
 
 	"ultimatum.person1.field1.content": "Marry Poppins",
 	"ultimatum.person1.field2.content": "27",

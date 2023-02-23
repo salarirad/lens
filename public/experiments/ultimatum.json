@@ -14,12 +14,6 @@
 			"text": "ultimatum.intro1.text"
 		},
     {
-			"id": "ultimatum.intro2",
-			"type": "text",
-			"instruction": true,
-			"text": "ultimatum.intro2.text"
-		},
-    {
 			"id": "ultimatum.intro3",
 			"type": "text",
 			"instruction": true,
@@ -30,7 +24,7 @@
 			"type": "ultimatum",
       "text" : "ultimatum.rule.text",
 			"trials": 3,
-      "tokens": 10,
+      "tokens": 5,
       "opponentTypes": ["occupied","female"],
       "useOpponentTypes": false,
       "personsPrefix" : "ultimatum.person",
