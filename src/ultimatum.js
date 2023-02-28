@@ -113,32 +113,24 @@ export default function Ultimatum({ content, onStore, onNotification }) {
    * @param {*} tags tags used to select the persons which their tags has at least one the tags given
    * @returns 
    */
- const filterPersonsByTags = (persons, tags) => {
-  if (useOpponentTypes !== true)
-    return persons;
-  const filterredPersons = persons.filter(person => { return checkPersonHasTags(person, tags) });
-  return filterredPersons;
-}
-
-/**
- * Checks if the given person has any of the the given tags
- * @returns true if the person has any of the given tags
- */
-function checkPersonHasTags(person, tags) {
-  var checkResult = false;
-  for (let i = 0; i < person.tags.length; i++) {
-    if (tags.inclue(person.tags[i]))
-      checkResult = true;
+  const filterPersonsByTags = (persons, tags) => {
+    if (useOpponentTypes !== true)
+      return persons;
+    const filterredPersons = persons.filter(person => { return checkPersonHasTags(person, tags) });
+      return filterredPersons;
   }
-  return checkResult;
-}
 
-  //test action experiment
-  const testAction = () => {
-    console.log('testAction', state);
-    console.log('shuffled : ', shuffledPersons);
-    console.log('personTypes: ', opponentTypes);
-    //console.log('canFinish: ', canFinishTrial());
+  /**
+   * Checks if the given person has any of the the given tags
+   * @returns true if the person has any of the given tags
+   */
+  function checkPersonHasTags(person, tags) {
+    var checkResult = false;
+    for (let i = 0; i < person.tags.length; i++) {
+      if (tags.inclue(person.tags[i]))
+        checkResult = true;
+    }
+    return checkResult;
   }
 
   const finishTrialAction = () => {
@@ -158,7 +150,7 @@ function checkPersonHasTags(person, tags) {
   }
 
   /***
-   * token has been moved by player to a different box
+   * Activated when player has droped a token (item that is dragged and name of the dropped box) by setting setBoxes
    */
   const handleDrop = useCallback(
     (name, item) => {
@@ -280,7 +272,8 @@ function checkPersonHasTags(person, tags) {
         <Grid item>
           <Typography variant="body2">{t(text)}</Typography>
         </Grid>
-        <Grid item container direction='column' alignItems='stretch'>
+        {/* Boxes container */}
+        <Grid item container spacing={2} alignItems='stretch' justifyContent='space-between' className='boxes-container'>
           <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
             {boxes.map(({name, amount, accepts}, index) => (
               <RepositoryBox
@@ -294,6 +287,7 @@ function checkPersonHasTags(person, tags) {
             ))}
           </DndProvider>
         </Grid>
+        {/* Labels and actions */}
         <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
           <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
             <Typography color='textSecondary' variant='caption'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
@@ -327,6 +321,7 @@ const RepositoryBox = memo(function RepositoryBox({
   const classes = useStyles(theme);
   const style = {
     lineHeight: 'normal',
+    height: '130px',
   }
 
   const [{ canDrop, isOver }, drop] = useDrop({
@@ -355,7 +350,7 @@ const RepositoryBox = memo(function RepositoryBox({
   return (
     <Grid item xs={12}>
       <Paper ref={drop} className={classes.paper} style={{ ...style, backgroundColor }} elevation={3} >
-        <Grid container direction="row">
+        <Grid container alignItems="center" direction="row" className={classes.height100}>
           <Grid item xs={4}>
             {name === ItemTypes.OPPONENT &&
               <OpponentInfoBar person={person} />
@@ -365,7 +360,7 @@ const RepositoryBox = memo(function RepositoryBox({
             }
           </Grid>
           <Grid item xs={7}>
-            <Grid container direction="row" justifyContent="flex-start" alignItems="center" className={classes.height100}>
+            <Grid container direction="row" justifyContent="flex-start" alignItems="center">
               {tokensList}
             </Grid>
           </Grid>
