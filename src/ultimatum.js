@@ -245,7 +245,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title"><b>{t('ultimatum.cashed_title')}</b></DialogTitle>
+        <DialogTitle id="dialog-title"><b>{t('ultimatum.dialog_title')}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t('ultimatum.trial_score_report', { score: state.trialResponses[state.trialResponses.length - 1].playerShare })}

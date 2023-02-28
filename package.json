@@ -2,7 +2,7 @@
   "name": "lens",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://ARadmanesh.github.io/lens",
+  "homepage": "https://ARadmanesh.github.io/lens/",
   "dependencies": {
     "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "4.x",
