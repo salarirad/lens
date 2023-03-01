@@ -331,7 +331,7 @@ const RepositoryBox = memo(function RepositoryBox({
   const classes = useStyles(theme);
   const style = {
     lineHeight: 'normal',
-    height: '130px',
+    height: '148px',
   }
 
   const [{ canDrop, isOver }, drop] = useDrop({
