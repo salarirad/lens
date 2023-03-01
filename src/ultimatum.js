@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { useTranslation } from 'react-i18next';
 import { ltrTheme, rtlTheme } from './utils/theme';
-import { grey } from '@material-ui/core/colors';
+import { grey, teal, blueGrey } from '@material-ui/core/colors';
 
 
 //css
@@ -40,6 +40,14 @@ const useStyles = makeStyles((theme) => ({
   grey: {
     color: theme.palette.getContrastText(grey[400]),
     backgroundColor: grey[400],
+  },
+  tealDark: {
+    color: theme.palette.getContrastText(teal[800]),
+    backgroundColor: teal[800],
+  },
+  blueG: {
+    color: theme.palette.getContrastText(blueGrey[800]),
+    backgroundColor: blueGrey[800],
   },
   height100: {
     height: '100%',
@@ -349,7 +357,7 @@ const RepositoryBox = memo(function RepositoryBox({
   if (isActive) {
     backgroundColor = 'darkgreen'
   } else if (canDrop) {
-    backgroundColor = 'darkkhaki'
+    backgroundColor = blueGrey[800]
   }
 
   const tokensList = [];
