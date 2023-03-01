@@ -8,6 +8,8 @@ import { useParams } from 'react-router-dom';
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { useTranslation } from 'react-i18next';
 import { ltrTheme, rtlTheme } from './utils/theme';
+import { grey } from '@material-ui/core/colors';
+
 
 //css
 import "./ultimatum.css";
@@ -27,9 +29,17 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     //textAlign: 'center'
   },
+  medium: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
   large: {
     width: theme.spacing(4),
     height: theme.spacing(4),
+  },
+  grey: {
+    color: theme.palette.getContrastText(grey[300]),
+    backgroundColor: grey[300],
   },
   height100: {
     height: '100%',

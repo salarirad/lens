@@ -24,7 +24,7 @@ i18n
     debug: process.env.NODE_ENV !== 'production',
     keySeparator: false,
     backend: {
-      loadPath: '/locales/{{lng}}.json',
+      loadPath: process.env.PUBLIC_URL + '/locales/{{lng}}.json',
     },
   });
 
