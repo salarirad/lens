@@ -11,6 +11,7 @@ import { ltrTheme, rtlTheme } from './utils/theme';
 
 //css
 import "./ultimatum.css";
+import { blueGrey, grey } from '@material-ui/core/colors';
 
 // Item types of draggable components
 const ItemTypes = {
@@ -27,12 +28,24 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     //textAlign: 'center'
   },
+  medium: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
   large: {
     width: theme.spacing(4),
     height: theme.spacing(4),
   },
   height100: {
     height: '100%',
+  },
+  grey: {
+    color: theme.palette.getContrastText(grey[300]),
+    backgroundColor: grey[300],
+  },
+  blueG: {
+    color: theme.palette.getContrastText(blueGrey[500]),
+    backgroundColor: blueGrey[500],
   }
 }));
 
@@ -107,38 +120,30 @@ export default function Ultimatum({ content, onStore, onNotification }) {
     return a;
   }
 
- /**
+  /**
    * Filters persons to return only the persons that have any of the given tags 
    * @param {*persons} persons persons to be filtered by their tags
    * @param {*} tags tags used to select the persons which their tags has at least one the tags given
    * @returns 
    */
- const filterPersonsByTags = (persons, tags) => {
-  if (useOpponentTypes !== true)
-    return persons;
-  const filterredPersons = persons.filter(person => { return checkPersonHasTags(person, tags) });
-  return filterredPersons;
-}
-
-/**
- * Checks if the given person has any of the the given tags
- * @returns true if the person has any of the given tags
- */
-function checkPersonHasTags(person, tags) {
-  var checkResult = false;
-  for (let i = 0; i < person.tags.length; i++) {
-    if (tags.inclue(person.tags[i]))
-      checkResult = true;
+  const filterPersonsByTags = (persons, tags) => {
+    if (useOpponentTypes !== true)
+      return persons;
+    const filterredPersons = persons.filter(person => { return checkPersonHasTags(person, tags) });
+    return filterredPersons;
   }
-  return checkResult;
-}
 
-  //test action experiment
-  const testAction = () => {
-    console.log('testAction', state);
-    console.log('shuffled : ', shuffledPersons);
-    console.log('personTypes: ', opponentTypes);
-    //console.log('canFinish: ', canFinishTrial());
+  /**
+   * Checks if the given person has any of the the given tags
+   * @returns true if the person has any of the given tags
+   */
+  function checkPersonHasTags(person, tags) {
+    var checkResult = false;
+    for (let i = 0; i < person.tags.length; i++) {
+      if (tags.inclue(person.tags[i]))
+        checkResult = true;
+    }
+    return checkResult;
   }
 
   const finishTrialAction = () => {
@@ -253,7 +258,7 @@ function checkPersonHasTags(person, tags) {
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title"><b>{t('ultimatum.cashed_title')}</b></DialogTitle>
+        <DialogTitle id="dialog-title"><b>{t('ultimatum.dialog_title')}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t('ultimatum.trial_score_report', { score: state.trialResponses[state.trialResponses.length - 1].playerShare })}
@@ -275,12 +280,13 @@ function checkPersonHasTags(person, tags) {
    */
   return (
     <Fragment>
+      {console.log(t)}
       {state.dialogIsOpen && renderDialog() }
       <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ultimatum-container'>
         <Grid item>
           <Typography variant="body2">{t(text)}</Typography>
         </Grid>
-        <Grid item container direction='column' alignItems='stretch'>
+        <Grid item container spacing={2} alignItems='stretch' justifyContent='space-between' className='boxes-container'>
           <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
             {boxes.map(({name, amount, accepts}, index) => (
               <RepositoryBox
@@ -355,7 +361,7 @@ const RepositoryBox = memo(function RepositoryBox({
   return (
     <Grid item xs={12}>
       <Paper ref={drop} className={classes.paper} style={{ ...style, backgroundColor }} elevation={3} >
-        <Grid container direction="row">
+        <Grid container alignItems="center" direction="row" className={classes.height100}>
           <Grid item xs={4}>
             {name === ItemTypes.OPPONENT &&
               <OpponentInfoBar person={person} />
@@ -372,9 +378,7 @@ const RepositoryBox = memo(function RepositoryBox({
           <Grid item xs={1}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
               {/* <Typography variant="caption" color="textSecondary">{t('ultimatum.box.total_label', { amount: amount })}</Typography> */}
-              <Badge color="secondary" badgeContent={amount} showZero>
-                <MonetizationOnIcon color={name === ItemTypes.PLAYER ? "primary" : "disabled"} fontSize="large" />
-              </Badge>
+              <Avatar className={`${name === ItemTypes.PLAYER ? classes.blueG : classes.grey} ${classes.large}`}>{amount}</Avatar>
             </Grid>
           </Grid>
         </Grid>

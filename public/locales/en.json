@@ -589,8 +589,8 @@
 	"ultimatum.trial_label": "Round {{trial}} of {{trials}}",
 	"ultimatum.total_points": "Total reward: {{score}}",
 	"ultimatum.box.total_label": "Total: {{amount}}",
-	"ultimatum.cashed_title": "Cashed!",
-	"ultimatum.trial_score_report": "You scored {{score}} points in this round.",
+	"ultimatum.dialog_title": "Collected!",
+	"ultimatum.trial_score_report": "You got {{score}} number of points. Press **next** to continue.",
 	"ultimatum.total_score_report": " In total, you have {{score}} points.",
 	"ultimatum.next_trial": "Next Round",
 
