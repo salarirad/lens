@@ -403,7 +403,7 @@ const OpponentInfoBar = memo(function OpponentInfoBar({ person }) {
   return (
     <>
       {person?.avatar &&
-        <Avatar alt={t(getPersonKey('field1', person.id))} src={"/images/" + person.avatar} className={classes.large} />
+        <Avatar alt={t(getPersonKey('field1', person.id))} src={process.env.PUBLIC_URL + "/images/" + person.avatar} className={classes.large} />
       }
       {!person?.avatar &&
         <Avatar className={classes.large} />
