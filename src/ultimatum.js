@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(4),
   },
   grey: {
-    color: theme.palette.getContrastText(grey[300]),
-    backgroundColor: grey[300],
+    color: theme.palette.getContrastText(grey[400]),
+    backgroundColor: grey[400],
   },
   height100: {
     height: '100%',
@@ -377,9 +377,7 @@ const RepositoryBox = memo(function RepositoryBox({
           <Grid item xs={1}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
               {/* <Typography variant="caption" color="textSecondary">{t('ultimatum.box.total_label', { amount: amount })}</Typography> */}
-              <Badge color="secondary" badgeContent={amount} showZero>
-                <MonetizationOnIcon color={name === ItemTypes.PLAYER ? "primary" : "disabled"} fontSize="large" />
-              </Badge>
+              <Avatar className={`${classes.grey} ${classes.large}`}>{amount}</Avatar>
             </Grid>
           </Grid>
         </Grid>
