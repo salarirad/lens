@@ -1,0 +1,16 @@
+.study-grid-container {
+  flex-wrap: nowrap !important;
+}
+
+.Text-container {
+  padding: 0 24px 0 24px;
+  flex-wrap: nowrap !important;
+}
+
+.markdown-text {
+  font-size: 1rem;
+}
+
+.country-select {
+  padding-bottom: 16px !important;
+}
