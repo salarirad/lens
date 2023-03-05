@@ -179,8 +179,9 @@ export default function Study(props) {
           <Grid container
             spacing={2}
             direction="column"
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="stretch"
+            className='study-grid-container'
           >
             <Snackbar 
               open={notification !== undefined} 
