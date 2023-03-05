@@ -12,7 +12,7 @@ import { grey, teal, blueGrey } from '@material-ui/core/colors';
 
 
 //css
-import "./ultimatum.css";
+import "./dictator.css";
 
 // Item types of draggable components
 const ItemTypes = {
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+    //textAlign: 'center'
   },
   medium: {
     width: theme.spacing(3),
@@ -56,8 +57,10 @@ const useStyles = makeStyles((theme) => ({
 var language = undefined;
 var personLangPrefix = undefined;
 
-export default function Ultimatum({ content, onStore, onNotification }) {
-  //content:   text , tokens , trials , opponentTypes, useOpponentTypes, personsPrefix
+export default function Dictator({ content, onStore, onNotification }) {
+  //props:   rule.text , help.text , itemsBox.text , playerBox.text, othersBox.text
+  //props:   initialAmount ,initialAmountRandomize ,initialAmountMin ,initialAmountMax , trials
+  //i18n:
 
   let { lang, studyId } = useParams();
   language = lang;
@@ -68,7 +71,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
   personLangPrefix = personsPrefix;
 
   const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
-  const classes = useStyles(theme);
+  //const classes = useStyles(theme);
   const response = useRef(null);
 
   const [state, setState] = useState({
@@ -149,7 +152,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
   }
 
   const finishTrialAction = () => {
-    canFinishTrial() ? newTrial() : onNotification(t('ultimatum.errors.required'));
+    canFinishTrial() ? newTrial() : onNotification(t('dictator.errors.required'));
   }
 
   /***
@@ -212,22 +215,17 @@ export default function Ultimatum({ content, onStore, onNotification }) {
       return;
     }
     const playerShare = boxes.find(box => box.name === ItemTypes.PLAYER).amount;
-    let accepted = true;
-    if(shuffledPersons[personIndex]?.minAcceptable > (tokens-playerShare))
-      accepted = false;
     setState({
       ...state,
       trialResponses: [...state.trialResponses, {
         trial: state.trial,
         playerShare: playerShare,
-        score: accepted ? playerShare : 0,
         opponentShare: tokens - playerShare,
-        opponent: shuffledPersons[personIndex],
-        result: accepted ? "accepted" : "rejected"
+        opponent: shuffledPersons[personIndex]
       }],
       finished: (state.trial >= trials - 1),
       trial: state.trial + 1,
-      totalScore: state.totalScore + (accepted ? playerShare : 0),
+      totalScore: state.totalScore + playerShare,
       dialogIsOpen: true,
     });
 
@@ -242,7 +240,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
   }
 
   if (state.trial === null) {
-    console.log('ultimatum starting...');
+    console.log('dictator starting...');
     startTask();
     return;
   }
@@ -265,16 +263,16 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title"><b>{state.trialResponses[state.trialResponses.length - 1].result==='accepted'?t('ultimatum.dialog_title.accepted'):t('ultimatum.dialog_title.rejected')}</b></DialogTitle>
+        <DialogTitle id="dialog-title"><b>{t('dictator.dialog_title')}</b></DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {t('ultimatum.trial_score_report', {decision: state.trialResponses[state.trialResponses.length - 1].result, score: state.trialResponses[state.trialResponses.length - 1].score })}
-            {t('ultimatum.total_score_report', { score: state.trialResponses.map(r => r.score).reduce((a, b) => a + b, 0) })}
+            {t('dictator.trial_score_report', { score: state.trialResponses[state.trialResponses.length - 1].playerShare })}
+            {t('dictator.total_score_report', { score: state.trialResponses.map(r => r.playerShare).reduce((a, b) => a + b, 0) })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setState({ ...state, dialogIsOpen: false })} color="primary" autoFocus size='large'>
-            {state.trial <= trials - 1 ? t('ultimatum.next_trial') : t('next')}
+            {state.trial <= trials - 1 ? t('dictator.next_trial') : t('next')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -288,7 +286,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
   return (
     <Fragment>
       {state.dialogIsOpen && renderDialog() }
-      <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ultimatum-container'>
+      <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='dictator-container'>
         <Grid item>
           <Typography variant="body2">{t(text)}</Typography>
         </Grid>
@@ -310,15 +308,15 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         {/* Labels and actions */}
         <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
           <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Typography color='textSecondary' variant='caption'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
+            <Typography color='textSecondary' variant='caption'>{t('dictator.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
           </Grid></Grid>
 
           <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
+            <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('dictator.finish.button')}</Button>
           </Grid></Grid>
 
           <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Typography variant="body1">{t('ultimatum.total_points',{score:state.totalScore})}</Typography>
+            <Typography variant="body1">{t('dictator.total_points',{score:state.totalScore})}</Typography>
           </Grid></Grid>
         </Grid>
       </Grid>
@@ -376,7 +374,7 @@ const RepositoryBox = memo(function RepositoryBox({
               <OpponentInfoBar person={person} />
             }
             {name !== ItemTypes.OPPONENT &&
-              <Typography>{t('ultimatum.' + name)}</Typography>
+              <Typography>{t('dictator.' + name)}</Typography>
             }
           </Grid>
           <Grid item xs={7}>
@@ -411,7 +409,7 @@ const OpponentInfoBar = memo(function OpponentInfoBar({ person }) {
   return (
     <>
       {person?.avatar &&
-        <Avatar alt={t(getPersonKey(person.field1, person.id))} src={process.env.PUBLIC_URL + "/images/" + person.avatar} className={classes.large} />
+        <Avatar alt={t(getPersonKey('field1', person.id))} src={process.env.PUBLIC_URL + "/images/" + person.avatar} className={classes.large} />
       }
       {!person?.avatar &&
         <Avatar className={classes.large} />
