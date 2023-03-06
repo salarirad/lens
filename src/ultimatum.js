@@ -300,7 +300,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         </Grid>
         {/* Boxes container */}
         <Grid item container spacing={2} alignItems='stretch' justifyContent='space-between' className='boxes-container'>
-          <DndProvider  backend={dndBackend} options={isTouchScreen()?{enableMouseEvents: true}:{}}>
+          <DndProvider backend={dndBackend} options={isTouchScreen()?{enableMouseEvents: true}:{}}>
             {boxes.map(({name, amount, accepts}, index) => (
               <RepositoryBox
                 accept={accepts}
@@ -346,7 +346,6 @@ const RepositoryBox = memo(function RepositoryBox({
   const theme = (languages[language].direction === 'rtl') ? rtlTheme : ltrTheme;
   const classes = useStyles(theme);
   const style = {
-    lineHeight: 'normal',
     height: '148px',
   }
 
