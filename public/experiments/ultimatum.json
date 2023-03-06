@@ -1,0 +1,69 @@
+{
+  "studyId": "ultimatum-demo",
+  "conditon": "a",
+  "redirectTo": "https://google.com?ID=123456",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@gmail.com"
+  },
+  "views": [
+    {
+			"id": "ultimatum.intro1",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro1.text"
+		},
+    {
+			"id": "ultimatum.intro2",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro2.text"
+		},
+    {
+			"id": "ultimatum.intro3",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro3.text"
+		},
+    {
+			"id": "ultimatum-demo",
+			"type": "ultimatum",
+      "text" : "ultimatum.rule.text",
+			"trials": 3,
+      "tokens": 5,
+      "opponentTypes": ["occupied","female"],
+      "useOpponentTypes": false,
+      "personsPrefix" : "ultimatum.person",
+      "persons": [
+        {
+          "id": 1,
+          "field1": "field1.content",
+          "field2": "field2.content",
+          "field3": "field3.content",
+          "field4": "field4.content",
+          "minAcceptable": 3,
+          "avatar": "marry-avatar.jpg",
+          "tags": ["occupied","single","female","young"]
+        },
+        {
+          "id": 2,
+          "field1": "field1.content",
+          "field3": "field3.content",
+          "minAcceptable": 0,
+          "tags": ["unemployed","married","male"]
+        },
+        {
+          "id": 3,
+          "field1": "field1.content",
+          "field2": "field2.content",
+          "field3": "field3.content",
+          "field4": "field4.content",
+          "avatar": "peter-avatar.jpg",
+          "minAcceptable": 1,
+          "tags": ["occupied","single","male","rich","young"]
+        }
+      ]
+		}
+
+  ]
+}

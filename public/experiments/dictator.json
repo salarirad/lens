@@ -1,0 +1,60 @@
+{
+  "studyId": "dictator-demo",
+  "conditon": "a",
+  "redirectTo": "https://google.com?ID=123456",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@gmail.com"
+  },
+  "views": [
+    {
+			"id": "dictator.intro1",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro1.text"
+		},
+    {
+			"id": "dictator.intro3",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro3.text"
+		},
+    {
+			"id": "dictatorDemo",
+			"type": "dictator",
+      "text" : "dictator.rule.text",
+			"trials": 3,
+      "tokens": 5,
+      "opponentTypes": ["occupied","female"],
+      "useOpponentTypes": false,
+      "personsPrefix" : "dictator.person",
+      "persons": [
+        {
+          "id": 1,
+          "field1": "field1.content",
+          "field2": "field2.content",
+          "field3": "field3.content",
+          "field4": "field4.content",
+          "avatar": "marry-avatar.jpg",
+          "tags": ["occupied","single","female","young"]
+        },
+        {
+          "id": 2,
+          "field1": "field1.content",
+          "field3": "field3.content",
+          "tags": ["unemployed","married","male"]
+        },
+        {
+          "id": 3,
+          "field1": "field1.content",
+          "field2": "field2.content",
+          "field3": "field3.content",
+          "field4": "field4.content",
+          "avatar": "peter-avatar.jpg",
+          "tags": ["occupied","single","male","rich","young"]
+        }
+      ]
+		}
+
+  ]
+}

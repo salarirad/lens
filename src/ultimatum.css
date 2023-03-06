@@ -1,0 +1,13 @@
+.ultimatum-container{
+  padding: 0 24px 0 24px;
+
+}
+.max-height{
+  height: 100%;
+}
+
+.stack-badge{
+  float: right;
+  top: 5px;
+  right: 5px;
+}

@@ -10,22 +10,31 @@ on:
     branches: [ master ]
 
 jobs:
-  deploy_on_ghpages:
-    name: deploy on gh-pages
+  build:
+
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 12.x
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
       with:
-        node-version: 12.x
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
     - run: npm install
     - name: deploy on gh-pages
       run: |
-            git config --global user.email "support@cut.social"
-            git config --global user.name "cutsocial"
-            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/cutsocial/lens.git
-            npm run deploy
+        git config --global user.name $user_name
+        git config --global user.email $user_email
+        git remote set-url origin https://${github_token}@github.com/${repository}
+        npm run deploy
       env:
-        CI: false
+        user_name: 'github-actions[bot]'
+        user_email: 'github-actions[bot]@users.noreply.github.com'
+        github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
+        repository: ${{ github.repository }}
