@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
-import { Typography, Button, Grid, Paper, makeStyles, Avatar, Badge, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-//import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Typography, Button, Grid, Paper, makeStyles, Avatar, Dialog, DialogTitle, 
+          DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { DndProvider, useDrag, useDrop, DragPreviewImage } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { languages } from './utils/i18n';
 import { useParams } from 'react-router-dom';
@@ -9,7 +10,6 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { useTranslation } from 'react-i18next';
 import { ltrTheme, rtlTheme } from './utils/theme';
 import { grey, teal, blueGrey } from '@material-ui/core/colors';
-
 
 //css
 import "./ultimatum.css";
@@ -67,8 +67,8 @@ export default function Ultimatum({ content, onStore, onNotification }) {
 
   personLangPrefix = personsPrefix;
 
-  const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
-  const classes = useStyles(theme);
+  //const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
+  //const classes = useStyles(theme);
   const response = useRef(null);
 
   const [state, setState] = useState({
@@ -281,6 +281,12 @@ export default function Ultimatum({ content, onStore, onNotification }) {
     );
   }  
 
+  const isTouchScreen = () => {
+    return ( 'ontouchstart' in window ) ||
+           ( navigator.maxTouchPoints > 0 ) ||
+           ( navigator.msMaxTouchPoints > 0 );
+  }
+  var dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
   /***
    * Main render part of the ultimatum experiment
    *
@@ -294,7 +300,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         </Grid>
         {/* Boxes container */}
         <Grid item container spacing={2} alignItems='stretch' justifyContent='space-between' className='boxes-container'>
-          <DndProvider backend={TouchBackend} options={{enableMouseEvents: true}}>
+          <DndProvider  backend={dndBackend} options={isTouchScreen()?{enableMouseEvents: true}:{}}>
             {boxes.map(({name, amount, accepts}, index) => (
               <RepositoryBox
                 accept={accepts}
@@ -441,19 +447,22 @@ const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
     cursor: 'move',
   }
 
-  const [{ opacity }, drag] = useDrag(
+  const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type,
       item: { name, boxName },
       collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0.4 : 1,
+        isDragging: !!monitor.isDragging(),
       }),
     }),
     [name],
   )
   return (
-    <Grid item key={name}>
-      <MonetizationOnIcon ref={drag} style={{ ...style, opacity }} />
+    <Grid item>
+      <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token.png"} />
+      <span ref={drag} className='token-span' style={{ ...style, opacity: isDragging ? 0.5 : 1,}}> 
+        <MonetizationOnIcon fontSize={isDragging? 'large':''} /> 
+      </span>
     </Grid>
   )
 
