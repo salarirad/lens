@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import {Grid, Button} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 import Markdown from 'react-markdown/with-html';
 import {useTranslation} from 'react-i18next';
 
 export default function Submission({submission, studyId, submissionNote}) {
 
   const {t} = useTranslation();
-  const submissionApi = `https://cut-lens.herokuapp.com/v1/${studyId}/responses`;
+  const submissionApi = `https://cutserver.herokuapp.com/v1/${studyId}/responses`;
 
   const [state, setState] = useState({
     submissionCode: undefined,
