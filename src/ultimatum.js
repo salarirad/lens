@@ -261,7 +261,6 @@ export default function Ultimatum({ content, onStore, onNotification }) {
       <Dialog
         open={state.dialogIsOpen}
         onClose={() => setState({ ...state, dialogIsOpen: false })}
-        disableBackdropClick
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
@@ -460,7 +459,7 @@ const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
     <Grid item>
       <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token.png"} />
       <span ref={drag} className='token-span' style={{ ...style, opacity: isDragging ? 0.5 : 1,}}> 
-        <MonetizationOnIcon fontSize={isDragging? 'large':''} /> 
+        <MonetizationOnIcon fontSize={isDragging? 'large':'medium'} />
       </span>
     </Grid>
   )

@@ -147,6 +147,7 @@ export default function Study(props) {
   
   const startExperiment = (experiment) => {
     console.log("starting experiment", experiment);
+    console.log("prolific pid : ",query.get('PROLIFIC_PID'))
     setState(prev => {
       return {
         ...prev,

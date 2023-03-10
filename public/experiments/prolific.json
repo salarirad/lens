@@ -1,0 +1,28 @@
+{
+  "studyId": "prolific",
+  "conditon": "a",
+  "redirectTo": "https://app.prolific.co/submissions/complete?cc=CWIHHG7D",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@gmail.com"
+  },
+  "views": [
+    {
+      "id": "prolific_ID",
+      "type": "text",
+      "instruction": false,
+      "required": true,
+      "text": "p.id.intro",
+      "help": "",
+      "placeholder": "Prolific ID",
+      "pattern": ""
+    },
+    {
+      "id": "done.statement",
+      "type": "text",
+      "instruction": true,
+      "text": "done"
+    }
+
+  ]
+}
