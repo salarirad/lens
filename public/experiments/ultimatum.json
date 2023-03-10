@@ -1,12 +1,22 @@
 {
   "studyId": "ultimatum-demo",
   "conditon": "a",
-  "redirectTo": "https://google.com?ID=123456",
+  "redirectTo": "https://app.prolific.co/submissions/complete?cc=CWIHHG7D",
   "submissionNote": "submission.note",
   "metadata": {
     "maintainer": "radmanesh@gmail.com"
   },
   "views": [
+    {
+      "id": "prolific ID",
+      "type": "text",
+      "instruction": false,
+      "required": true,
+      "text": "p.id.intro",
+      "help": "",
+      "placeholder": "",
+      "pattern": ""
+    },
     {
 			"id": "ultimatum.intro1",
 			"type": "text",
@@ -18,12 +28,6 @@
 			"type": "text",
 			"instruction": true,
 			"text": "ultimatum.intro2.text"
-		},
-    {
-			"id": "ultimatum.intro3",
-			"type": "text",
-			"instruction": true,
-			"text": "ultimatum.intro3.text"
 		},
     {
 			"id": "ultimatum-demo",
@@ -63,7 +67,13 @@
           "tags": ["occupied","single","male","rich","young"]
         }
       ]
-		}
+		},
+    {
+      "id": "done.statement",
+      "type": "text",
+      "instruction": true,
+      "text": "done"
+    }
 
   ]
 }
