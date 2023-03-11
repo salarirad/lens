@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
+import React, { useEffect, useState, Fragment, useCallback, memo } from 'react';
 import { Typography, Button, Grid, Paper, makeStyles, Avatar, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { DndProvider, useDrag, useDrop, DragPreviewImage } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -61,7 +61,7 @@ export default function Dictator({ content, onStore, onNotification }) {
   //props:   initialAmount ,initialAmountRandomize ,initialAmountMin ,initialAmountMax , trials
   //i18n:
 
-  let { lang, studyId } = useParams();
+  let { lang } = useParams();
   language = lang;
 
   const { t } = useTranslation();
@@ -71,7 +71,6 @@ export default function Dictator({ content, onStore, onNotification }) {
 
   //const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
   //const classes = useStyles(theme);
-  const response = useRef(null);
 
   const [state, setState] = useState({
     finished: false,
@@ -282,7 +281,7 @@ export default function Dictator({ content, onStore, onNotification }) {
            ( navigator.maxTouchPoints > 0 ) ||
            ( navigator.msMaxTouchPoints > 0 );
   }
-  var dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
+  const dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
 
   /***
    * Main render part of the dictator experiment

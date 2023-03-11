@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
+import React, { useEffect, useState, Fragment, useCallback, memo } from 'react';
 import { Typography, Button, Grid, Paper, makeStyles, Avatar, Dialog, DialogTitle, 
           DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { DndProvider, useDrag, useDrop, DragPreviewImage } from 'react-dnd';
@@ -59,7 +59,7 @@ var personLangPrefix = undefined;
 export default function Ultimatum({ content, onStore, onNotification }) {
   //content:   text , tokens , trials , opponentTypes, useOpponentTypes, personsPrefix
 
-  let { lang, studyId } = useParams();
+  let { lang } = useParams();
   language = lang;
 
   const { t } = useTranslation();
@@ -69,8 +69,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
 
   //const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
   //const classes = useStyles(theme);
-  const response = useRef(null);
-
+  
   const [state, setState] = useState({
     finished: false,
     trial: null,
@@ -285,7 +284,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
            ( navigator.maxTouchPoints > 0 ) ||
            ( navigator.msMaxTouchPoints > 0 );
   }
-  var dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
+  const dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
   /***
    * Main render part of the ultimatum experiment
    *
