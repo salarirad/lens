@@ -30,6 +30,30 @@
 			"text": "ultimatum.intro2.text"
 		},
     {
+			"id": "ultimatum.intro3",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro3.text"
+		},
+    {
+			"id": "ultimatum.intro4",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro4.text"
+		},
+    {
+			"id": "ultimatum.intro5",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro5.text"
+		},
+    {
+			"id": "ultimatum.intro6",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro6.text"
+		},
+    {
 			"id": "ultimatum-demo",
 			"type": "ultimatum",
       "text" : "ultimatum.rule.text",
