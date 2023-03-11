@@ -210,7 +210,7 @@ export default function Dictator({ content, onStore, onNotification }) {
   const newTrial = () => {
     if (!canFinishTrial()) {
       console.log('it should never come to this, because before calling newTrial, canFinishTrial has been checked!!!!');
-      onNotification(t('ultimatum.errors.required'));
+      onNotification(t('dictator.errors.required'));
       return;
     }
     const playerShare = boxes.find(box => box.name === ItemTypes.PLAYER).amount;
@@ -258,7 +258,6 @@ export default function Dictator({ content, onStore, onNotification }) {
       <Dialog
         open={state.dialogIsOpen}
         onClose={() => setState({ ...state, dialogIsOpen: false })}
-        disableBackdropClick
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
@@ -286,7 +285,7 @@ export default function Dictator({ content, onStore, onNotification }) {
   var dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
 
   /***
-   * Main render part of the ultimatum experiment
+   * Main render part of the dictator experiment
    *
    */
   return (
@@ -389,7 +388,6 @@ const RepositoryBox = memo(function RepositoryBox({
           </Grid>
           <Grid item xs={1}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
-              {/* <Typography variant="caption" color="textSecondary">{t('ultimatum.box.total_label', { amount: amount })}</Typography> */}
               <Avatar className={`${classes.grey} ${classes.large}`}>{amount}</Avatar>
             </Grid>
           </Grid>
@@ -455,7 +453,8 @@ const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
     <Grid item>
       <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token.png"} />
       <span ref={drag} className='token-span' style={{ ...style, opacity: isDragging ? 0.5 : 1,}}> 
-        <MonetizationOnIcon /> 
+        {/* <MonetizationOnIcon fontSize={isDragging? 'large':'medium'} />  */}
+        <MonetizationOnIcon />
       </span>
     </Grid>
 
