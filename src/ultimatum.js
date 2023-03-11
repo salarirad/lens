@@ -201,7 +201,16 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title"><b>{state.trialResponses[state.trialResponses.length - 1].result==='accepted'?t('ultimatum.dialog_title.accepted'):t('ultimatum.dialog_title.rejected')}</b></DialogTitle>
+        <DialogTitle id="dialog-title">
+          <Typography variant='h6' color={state.trialResponses[state.trialResponses.length - 1].result==='accepted'?'primary':'error'}>
+            <b>
+            {state.trialResponses[state.trialResponses.length - 1].result==='accepted' ? 
+              t('ultimatum.dialog_title.accepted')
+              :t('ultimatum.dialog_title.rejected')
+            }
+            </b>
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t('ultimatum.trial_score_report', {decision: state.trialResponses[state.trialResponses.length - 1].result, score: state.trialResponses[state.trialResponses.length - 1].score })}
