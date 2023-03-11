@@ -312,16 +312,16 @@ export default function Dictator({ content, onStore, onNotification }) {
         </Grid>
         {/* Labels and actions */}
         <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
-          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Typography color='textSecondary' variant='caption'>{t('dictator.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
+          <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Typography variant='body2'>{t('dictator.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
           </Grid></Grid>
 
-          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+          <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
             <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('dictator.finish.button')}</Button>
           </Grid></Grid>
 
-          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Typography variant="body1">{t('dictator.total_points',{score:state.totalScore})}</Typography>
+          <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Typography variant="body2">{t('dictator.total_points',{score:state.totalScore})}</Typography>
           </Grid></Grid>
         </Grid>
       </Grid>
@@ -451,10 +451,9 @@ const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
   )
   return (
     <Grid item>
-      <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token.png"} />
+      <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token-large.png"} />
       <span ref={drag} className='token-span' style={{ ...style, opacity: isDragging ? 0.5 : 1,}}> 
-        {/* <MonetizationOnIcon fontSize={isDragging? 'large':'medium'} />  */}
-        <MonetizationOnIcon />
+        <MonetizationOnIcon fontSize={isDragging? 'large':'medium'} /> 
       </span>
     </Grid>
 
