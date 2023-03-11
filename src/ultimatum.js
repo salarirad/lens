@@ -1,76 +1,26 @@
-import React, { useRef, useEffect, useState, Fragment, useCallback, memo } from 'react';
-import { Typography, Button, Grid, Paper, makeStyles, Avatar, Dialog, DialogTitle, 
+import React, { useEffect, useState, Fragment, useCallback, } from 'react';
+import { Typography, Button, Grid, Dialog, DialogTitle, 
           DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-import { DndProvider, useDrag, useDrop, DragPreviewImage } from 'react-dnd';
+import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { languages } from './utils/i18n';
-import { useParams } from 'react-router-dom';
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { useTranslation } from 'react-i18next';
-import { ltrTheme, rtlTheme } from './utils/theme';
-import { grey, teal, blueGrey } from '@material-ui/core/colors';
+import shuffle from './utils/shuffle';
+import { ItemTypes, RepositoryBox } from './components/allotmentBox';
 
 //css
 import "./ultimatum.css";
 
-// Item types of draggable components
-const ItemTypes = {
-  OPPONENT: 'opponent',
-  POT: 'pot',
-  PLAYER: 'player',
-}
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 0,
-  },
-  paper: {
-    padding: theme.spacing(2),
-  },
-  medium: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-  },
-  large: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
-  },
-  grey: {
-    color: theme.palette.getContrastText(grey[400]),
-    backgroundColor: grey[400],
-  },
-  tealDark: {
-    color: theme.palette.getContrastText(teal[800]),
-    backgroundColor: teal[800],
-  },
-  blueG: {
-    color: theme.palette.getContrastText(blueGrey[800]),
-    backgroundColor: blueGrey[800],
-  },
-  height100: {
-    height: '100%',
-  }
-}));
-
-var language = undefined;
-var personLangPrefix = undefined;
 
 export default function Ultimatum({ content, onStore, onNotification }) {
   //content:   text , tokens , trials , opponentTypes, useOpponentTypes, personsPrefix
 
-  let { lang, studyId } = useParams();
-  language = lang;
-
   const { t } = useTranslation();
   const { tokens, trials, useOpponentTypes, opponentTypes, text, personsPrefix, persons } = content;
 
-  personLangPrefix = personsPrefix;
-
   //const theme = (languages[lang].direction === 'rtl') ? rtlTheme : ltrTheme;
   //const classes = useStyles(theme);
-  const response = useRef(null);
-
+  
   const [state, setState] = useState({
     finished: false,
     trial: null,
@@ -108,19 +58,6 @@ export default function Ultimatum({ content, onStore, onNotification }) {
       }, true); // store + next
     }
   }, [state, onStore, content]);
-
-  /**
-  * Shuffles any array and returns it
-  * @param {*any} a any array
-  * @returns shuffled array
-  */
-  const shuffle = (a) => {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
 
  /**
    * Filters persons to return only the persons that have any of the given tags 
@@ -264,7 +201,16 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title"><b>{state.trialResponses[state.trialResponses.length - 1].result==='accepted'?t('ultimatum.dialog_title.accepted'):t('ultimatum.dialog_title.rejected')}</b></DialogTitle>
+        <DialogTitle id="dialog-title">
+          <Typography variant='h6' color={state.trialResponses[state.trialResponses.length - 1].result==='accepted'?'primary':'error'}>
+            <b>
+            {state.trialResponses[state.trialResponses.length - 1].result==='accepted' ? 
+              t('ultimatum.dialog_title.accepted')
+              :t('ultimatum.dialog_title.rejected')
+            }
+            </b>
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t('ultimatum.trial_score_report', {decision: state.trialResponses[state.trialResponses.length - 1].result, score: state.trialResponses[state.trialResponses.length - 1].score })}
@@ -285,7 +231,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
            ( navigator.maxTouchPoints > 0 ) ||
            ( navigator.msMaxTouchPoints > 0 );
   }
-  var dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
+  const dndBackend = isTouchScreen() ? TouchBackend : HTML5Backend;
   /***
    * Main render part of the ultimatum experiment
    *
@@ -308,6 +254,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
                 onDrop={(item) => handleDrop(name, item)}
                 key={index}
                 person={shuffledPersons[personIndex]}
+                personsPrefix={personsPrefix}
               />
             ))}
           </DndProvider>
@@ -319,7 +266,7 @@ export default function Ultimatum({ content, onStore, onNotification }) {
           </Grid></Grid>
 
           <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
+            <Button size='large' color={canFinishTrial()?'primary':'default'} variant={canFinishTrial()?'contained':'outlined'} onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
           </Grid></Grid>
 
           <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
@@ -330,135 +277,3 @@ export default function Ultimatum({ content, onStore, onNotification }) {
     </Fragment>
   );
 }
-
-/***
- * Container box for monetized entities and their interactions
- */
-const RepositoryBox = memo(function RepositoryBox({
-  name,
-  amount,
-  onDrop,
-  accept,
-  person,
-}) {
-  const { t } = useTranslation();
-  const theme = (languages[language].direction === 'rtl') ? rtlTheme : ltrTheme;
-  const classes = useStyles(theme);
-  const style = {
-    height: '128px',
-  }
-
-  const [{ canDrop, isOver }, drop] = useDrop({
-    accept,
-    drop: onDrop,
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-      //connectDropTarget: connect.dropTarget()
-    }),
-  })
-
-  const isActive = canDrop && isOver
-  let backgroundColor = '#222'
-  if (isActive) {
-    backgroundColor = 'darkgreen'
-  } else if (canDrop) {
-    backgroundColor = blueGrey[800]
-  }
-
-  const tokensList = [];
-  for (let i = 0; i < amount; i++) {
-    tokensList.push(<MonetizedToken type={name} name={name + i.toString()} key={name + i.toString()} boxName={name} />);
-  }
-
-  return (
-    <Grid item xs={12}>
-      <Paper ref={drop} className={classes.paper} style={{ ...style, backgroundColor }} elevation={3} >
-        <Grid container alignItems="center" direction="row" className={classes.height100}>
-          <Grid item xs={4}>
-            {name === ItemTypes.OPPONENT &&
-              <OpponentInfoBar person={person} />
-            }
-            {name !== ItemTypes.OPPONENT &&
-              <Typography>{t('ultimatum.' + name)}</Typography>
-            }
-          </Grid>
-          <Grid item xs={7}>
-            <Grid container direction="row" justifyContent="flex-start" alignItems="center">
-              {tokensList}
-            </Grid>
-          </Grid>
-          <Grid item xs={1}>
-            <Grid container direction="column" justifyContent="center" alignItems="center">
-              {/* <Typography variant="caption" color="textSecondary">{t('ultimatum.box.total_label', { amount: amount })}</Typography> */}
-              <Avatar className={`${classes.grey} ${classes.large}`}>{amount}</Avatar>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Paper>
-    </Grid>
-  );
-})
-
-/**
- * uses the persons id and the field key alongside experiment loaded personLangPrefix to produce the locales key
- * @returns string for locales key
- */
-function getPersonKey(key, id) {
-  return personLangPrefix + id + '.' + key;
-}
-
-const OpponentInfoBar = memo(function OpponentInfoBar({ person }) {
-  const { t } = useTranslation();
-  const theme = (languages[language].direction === 'rtl') ? rtlTheme : ltrTheme;
-  const classes = useStyles(theme);
-  return (
-    <>
-      {person?.avatar &&
-        <Avatar alt={t(getPersonKey(person.field1, person.id))} src={process.env.PUBLIC_URL + "/images/" + person.avatar} className={classes.large} />
-      }
-      {!person?.avatar &&
-        <Avatar className={classes.large} />
-      }
-      <Typography variant="body1" color="textPrimary" component="p">
-        {person?.field1 && t(getPersonKey(person.field1, person.id))}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" component="p">
-        {person?.field2 && t(getPersonKey(person.field2, person.id))}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" component="p">
-        {person?.field3 && t(getPersonKey(person.field3, person.id))}
-      </Typography>
-    </>
-  );
-})
-
-/***
- * Component which renders coin tokens and handles dragging events
- */
-const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
-
-  const style = {
-    cursor: 'move',
-  }
-
-  const [{ isDragging }, drag, preview] = useDrag(
-    () => ({
-      type,
-      item: { name, boxName },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-    }),
-    [name],
-  )
-  return (
-    <Grid item>
-      <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token-large.png"} />
-      <span ref={drag} className='token-span' style={{ ...style, opacity: isDragging ? 0.5 : 1,}}> 
-        <MonetizationOnIcon fontSize={isDragging? 'large':'medium'} />
-      </span>
-    </Grid>
-  )
-
-})
