@@ -314,16 +314,16 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         </Grid>
         {/* Labels and actions */}
         <Grid item container direction='row' justifyContent="space-around" alignItems='center'>
-          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Typography color='textSecondary' variant='caption'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
+          <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Typography  variant='body2'>{t('ultimatum.trial_label',{trial:state.trial+1, trials:trials})}</Typography>
           </Grid></Grid>
 
-          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+          <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
             <Button size='large' color='primary' variant='outlined' onClick={finishTrialAction}>{t('ultimatum.finish.button')}</Button>
           </Grid></Grid>
 
-          <Grid item><Grid container direction='column' justifyContent="space-around" alignItems='center'>
-            <Typography variant="body1">{t('ultimatum.total_points',{score:state.totalScore})}</Typography>
+          <Grid item xs={4}><Grid container direction='column' justifyContent="space-around" alignItems='center'>
+            <Typography variant="body2">{t('ultimatum.total_points',{score:state.totalScore})}</Typography>
           </Grid></Grid>
         </Grid>
       </Grid>
@@ -345,7 +345,7 @@ const RepositoryBox = memo(function RepositoryBox({
   const theme = (languages[language].direction === 'rtl') ? rtlTheme : ltrTheme;
   const classes = useStyles(theme);
   const style = {
-    height: '148px',
+    height: '128px',
   }
 
   const [{ canDrop, isOver }, drop] = useDrop({
@@ -428,9 +428,6 @@ const OpponentInfoBar = memo(function OpponentInfoBar({ person }) {
       </Typography>
       <Typography variant="body2" color="textSecondary" component="p">
         {person?.field3 && t(getPersonKey(person.field3, person.id))}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" component="p">
-        {person?.field4 && t(getPersonKey(person.field4, person.id))}
       </Typography>
     </>
   );
