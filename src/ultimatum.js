@@ -457,7 +457,7 @@ const MonetizedToken = memo(function MonetizedToken({ type, name, boxName }) {
   )
   return (
     <Grid item>
-      <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token.png"} />
+      <DragPreviewImage connect={preview} src={process.env.PUBLIC_URL + "/images/token-large.png"} />
       <span ref={drag} className='token-span' style={{ ...style, opacity: isDragging ? 0.5 : 1,}}> 
         <MonetizationOnIcon fontSize={isDragging? 'large':'medium'} />
       </span>
