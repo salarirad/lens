@@ -1,7 +1,7 @@
 {
 	"studyId": "mad2023",
 	"conditon": "a", 
-	"redirectTo": "https://app.prolific.co/submissions/complete?cc=6D56E887",
+	"redirectTo": "https://app.prolific.co/submissions/complete?cc=C1H9HHV2",
 	"submissionNote": "submission.note",
 	"metadata": {
 		"maintainer": "salarirad@gmail.com"
@@ -156,104 +156,7 @@
 			"questions": ["risk.qual.q"]
 		},
 		{
-			"id": "tasks intro",
-			"type": "text",
-			"instruction": true,
-			"text": "tasks.intro"
-		},
-		{
-			"id": "social dilemma 1",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "social.dilemma.q1",
-			"help": "",
-			"placeholder": "Points I request",
-			"pattern": ""
-		},
-		{
-			"id": "social dilemma 2",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "social.dilemma.q2",
-			"help": "",
-			"placeholder": "Points I request",
-			"pattern": ""
-		},
-		{
-			"id": "social dilemma 3",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "social.dilemma.q3",
-			"help": "",
-			"placeholder": "Points I request",
-			"pattern": ""
-		},
-		{
-			"id": "social dilemma 4",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "social.dilemma.q4",
-			"help": "",
-			"placeholder": "Points I request",
-			"pattern": ""
-		},
-		{
-			"id": "social dilemma 5",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "social.dilemma.q5",
-			"help": "",
-			"placeholder": "Points I request",
-			"pattern": ""
-		},
-		{
-			"id": "social dilemma 6",
-			"type": "text",
-			"instruction": false,
-			"required": true,
-			"text": "social.dilemma.q6",
-			"help": "",
-			"placeholder": "Points I request",
-			"pattern": ""
-		},
-		{
-			"id": "gratitude.trust",
-			"type": "matrix",
-			"text": "trust.q",
-			"slider": true,
-			"showMidMark": true,
-			"requiredQuestions": [
-				0,
-				1,
-				2
-			],
-			"direction": "vertical",
-			"choices": [
-				"trust.c1",
-				"trust.c2",
-				"trust.c3",
-				"trust.c4",
-				"trust.c5",
-				"trust.c6",
-				"trust.c7"
-			],
-			"questions": [
-				"gratitude.1",
-				"gratitude.2",
-				"gratitude.3",
-				"gratitude.4",
-				"gratitude.5",
-				"gratitude.6",
-				"trust.falk"
-			]
-		},
-		{
-			"id": "gratitude.trust",
+			"id": "BSCS",
 			"type": "matrix",
 			"text": "",
 			"slider": true,
@@ -285,47 +188,6 @@
 				"BSCS.10",
 				"BSCS.11",
 				"BSCS.12"
-			]
-		},
-		{
-			"id": ".flourishing",
-			"type": "matrix",
-			"text": "",
-			"slider": true,
-			"showMidMark": true,
-			"requiredQuestions": [
-				0,
-				1,
-				2
-			],
-			"direction": "vertical",
-			"choices": [
-				"flourishing.c1",
-				"flourishing.c2",
-				"flourishing.c3",
-				"flourishing.c4",
-				"flourishing.c5",
-				"flourishing.c6",
-				"flourishing.c7",
-				"flourishing.c8",
-				"flourishing.c9",
-				"flourishing.c10",
-				"flourishing.c11"
-
-			],
-			"questions": [
-				"flourishing.1",
-				"flourishing.2",
-				"flourishing.3",
-				"flourishing.4",
-				"flourishing.5",
-				"flourishing.6",
-				"flourishing.7",
-				"flourishing.8",
-				"flourishing.9",
-				"flourishing.10",
-				"flourishing.11",
-				"flourishing.12"
 			]
 		},
 		{
@@ -668,7 +530,6 @@
 				"cos12",
 				"cos13",
 				"cos14"
-
 			]
 		},
 		{
