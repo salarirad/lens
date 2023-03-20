@@ -746,7 +746,7 @@
 			"questions": ["fasting.q"]
 		},
 		{
-			"id": "motive",
+			"id": "effort",
 			"type": "matrix",
 			"text": "",
 			"slider": true,
@@ -796,6 +796,34 @@
 				"motive.introjected",
 				"motive.identified",
 				"motive.intrinsic"
+			]
+		},
+        {
+			"id": "motive.others",
+			"type": "matrix",
+			"text": "motives.others.q",
+			"slider": true,
+			"showMidMark": true,
+			"requiredQuestions": [
+				0,
+				1,
+				2
+			],
+			"direction": "vertical",
+			"choices": [
+				"motive.c1",
+				"motive.c2",
+				"motive.c3",
+				"motive.c4",
+				"motive.c5",
+				"motive.c6",
+				"motive.c7"
+			],
+			"questions": [
+				"motive.others.external",
+				"motive.others.introjected",
+				"motive.others.identified",
+				"motive.others.intrinsic"
 			]
 		}, 
 		{
