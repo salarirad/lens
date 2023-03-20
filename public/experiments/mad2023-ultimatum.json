@@ -71,7 +71,7 @@
         "persons": [
           {
             "id": 1,
-            "field1": "ultimatum.person1.field1.content",
+            "field1": "field1.content",
             "field2": "",
             "minAcceptable": 4,
             "avatar": "",
@@ -79,14 +79,14 @@
           },
           {
             "id": 2,
-            "field1": "ultimatum.person1.field1.content",
+            "field1": "field1.content",
             "field3": "",
             "minAcceptable": 4,
             "tags": ["unemployed","married","male"]
           },
           {
             "id": 3,
-            "field1": "ultimatum.person1.field1.content",
+            "field1": "field1.content",
             "field2": "",
             "avatar": "",
             "minAcceptable": 4,
@@ -94,14 +94,14 @@
           },
           {
             "id": 4,
-            "field1": "ultimatum.person1.field1.content",
+            "field1": "field1.content",
             "field3": "",
             "minAcceptable": 4,
             "tags": ["unemployed","married","male"]
           },      
           {
             "id": 5,
-            "field1": "ultimatum.person1.field1.content",
+            "field1": "field1.content",
             "field3": "",
             "minAcceptable": 4,
             "tags": ["unemployed","married","male"]
