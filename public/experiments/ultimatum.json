@@ -54,6 +54,12 @@
 			"text": "ultimatum.intro6.text"
 		},
     {
+			"id": "ultimatum.intro7",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro7.text"
+		},
+    {
 			"id": "ultimatum-demo",
 			"type": "ultimatum",
       "text" : "ultimatum.rule.text",
