@@ -597,7 +597,7 @@
 	"ultimatum.dialog_title.accepted": "Proposal Accepted",
 	"ultimatum.dialog_title.rejected": "Proposal Rejected",
 	"ultimatum.trial_score_report": "The other player {{decision}} the proposal. You received {{score}} points.",
-	"ultimatum.total_score_report": "In total, you have {{score}} points. Press Next to conintue.",
+	"ultimatum.total_score_report": "<br /> <br /> In total, you have {{score}} points. Press Next to conintue.",
 	"ultimatum.next_trial": "Next Round",
 
 	"ultimatum.intro1.text": "In this task, some tokens are placed between you and another participant in this study.<br /> <br /> You decide how to divide them between the two of you as you like.<br /> <br /> The other player decides to accept or reject the offer. If they **accept** it, you both get your tokens.<br /> <br />If they **reject** it, neither of you get anything.<br /> <br /> Press **Next** to start a step-by-step tutorial.",
