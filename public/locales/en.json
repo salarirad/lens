@@ -606,7 +606,7 @@
 	"ultimatum.intro4.text": "And the box where you are about to drop the token turns green. <br /> <br /><img src='./images/ultimatum_intro_3.png' width='100%' />",
 	"ultimatum.intro5.text": "Once you've allocated all the tokens, press the **Propose** button to see the other player's response, and go to the next round.<br /> <br /> <img src='./images/ultimatum_intro_4.png' width='100%' />",
 	"ultimatum.intro6.text": "Remembers, if the other player **Accepts** your proposal, you both get your tokens. <br /> <br /> <img src='./images/ultimatum_intro_accept.png' width='100%' /> <br /> <br /> If they **Rejects** your proposal, neither of you will get anything. <br /> <br /> <img src='./images/ultimatum_intro_reject.png' width='100%' />  ",
-	"ultimatum.intro7.text": "The task begins now. <br /> <br /> The other player has previously submitted their responses to different possible proposals. <br /> <br /> You will make the proposals now. Press next when you're ready. <br /> <br /> Remember, your total points determine your chances in the raffle.",
+	"ultimatum.intro7.text": "The task begins now. <br /> <br /> The other player has previously given their response to different possible proposals. <br /> <br /> It's your turn to make the proposals. Yoou will play **five** rounds. Press next when you're ready. <br /> <br /> Remember, your total points determine your chances in the raffle.",
 	"ultimatum.person1.field1.content": "Other player",
 	"ultimatum.person1.field2.content": "",
 	"ultimatum.person1.field3.content": "",
