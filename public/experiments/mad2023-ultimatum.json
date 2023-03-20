@@ -1,0 +1,120 @@
+{
+    "studyId": "ultimatum-demo",
+    "conditon": "a",
+    "redirectTo": "https://app.prolific.co/submissions/complete?cc=CWIHHG7D",
+    "submissionNote": "submission.note",
+    "metadata": {
+      "maintainer": "radmanesh@gmail.com"
+    },
+    "views": [
+      {
+        "id": "prolific ID",
+        "type": "text",
+        "instruction": false,
+        "required": true,
+        "text": "p.id.intro",
+        "help": "",
+        "placeholder": "",
+        "pattern": ""
+      },
+      {
+              "id": "ultimatum.intro1",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro1.text"
+          },
+      {
+              "id": "ultimatum.intro2",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro2.text"
+          },
+      {
+              "id": "ultimatum.intro3",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro3.text"
+          },
+      {
+              "id": "ultimatum.intro4",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro4.text"
+          },
+      {
+              "id": "ultimatum.intro5",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro5.text"
+          },
+      {
+              "id": "ultimatum.intro6",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro6.text"
+          },
+      {
+              "id": "ultimatum.intro7",
+              "type": "text",
+              "instruction": true,
+              "text": "ultimatum.intro7.text"
+          },
+      {
+              "id": "ultimatum-1",
+              "type": "ultimatum",
+        "text" : "ultimatum.rule.text",
+              "trials": 5,
+        "tokens": 8,
+        "opponentTypes": ["occupied","female"],
+        "useOpponentTypes": false,
+        "personsPrefix" : "ultimatum.person",
+        "persons": [
+          {
+            "id": 1,
+            "field1": "",
+            "field2": "",
+            "minAcceptable": 4,
+            "avatar": "",
+            "tags": ["occupied","single","female","young"]
+          },
+          {
+            "id": 2,
+            "field1": "",
+            "field3": "",
+            "minAcceptable": 4,
+            "tags": ["unemployed","married","male"]
+          },
+          {
+            "id": 3,
+            "field1": "",
+            "field2": "",
+            "avatar": "",
+            "minAcceptable": 4,
+            "tags": ["occupied","single","male","rich","young"]
+          },
+          {
+            "id": 4,
+            "field1": "",
+            "field3": "",
+            "minAcceptable": 4,
+            "tags": ["unemployed","married","male"]
+          },      
+          {
+            "id": 5,
+            "field1": "",
+            "field3": "",
+            "minAcceptable": 4,
+            "tags": ["unemployed","married","male"]
+          },
+        ]
+            },  
+      {
+        "id": "done.statement",
+        "type": "text",
+        "instruction": true,
+        "text": "done"
+      }
+  
+    ]
+  }
+  
