@@ -506,10 +506,10 @@
 	"motive.c7": "very much (7)",
 	
 	"motives.others.q": "To what extent do you believe each statement true?",
-	"motive..others.external": "People fast in Ramadan because others expect them to or because the situation demands it.",
-	"motive..others.introjected": "People fast in Ramadan because they would feel ashamed, guilty, or anxious if they didn't.",
-	"motive..others.identified": "People fast in Ramadan because they really believe it's important to who they are.",
-	"motive..others.intrinsic": "People fast in Ramadan because of the benefits and enjoyment that it provides them.",
+	"motive.others.external": "People fast in Ramadan because others expect them to or because the situation demands it.",
+	"motive.others.introjected": "People fast in Ramadan because they would feel ashamed, guilty, or anxious if they didn't.",
+	"motive.others.identified": "People fast in Ramadan because they really believe it's important to who they are.",
+	"motive.others.intrinsic": "People fast in Ramadan because of the benefits and enjoyment that it provides them.",
 
 	
 	"cos1": "It bothers me when other people neglect my needs.",
