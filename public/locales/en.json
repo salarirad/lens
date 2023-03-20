@@ -586,7 +586,7 @@
 	"done": "And we're done! Thanks for your participation. Please press continue on the enxt page to be redirected back to the Prolific.co webpage.",
 
 
-	"ultimatum.rule.text": "Please distribute the amount given between yourself and the other participant.",
+	"ultimatum.rule.text": "Please allocate the tokens by dragging and dropping them in the boxes.",
 	"ultimatum.finish.button": "Propose",
 	"ultimatum.errors.required": "You have to move all tokens from POT box to other boxes",
 	"ultimatum.player": "Your Share",
@@ -635,19 +635,22 @@
 	"dictator.total_score_report": "In total, you have {{score}} points. Press Next to continue.",
 	"dictator.next_trial": "Next Round",
 
-	"dictator.intro1.text": "In this task, some coins are placed between you and another participant in this study. You decide how to divide these coins between the two of you.<br /> <br /> You can do so by dragging the coins from the box in the middle and dropping them either in your own box (on the bottom) or the other player's (on the top). You're free to distribute the coins however you like. Just make sure you allocate all of the coins. Otherwise, you cannot move to the next stage. <br /> <br /> Press **Next** to continue",
-	"dictator.intro3.text": "In this task, some coins are placed between you and another participant in this study.<br /> <img src='./images/joe-avatar.jpg' width='100%' />",
+	"dictator.intro1.text": "In this task, you're given some tokens, and the choice to give some of them to another participant in this study. <br /> <br /> You can give them all of the tokens, or some, or none. <br /> <br />Press **Next** to see a step-by-step tutorial.",
+	"dictator.intro2.text": "In the beginning of each round, the tokens are placed in the middle. You should distribute the tokens by dragging them from the box in the middle and dropping them either in the bottom box (your box) or the top box (other player's box). <br /> <br /> <img src='./images/ultimatum_intro_1.jpg' width='100%' />", 
+	"dictator.intro3.text": "When you drag a token, the color of target boxes changes.<br /> <br /> <img src='./images/ultimatum_intro_2.png' width='100%' />",
+	"dictator.intro4.text": "And the box where you are about to drop the token turns green. <br /> <br /><img src='./images/ultimatum_intro_3.png' width='100%' />",
+	"dictator.intro5.text": "After you've allocated all the tokens, press the **Collect** button to go to the next round.<br /> <br /> <img src='./images/ultimatum_intro_4.png' width='100%' />",
 
-	"dictator.person1.field1.content": "Marry Poppins",
-	"dictator.person1.field2.content": "27",
-	"dictator.person1.field3.content": "Nurse",
-	"dictator.person1.field4.content": "Female",
-	"dictator.person2.field1.content": "Joe Petterson",
-	"dictator.person2.field2.content": "47",
-	"dictator.person2.field3.content": "Unemployed",
-	"dictator.person2.field4.content": "Male",
-	"dictator.person3.field1.content": "Peter Rossling",
-	"dictator.person3.field2.content": "31",
-	"dictator.person3.field3.content": "Security",
-	"dictator.person3.field4.content": "Male"
+
+	"dictator.person1.field1.content": "Other player",
+	"dictator.person2.field2.content": "Other player",
+	"dictator.person3.field1.content": "Other player",
+	"dictator.person4.field1.content": "Other player",
+	"dictator.person5.field1.content": "Other player",
+
+	"dictator.person2.field3.content": "",
+	"dictator.person1.field2.content": "",
+	"dictator.person1.field3.content": "",
+	"dictator.person1.field4.content": "",
+	"dictator.person2.field1.content": "",
 }
