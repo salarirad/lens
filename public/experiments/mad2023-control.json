@@ -155,6 +155,79 @@
 			],
 			"questions": ["risk.qual.q"]
 		},
+        {
+			"id": "dictator.intro1",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro1.text"
+		},
+    {
+			"id": "dictator.intro2",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro2.text"
+		},
+    {
+			"id": "dictator.intro3",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro3.text"
+		},
+    {
+			"id": "dictator.intro4",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro4.text"
+		},
+    {
+			"id": "dictator.intro5",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro5.text"
+		},
+    {
+			"id": "dictator.intro6",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro6.text"
+		},
+    {
+			"id": "dictatorDemo",
+			"type": "dictator",
+      "text" : "dictator.rule.text",
+			"trials": 5,
+      "tokens": 8,
+      "opponentTypes": ["occupied","female"],
+      "useOpponentTypes": false,
+      "personsPrefix" : "dictator.person",
+      "persons": [
+        {
+          "id": 1,
+          "field1": "field1.content",
+          "tags": ["occupied","single","female","young"]
+        },
+        {
+          "id": 2,
+          "field1": "field1.content",
+          "tags": ["unemployed","married","male"]
+        },
+        {
+          "id": 3,
+          "field1": "field1.content",
+          "tags": ["occupied","single","male","rich","young"]
+        },
+        {
+           "id": 4,
+           "field1": "field1.content",
+           "tags": ["occupied","single","male","rich","young"]
+        },
+        {
+           "id": 5,
+           "field1": "field1.content",
+           "tags": ["occupied","single","male","rich","young"]
+        }
+      ]
+		},
 		{
 			"id": "BSCS",
 			"type": "matrix",
@@ -443,7 +516,7 @@
                 "trust.q2",
                 "trust.q3",
                 "trust.q4",
-                "trust.q5",
+                "trust.q5"
 
 			]
 		},
