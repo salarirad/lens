@@ -639,12 +639,12 @@
 	"dictator.next_trial": "Next Round",
 
 	"dictator.intro1.text": "In this task, you're given some tokens. <br /> <br />You have the choice to give some of them to another participant in this study, picked at random. <br /> <br /> You can give them all of the tokens, or some, or none. <br /> <br />Press **Next** to see a step-by-step tutorial.",
-	"dictator.intro2.text": "In the beginning of each round, the tokens are placed in the middle. You should distribute the tokens by dragging them from the box in the middle and dropping them either in the bottom box (your box) or the top box (other player's box). <br /> <br /> <img src='./images/dictatorgame1.png' width='100%' />", 
+	"dictator.intro2.text": "In the beginning of each round, the tokens are placed in the middle. You can distribute them by dragging them from the middle box and dropping them either in the bottom box (your box) or the top box (other player's box). <br /> <br /> <img src='./images/dictatorgame1.png' width='100%' />", 
 	"dictator.intro3.text": "When you drag a token, the color of target boxes changes.<br /> <br /> <img src='./images/dictatorgame2.png' width='100%' />",
 	"dictator.intro4.text": "And the box where you are about to drop the token turns green. <br /> <br /><img src='./images/dictatorgame3.png' width='100%' />",
 	"dictator.intro5.text": "After you've allocated all the tokens, press the **Collect** button to go to the next round.<br /> <br /> <img src='./images/dictatorgame4.png' width='100%' />",
 
-	"dictator.intro6.text": "The task begins now. <br /> <br /> You will complete this task **five** times, with five different participants. Press next when you're ready. <br /> <br /> Remember, your total tokens determine your chances in the raffle.",
+	"dictator.intro6.text": "The task begins now. <br /> <br /> You will complete this task **five** times (five different participants). Press next when you're ready. <br /> <br /> Remember, your total tokens determine your chances in the raffle. You can allocate the tokens **however you like**. You just have to allocate **all of them**.",
 	
 
 	"dictator.person1.field1.content": "Other player 1",
