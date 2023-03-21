@@ -231,7 +231,7 @@
 		{
 			"id": "BSCS",
 			"type": "matrix",
-			"text": "",
+			"text": "trust.q",
 			"slider": true,
 			"showMidMark": true,
 			"requiredQuestions": [
@@ -511,7 +511,13 @@
 				"neg.recip.2",
 				"neg.recip.3",
 				"attention.check.2",
-				"altruism"
+				"altruism",
+                "trust.q1",
+                "trust.q2",
+                "trust.q3",
+                "trust.q4",
+                "trust.q5",
+
 			]
 		},
 		{
