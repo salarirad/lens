@@ -59,7 +59,7 @@
           "field2": "field2.content",
           "field3": "field3.content",
           "field4": "field4.content",
-          "avatar": "marry-avatar.jpg",
+          "avatar": "",
           "tags": ["occupied","single","female","young"]
         },
         {
@@ -74,7 +74,7 @@
           "field2": "field2.content",
           "field3": "field3.content",
           "field4": "field4.content",
-          "avatar": "peter-avatar.jpg",
+          "avatar": "",
           "tags": ["occupied","single","male","rich","young"]
         }
       ]
