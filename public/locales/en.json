@@ -481,6 +481,7 @@
 	"BSCS.11":"I am able to work effectively toward long-term goals.",
 	"BSCS.12":"Sometimes I can’t stop myself from doing something, even if I know it is wrong.",
 	"BSCS.13":"I often act without thinking through all the alternatives.",
+	"BSCS.14":"I say inappropriate things.",
 
 	"BSCS.c1": "not at all (1)",
 	"BSCS.c2": "2",
@@ -511,7 +512,9 @@
 	"motive.others.identified": "People fast in Ramadan because they really believe it's important to who they are.",
 	"motive.others.intrinsic": "People fast in Ramadan because of the benefits and enjoyment that it provides them.",
 
-	
+	"motive.others.control":"What would you say motivates people to fast in Ramadan?",
+
+
 	"cos1": "It bothers me when other people neglect my needs.",
 	"cos2": "When making a decision, I take other people's needs and feelings into account.",
 	"cos3": "I'm not especially sensitive to other people's feelings.",
