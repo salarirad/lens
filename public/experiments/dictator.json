@@ -14,10 +14,34 @@
 			"text": "dictator.intro1.text"
 		},
     {
+			"id": "dictator.intro2",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro2.text"
+		},
+    {
 			"id": "dictator.intro3",
 			"type": "text",
 			"instruction": true,
 			"text": "dictator.intro3.text"
+		},
+    {
+			"id": "dictator.intro4",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro4.text"
+		},
+    {
+			"id": "dictator.intro5",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro5.text"
+		},
+    {
+			"id": "dictator.intro6",
+			"type": "text",
+			"instruction": true,
+			"text": "dictator.intro6.text"
 		},
     {
 			"id": "dictatorDemo",
