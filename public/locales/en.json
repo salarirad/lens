@@ -625,7 +625,7 @@
 	"ultimatum.person4.field1.content": "Other player",
 	"ultimatum.person5.field1.content": "Other player",
 
-	"dictator.rule.text": "Please divide the tokens between yourself and the other participant.",
+	"dictator.rule.text": "Please allocate **all** of the tokens however you like.",
 	"dictator.finish.button": "Collect",
 	"dictator.errors.required": "You have to move all tokens from POT box to other boxes",
 	"dictator.player": "Your Share",
@@ -644,7 +644,7 @@
 	"dictator.intro4.text": "And the box where you are about to drop the token turns green. <br /> <br /><img src='./images/dictatorgame3.png' width='100%' />",
 	"dictator.intro5.text": "After you've allocated all the tokens, press the **Collect** button to go to the next round.<br /> <br /> <img src='./images/dictatorgame4.png' width='100%' />",
 
-	"dictator.intro6.text": "The task begins now. <br /> <br /> You will complete this task **five** times (five different participants). Press next when you're ready. <br /> <br /> Remember, your total tokens determine your chances in the raffle. You can allocate the tokens **however you like**. You just have to allocate **all of them**.",
+	"dictator.intro6.text": "The task begins now. <br /> <br /> You will complete this task **five** times (five different participants). Press next when you're ready. <br /> <br /> Remember:<br /> <br /> * Your total tokens determine your chances in the raffle. <br /> <br /> * You can allocate the tokens **however you like**. <br /> <br /> * You just have to allocate **all of them**.",
 	
 
 	"dictator.person1.field1.content": "Other player 1",
