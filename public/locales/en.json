@@ -77,7 +77,7 @@
 	"risk.qual.c4": "low return and no risk",
 
 	"tasks.intro": "Thanks. Our main questions and tasks begin next.<br /><br />Remember, the responses you give in different tasks are converted into bonus points that determine your chances in a $50 raffle. You get points based on your choices, response accuracy, and speed on the specific task.<br /><br />Press next to begin the first task.",
-	"bart.intro": "Great. So in the next task, you'll see a ball in the middle of the screen that grows bigger every time you press on it.<br /><br />You receive **7 bonus points** for each pump, but only if the ball doesn't blow up. If the ball explodes, you lose all your points in that round.<br /><br />You can also select the ‘**CASH**’ button to save your bonus points if you don’t want to pump the ball anymore.<br /><br />Press **Next** to begin.",
+	"bart.intro": "Great. So in the next task, you'll see a ball in the middle of the screen that grows bigger every time you press on it.<br /><br />You receive **10 bonus points** for each pump, **but only if the ball doesn't blow up**. If the ball explodes, you lose all your points in that round.<br /><br />You can also select the ‘**CASH**’ button to save your bonus points if you don’t want to pump the ball anymore.<br /><br />Press **Next** to begin.",
 
 	"bart.cash": "Cash",
 	"bart.balloon_tooltip": "Touch to pump",
@@ -595,7 +595,7 @@
 	"ultimatum.player": "Your Share",
 	"ultimatum.pot": "Pot",
 	"ultimatum.trial_label": "Round {{trial}} of {{trials}}",
-	"ultimatum.total_points": "Total points: {{score}}",
+	"ultimatum.total_points": "Your Total Tokens: {{score}}",
 	"ultimatum.box.total_label": "Total: {{amount}}",
 	"ultimatum.dialog_title.accepted": "Proposal Accepted",
 	"ultimatum.dialog_title.rejected": "Proposal Rejected",
@@ -624,6 +624,8 @@
 	"ultimatum.person3.field4.content": "",
 	"ultimatum.person4.field1.content": "Other player",
 	"ultimatum.person5.field1.content": "Other player",
+
+
 
 	"dictator.rule.text": "Please allocate **all** of the tokens however you like.",
 	"dictator.finish.button": "Collect",

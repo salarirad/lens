@@ -1,7 +1,7 @@
 {
-    "studyId": "ultimatum-demo",
+    "studyId": "ultimatum+BART",
     "conditon": "a",
-    "redirectTo": "https://app.prolific.co/submissions/complete?cc=CWIHHG7D",
+    "redirectTo": "https://app.prolific.co/submissions/complete?cc=CEYZCTGO",
     "submissionNote": "submission.note",
     "metadata": {
       "maintainer": "radmanesh@gmail.com"
@@ -16,7 +16,27 @@
         "help": "",
         "placeholder": "",
         "pattern": ""
-      },
+          },
+      {
+        "id": "introduction",
+        "type": "text",
+        "instruction": true,
+        "text": "intro"
+          }, 
+      {
+        "id": "introduction.bart",
+        "type": "text",
+        "instruction": true,
+        "text": "bart.intro"
+          },    
+      {
+		"id": "bart",
+		"type": "bart",
+		"reward": 10,
+		"maxPumps": 15,
+		"safePumps": 1,
+		"trials": 10
+		  },
       {
               "id": "ultimatum.intro1",
               "type": "text",
@@ -62,7 +82,7 @@
       {
               "id": "ultimatum-1",
               "type": "ultimatum",
-        "text" : "ultimatum.rule.text",
+              "text" : "ultimatum.rule.text",
               "trials": 5,
         "tokens": 8,
         "opponentTypes": ["occupied","female"],
@@ -108,6 +128,88 @@
           }
         ]
             },  
+            {
+                "id": "BSCS",
+                "type": "matrix",
+                "text": "trust.q",
+                "slider": true,
+                "showMidMark": true,
+                "requiredQuestions": [
+                    0,
+                    1,
+                    2
+                ],
+                "direction": "vertical",
+                "choices": [
+                    "BSCS.c1",
+                    "BSCS.c2",
+                    "BSCS.c3",
+                    "BSCS.c4",
+                    "BSCS.c5"
+                ],
+                "questions": [
+                    "BSCS.1",
+                    "BSCS.2",
+                    "BSCS.3",
+                    "BSCS.4",
+                    "BSCS.5",
+                    "BSCS.6",
+                    "BSCS.7",
+                    "BSCS.8",
+                    "check.1",
+                    "BSCS.9",
+                    "BSCS.10",
+                    "BSCS.11",
+                    "BSCS.12",
+                    "BSCS.13",
+                    "BSCS.14"
+                ]
+            },
+            {
+                "id": "food.reminder.time",
+                "type": "matrix",
+                "text": "",
+                "requiredQuestions": [0],
+                "direction": "vertical",
+                "choices": [
+                    "food.reminder.c1",
+                    "food.reminder.c2",
+                    "food.reminder.c3",
+                    "food.reminder.c4",
+                    "food.reminder.c5",
+                    "food.reminder.c6",
+                    "food.reminder.c7",
+                    "food.reminder.c8"
+                ],
+                "questions": [
+                    "food.reminder.time.q"
+                ]
+            },
+            {
+                "id": "hunger",
+                "type": "matrix",
+                "text": "",
+                "slider": true,
+                "showMidMark": true,
+                "requiredQuestions": [0],
+                "direction": "vertical",
+                "choices": [
+                    "hunger.c1",
+                    "hunger.c2",
+                    "hunger.c3",
+                    "hunger.c4",
+                    "hunger.c5",
+                    "hunger.c6",
+                    "hunger.c7",
+                    "hunger.c8",
+                    "hunger.c9",
+                    "hunger.c10",
+                    "hunger.c11"
+    
+                ],
+                "questions": ["hunger.q"]
+            },
+
       {
         "id": "done.statement",
         "type": "text",
