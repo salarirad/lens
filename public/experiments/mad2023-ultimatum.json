@@ -33,7 +33,7 @@
 		"id": "bart",
 		"type": "bart",
 		"reward": 10,
-		"maxPumps": 15,
+		"maxPumps": 20,
 		"safePumps": 1,
 		"trials": 10
 		  },
