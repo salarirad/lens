@@ -1,15 +1,14 @@
 {
-  "studyId": "prolific",
+  "studyId": "prolific-demo",
   "conditon": "a",
-  "redirectTo": "https://app.prolific.co/submissions/complete?cc=CWIHHG7D",
   "submissionNote": "submission.note",
   "metadata": {
     "maintainer": "radmanesh@gmail.com"
   },
   "views": [
     {
-      "id": "prolific_ID",
-      "type": "text",
+      "id": "prolific-ID-demo",
+      "type": "prolific",
       "instruction": false,
       "required": true,
       "text": "p.id.intro",

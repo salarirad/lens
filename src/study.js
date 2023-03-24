@@ -10,6 +10,7 @@ import {languages} from './utils/i18n';
 
 import Navigation from './navigation';
 import Text from './text';
+import Prolific from './prolific'
 import Matrix from './matrix';
 import Submission from './submission';
 import BART from './bart';
@@ -127,6 +128,8 @@ export default function Study(props) {
     switch(view?.type) {
       case 'text':
         return <Text onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />;
+      case 'prolific':
+        return <Prolific onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />;
       case 'bart':
         return <BART onStore={storeData} content={view} key={view.id} />;
       case 'gonogo': 
