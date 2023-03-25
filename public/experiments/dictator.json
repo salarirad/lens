@@ -1,7 +1,7 @@
 {
   "studyId": "dictator-demo",
   "conditon": "a",
-  "redirectTo": "https://google.com?ID=123456",
+  "redirectTo": "https://cut.social",
   "submissionNote": "submission.note",
   "metadata": {
     "maintainer": "radmanesh@gmail.com"
@@ -44,14 +44,14 @@
 			"text": "dictator.intro6.text"
 		},
     {
-			"id": "dictatorDemo",
+			"id": "dictator.demo.detailed",
 			"type": "dictator",
       "text" : "dictator.rule.text",
-			"trials": 3,
-      "tokens": 5,
+			"trials": 1,
+      "tokens": 3,
       "opponentTypes": ["occupied","female"],
       "useOpponentTypes": false,
-      "personsPrefix" : "ultimatum-demo.person",
+      "personsPrefix" : "detailed.set.p",
       "persons": [
         {
           "id": 1,
@@ -78,7 +78,29 @@
           "tags": ["occupied","single","male","rich","young"]
         }
       ]
+		},
+    {
+			"id": "dictator.demo.anonymous",
+			"type": "dictator",
+      "text" : "dictator.rule.text",
+			"trials": 2,
+      "tokens": 3,
+      "useOpponentTypes": false,
+      "personsPrefix" : "anonymous.set.p",
+      "persons": [
+        {
+          "id": 1,
+          "field1": "field1.content"
+        },
+        {
+          "id": 2,
+          "field1": "field1.content"
+        },
+        {
+          "id": 3,
+          "field1": "field1.content"
+        }
+      ]
 		}
-
   ]
 }
