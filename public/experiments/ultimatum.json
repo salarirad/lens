@@ -67,7 +67,7 @@
       "tokens": 5,
       "opponentTypes": ["occupied","female"],
       "useOpponentTypes": false,
-      "personsPrefix" : "ultimatum.person",
+      "personsPrefix" : "ultimatum-demo.person",
       "persons": [
         {
           "id": 1,
