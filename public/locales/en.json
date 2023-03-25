@@ -625,6 +625,18 @@
 	"ultimatum.person4.field1.content": "Other player",
 	"ultimatum.person5.field1.content": "Other player",
 
+	"ultimatum-demo.person1.field1.content": "Marry Poppins",
+	"ultimatum-demo.person1.field2.content": "27",
+	"ultimatum-demo.person1.field3.content": "Nurse",
+	"ultimatum-demo.person1.field4.content": "Female",
+	"ultimatum-demo.person2.field1.content": "Joe Petterson",
+	"ultimatum-demo.person2.field2.content": "47",
+	"ultimatum-demo.person2.field3.content": "Unemployed",
+	"ultimatum-demo.person2.field4.content": "Male",
+	"ultimatum-demo.person3.field1.content": "Peter Rossling",
+	"ultimatum-demo.person3.field2.content": "31",
+	"ultimatum-demo.person3.field3.content": "Security",
+	"ultimatum-demo.person3.field4.content": "Male",
 
 
 	"dictator.rule.text": "Please allocate **all** of the tokens however you like.",
@@ -645,10 +657,8 @@
 	"dictator.intro3.text": "When you drag a token, the color of target boxes changes.<br /> <br /> <img src='./images/dictatorgame2.png' width='100%' />",
 	"dictator.intro4.text": "And the box where you are about to drop the token turns green. <br /> <br /><img src='./images/dictatorgame3.png' width='100%' />",
 	"dictator.intro5.text": "After you've allocated all the tokens, press the **Collect** button to go to the next round.<br /> <br /> <img src='./images/dictatorgame4.png' width='100%' />",
-
 	"dictator.intro6.text": "The task begins now. <br /> <br /> You will complete this task **five** times (five different participants). Press next when you're ready. <br /> <br /> Remember:<br /> <br /> * Your total tokens determine your chances in the raffle. <br /> <br /> * You can allocate the tokens **however you like**. <br /> <br /> * You just have to allocate **all of them**.",
 	
-
 	"dictator.person1.field1.content": "Other player 1",
 	"dictator.person2.field1.content": "Other player 2",
 	"dictator.person3.field1.content": "Other player 3",

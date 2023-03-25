@@ -51,7 +51,7 @@
       "tokens": 5,
       "opponentTypes": ["occupied","female"],
       "useOpponentTypes": false,
-      "personsPrefix" : "dictator.person",
+      "personsPrefix" : "ultimatum-demo.person",
       "persons": [
         {
           "id": 1,
@@ -59,7 +59,7 @@
           "field2": "field2.content",
           "field3": "field3.content",
           "field4": "field4.content",
-          "avatar": "",
+          "avatar": "marry-avatar.jpg",
           "tags": ["occupied","single","female","young"]
         },
         {
@@ -74,7 +74,7 @@
           "field2": "field2.content",
           "field3": "field3.content",
           "field4": "field4.content",
-          "avatar": "",
+          "avatar": "peter-avatar.jpg",
           "tags": ["occupied","single","male","rich","young"]
         }
       ]
