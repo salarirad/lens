@@ -18,6 +18,7 @@ import Stroop from './stroop';
 import Ultimatum from './ultimatum';
 import Dictator from './dictator';
 import { useTranslation } from 'react-i18next';
+import TaskSwitch from './taskswitch';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -139,6 +140,8 @@ export default function Study(props) {
         return <Ultimatum onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
       case 'dictator':
         return <Dictator onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
+      case 'taskswitch':
+        return <TaskSwitch onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
       default:
         return <div>Not Implemented!</div>;
     }
@@ -198,7 +201,7 @@ export default function Study(props) {
               {!state.loading && renderView(state.view)}
               </Paper>
             </Grid>
-            {!['gonogo','bart','stroop','ultimatum','dictator'].includes(state.view.type) && !state.loading &&
+            {!['gonogo','bart','stroop','ultimatum','dictator','taskswitch'].includes(state.view.type) && !state.loading &&
             <Grid item>
               <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
             </Grid>
