@@ -668,6 +668,16 @@
 	"dictator.person2.field1.content": "Other player 2",
 	"dictator.person3.field1.content": "Other player 3",
 	"dictator.person4.field1.content": "Other player 4",
-	"dictator.person5.field1.content": "Other player 5"
+	"dictator.person5.field1.content": "Other player 5",
+
+
+	"taskswitch.are_you_ready": "Place your fingers on the &#8594; and &#8592; keys. Press **Start** to begin.",
+	"taskswitch.too_many_timeouts": "You waited too long! Let's start over.",
+	"taskswitch.restart": "Restart",
+	"taskswitch.start": "Start",
+	"taskswitch.instruction": "Use &#8594; and &#8592; keys, or click on symbols. **Be quick!**",
+	"taskswitch.main.introduction": "Ok, so let's begin round 2. You will not receive feedback. Press next to begin.",
+
+	"taskswitch.tutorial": "Use &#8594; and &#8592; keys. <br /> If the symbols are placed above the divider line you should focus only on shape of those Symbols, same side for the (blue/yellow) Circle, opposite side for the Star. <br /> If the symbols are placed below the divider line you should only focus on the color, Same side for Yellow, opposite side for blue. <br /> **Be quick!**"
 
 }
