@@ -19,7 +19,7 @@
         "figureA": 6,
         "colorA": 6
       },
-      "stimuliDuration": 20000,
+      "stimuliDuration": 4000,
       "fixationDuration": 1000, 
       "feedbackDuration": 1000,
       "timeoutsBeforeReset": 100,

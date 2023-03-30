@@ -24,7 +24,7 @@ let clock
 export default function TaskSwitch({content, onStore, onProgress}) {
 
   const {t} = useTranslation();
-  const {text, trials, stimuliDuration, fixationDuration, choices, timeoutsBeforeReset, feedbackDuration} = content;
+  const {text, trials, stimuliDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration} = content;
 
   const [state, setState] = useState({
     finished: false,
@@ -193,20 +193,19 @@ export default function TaskSwitch({content, onStore, onProgress}) {
 
     clearTimeout(clock);
 
-    //FIXME
     const _correct = getCrorrectFromStimuli(state.stimuli[state.trial-1]);
-    console.log('correct answer = %d for pos %d',_correct,choice,state.stimuli[state.trial-1]);
+    console.log('correct answer = %d for choice %d , in stimuli %o',_correct,choice,state.stimuli[state.trial-1]);
 
     setState({
       ...state,
-      correct: _correct,
+      correct: _correct===choice,
       respondedAt: respondedAt,
       trialResponses: [...state.trialResponses, {
         'trial': state.trial,
         'stimuli': state.stimuli[state.trial-1],
         'type': state.stimuli[state.trial-1].pos<2 ? 0 : 1,
         'choice': choice,
-        'correct': _correct,
+        'correct': _correct===choice,
         'respondedAt': respondedAt,
         'trialStartedAt': state.trialStartedAt,
         'rt': respondedAt - state.trialStartedAt
@@ -224,7 +223,7 @@ export default function TaskSwitch({content, onStore, onProgress}) {
     if(stimuli.pos>1){
       if(stimuli.color === 0)
         return stimuli.pos;
-      return stimuli.pos===3 ? 4 : 3;
+      return stimuli.pos===2 ? 3 : 2;
     }
   }
 
@@ -250,22 +249,22 @@ export default function TaskSwitch({content, onStore, onProgress}) {
       );
     return (
       <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
-        {stimuli.pos ===i && renderStimulus(stimuli.figure+'-'+stimuli.color, stimuli.pos)}
-        {stimuli.pos ===j && renderStimulus('empty', i)}
+        {stimuli?.pos ===i && renderStimulus(stimuli.figure+'-'+stimuli.color, stimuli.pos)}
+        {stimuli?.pos ===j && renderStimulus('empty', i)}
         <Divider orientation='vertical' flexItem />
-        {stimuli.pos ===i && renderStimulus('empty', j)}
-        {stimuli.pos ===j && renderStimulus(stimuli.figure+'-'+stimuli.color, stimuli.pos)}
+        {stimuli?.pos ===i && renderStimulus('empty', j)}
+        {stimuli?.pos ===j && renderStimulus(stimuli.figure+'-'+stimuli.color, stimuli.pos)}
       </Grid>
     )
   }
   const renderStimuli = (stimuli) => {
     return (
       <Grid item container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ts-stimulus-container'>
-        {stimuli.pos < 2 && renderStimuliRow(true,stimuli,0,1)}
-        {stimuli.pos > 1 && renderStimuliRow(false)}
+        {stimuli?.pos < 2 && renderStimuliRow(true,stimuli,0,1)}
+        {stimuli?.pos > 1 && renderStimuliRow(false)}
         <Grid item> <Divider orientation='horizontal' /> </Grid>
-        {stimuli.pos < 2 && renderStimuliRow(false)}
-        {stimuli.pos > 1 && renderStimuliRow(true,stimuli,2,3)}
+        {stimuli?.pos < 2 && renderStimuliRow(false)}
+        {stimuli?.pos > 1 && renderStimuliRow(true,stimuli,2,3)}
       </Grid>
     )
   }
