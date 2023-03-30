@@ -141,7 +141,7 @@ export default function Study(props) {
       case 'dictator':
         return <Dictator onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
       case 'taskswitch':
-        return <TaskSwitch onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
+        return <TaskSwitch onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
       default:
         return <div>Not Implemented!</div>;
     }

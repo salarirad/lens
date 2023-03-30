@@ -15,17 +15,19 @@
       "trials": {
         "total": 24,
         "typeA": 12,
-        "left": 6
+        "left": 6,
+        "figureA": 6,
+        "colorA": 6
       },
-      "stimuliDuration": 2000,
+      "stimuliDuration": 20000,
       "fixationDuration": 1000, 
       "feedbackDuration": 1000,
-      "timeoutsBeforeReset": 2,
+      "timeoutsBeforeReset": 100,
       "choices": {
         "figureA": "star",
         "figureB": "circle",
-        "colorA": "blue",
-        "colorB": "yellow"
+        "colorA": "yellow",
+        "colorB": "blue"
       }
     }
   ]
