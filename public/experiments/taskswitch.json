@@ -22,13 +22,7 @@
       "stimuliDuration": 4000,
       "fixationDuration": 1000, 
       "feedbackDuration": 1000,
-      "timeoutsBeforeReset": 100,
-      "choices": {
-        "figureA": "star",
-        "figureB": "circle",
-        "colorA": "yellow",
-        "colorB": "blue"
-      }
+      "timeoutsBeforeReset": 100
     }
   ]
 }
