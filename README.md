@@ -11,7 +11,7 @@ Lens is the evolution of [Cut](https://cut.social/), a platform that facilitates
 \
 Lens uses React and Material UI to structure the development process while simplifying the study design for experimenters and providing a streamlined experience to respondents. It works by sending users a JSON file containing the tasks and questions and collecting their responses in the same format. See the details [here](https://sites.google.com/view/msrad/cut?authuser=0). 
 
-This architecture provides additional functionalities, in addition to facilitating the intergation of interactive tasks with conventional survey elements:
+This architecture provides several other functionalities, in addition to facilitating the integration of interactive tasks with conventional survey elements:
 
 * Multilingual survey content with little effort
 * Device adaptable research instruments
