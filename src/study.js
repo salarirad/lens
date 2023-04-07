@@ -19,12 +19,17 @@ import Ultimatum from './ultimatum';
 import Dictator from './dictator';
 import { useTranslation } from 'react-i18next';
 import TaskSwitch from './taskswitch';
+import ReactGA from "react-ga4";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 export default function Study(props) {
+
+  ReactGA.initialize("G-YFD0H08757");
+  //ReactGA.pageview(window.location.pathname + window.location.search);
+  ReactGA.send({ hitType: "pageview", page: window.location.pathname , title: "window?.title" });
 
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
