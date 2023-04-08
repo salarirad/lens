@@ -22,17 +22,13 @@ import TaskSwitch from './taskswitch';
 import SimplifiedTaskSwitch from './simplified_taskswitch';
 import ReactGA from "react-ga4";
 
-
-if (process.env.NODE_ENV === 'production') {
-  ReactGA.initialize();
-}
-
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 export default function Study(props) {
 
+  ReactGA.initialize("G-YFD0H08757");
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
 
@@ -119,11 +115,6 @@ export default function Study(props) {
   }
   
   const renderView = (view) => {
-
-    if (process.env.NODE_ENV === 'production') {
-      //ReactGA.pageview(window.location.pathname + window.location.search);
-      ReactGA.send({ hitType: "pageview", page: window.location.pathname , title: view?.type });
-    }
     
     if (state.finished) {
       return (
