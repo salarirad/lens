@@ -16,12 +16,12 @@ import Markdown from 'react-markdown/with-html';
 import { shuffle } from './utils/random';
 import { useTranslation } from 'react-i18next';
 
-import './taskswitch.css';
+import './simplified_taskswitch.css';
 
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-export default function TaskSwitch({ content, onStore, onProgress }) {
+export default function SimplifiedTaskSwitch({ content, onStore, onProgress }) {
 
   const { t } = useTranslation();
   const { text, trials, stimuliDuration, fixationDuration, timeoutsBeforeReset, feedbackDuration } = content;
@@ -44,6 +44,7 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
 
 
   useEffect(() => {
+    console.log('useEffect -> before handleKeyPress, it has no dependency');
     /**
      * callback to handle keypress events
      */
@@ -63,52 +64,47 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
       const current = state.stimuli[state.trial - 1];
       let choice = undefined;
 
-      let empty = (key==='ArrowLeft' && current.startsWith('right')) || 
-                  (key==='ArrowRight' && current.startsWith('left'));
-      let go = (key==='ArrowLeft' && current.startsWith('left-go')) ||
-              (key==='ArrowRight' && current.startsWith('right-go'));
+      if (key === 'ArrowLeft')
+        choice = current.pos > 1 ? 2 : 0;
+      if (key === 'ArrowRight')
+        choice = current.pos > 1 ? 3 : 1;
 
-      choice = current.endsWith('top') ? 
-          (go?trials.top.choices.go : (empty?'empty':trials.top.choices.nogo) )
-          :
-          (go?trials.bottom.choices.go : (empty?'empty':trials.bottom.choices.nogo)) ;
       handleResponse(choice)
+
     }
-    
     window.addEventListener('keydown', handleKeyPress);
 
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-
   }, [state] // FIXME add missin dependencies
   );
 
   useEffect(() => {
-    // generate stimuli stream
-    if (state.stimuli===null) {
-      let stim = [...Array(trials.total).keys()].map((i,t) => {
-        if(i<trials.top.total){
-          if(i<trials.top.leftGo)
-            return 'left-go-top'
-          if (i<trials.top.go)
-            return 'right-go-top'
-          if (i<trials.top.go + (trials.top.left - trials.top.leftGo))
-            return 'left-nogo-top'
-          return 'right-nogo-top'
-        }else{
-          if(i<trials.top.total+trials.bottom.leftGo)
-            return 'left-go-bottom'
-          if(i<trials.top.total+trials.bottom.go)
-            return 'right-go-bottom'
-          if (i<trials.top.total+ trials.bottom.go + (trials.bottom.left - trials.bottom.leftGo))
-            return 'left-nogo-bottom'
-          return 'right-nogo-bottom'
+
+    console.log(state.stimuli);
+    // generate stimuli stream : stimuli:{pos: [0 top-left, 1 top-right, 2 bott-left, 3 bott-right]  , figure:'figureA/B' , color: 'blue/yellow }
+    if (state.stimuli === null) {
+      let stim = [...Array(trials.total).keys()].map((i, t) => {
+        let stimuliProperties = {
+          pos: 0, // 0 top-left, 1 top-right, 2 bott-left, 3 bott-right]
+          figure: 0, // 0 'figureA' , 1 'figureB' color: 'blue/yellow }
+          color: 0 // 0 colorA , 1 colorB
+        };
+        if (i < trials.typeA) {
+          stimuliProperties.pos = (i < trials.left) ? 0 : 1;
+          stimuliProperties.figure = i < trials.figureA ? 0 : 1;
+          stimuliProperties.color = i < trials.colorA ? 0 : 1;
+        } else {
+          stimuliProperties.pos = (i - trials.typeA) < trials.left ? 2 : 3;
+          stimuliProperties.figure = (i - trials.typeA) < trials.figureA ? 0 : 1;
+          stimuliProperties.color = (i - trials.typeA) < trials.colorA ? 0 : 1;
         }
-      }); 
-      setState({...state, stimuli: shuffle(stim)});
+        return stimuliProperties;
+      })
+      setState({ ...state, stimuli: shuffle(stim) });
     }
-  }, [state]);
+  }, [state.stimuli]);
 
   useEffect(() => {
     // # FIXATION
@@ -201,8 +197,8 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
 
     clearTimeout(clock);
 
-    const _correct = getCorrect(state.stimuli[state.trial - 1]);
-    console.log('correct answer = %s for choice %s , in stimuli %o', _correct, choice, state.stimuli[state.trial - 1]);
+    const _correct = getCrorrectFromStimuli(state.stimuli[state.trial - 1]);
+    console.log('correct answer = %d for choice %d , in stimuli %o', _correct, choice, state.stimuli[state.trial - 1]);
 
     setState({
       ...state,
@@ -211,6 +207,7 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
       trialResponses: [...state.trialResponses, {
         'trial': state.trial,
         'stimuli': state.stimuli[state.trial - 1],
+        'type': state.stimuli[state.trial - 1].pos < 2 ? 0 : 1,
         'choice': choice,
         'correct': _correct === choice,
         'respondedAt': respondedAt,
@@ -221,63 +218,59 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
     })
   }
 
-  function getCorrect(stimuli){
-    const choices = stimuli.endsWith('top') ? trials.top.choices : trials.bottom.choices;
-    return stimuli.includes('nogo') ? 'empty' : choices.go;
+  function getCrorrectFromStimuli(stimuli) {
+    if (stimuli.pos < 2) {
+      if (stimuli.figure === 0)
+        return stimuli.pos;
+      return 1 - stimuli.pos;
+    }
+    if (stimuli.pos > 1) {
+      if (stimuli.color === 0)
+        return stimuli.pos;
+      return stimuli.pos === 2 ? 3 : 2;
+    }
   }
 
-  const renderStimulus = (stimulus, selectable = true) => {
+  const renderStimulus = (stimulus, pos) => {
     return (
       <Fragment>
-      {stimulus==='empty' && selectable && <div onClick={() => handleResponse('empty')} className='ts-stimulus'> </div>}
-      {stimulus==='empty' && !selectable && <div className='ts-stimulus ts-inactive'> </div>}
-      {stimulus==='star' && <div onClick={() => handleResponse('star')} className='ts-stimulus'><Star fontSize='large' className='yellow' /></div>}
-      {stimulus==='circle' && <div onClick={() => handleResponse('circle')} className='ts-stimulus'><Circle fontSize='large' className='blue' /></div>}
-      {stimulus==='blue-star' && <div onClick={() => handleResponse('blue-star')} className='ts-stimulus'><Star fontSize='large' className='blue' /></div>}
-      {stimulus==='yellow-circle' && <div onClick={() => handleResponse('yellow-circle')} className='ts-stimulus'><Star fontSize='large' className='yellow' /></div>}
+        <div onClick={() => handleResponse(pos)} className='ts-stimulus'>
+          {stimulus === '0-0' && <Star fontSize='large' className='yellow' />}
+          {stimulus === '1-0' && <Circle fontSize='large' className='yellow' />}
+          {stimulus === '0-1' && <Star fontSize='large' className='blue' />}
+          {stimulus === '1-1' && <Circle fontSize='large' className='blue' />}
+        </div>
       </Fragment>
     );
   }
 
-  /**
-   * 
-   * @param {*} trialType type of trial
-   * @param {*} pos 0 for top, 1 for bottom
-   * @returns renders a row of stimuli
-   */
-  const renderStimuliRow = (trialType, pos) =>{
-    const choices = trialType.endsWith('top') ? trials.top.choices : trials.bottom.choices;
+  const renderStimuliRow = (draw, stimuli, i, j) => {
+    if (draw === false)
+      return (
+        <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+          {renderStimulus('empty', i)}
+          <Divider orientation='vertical' flexItem />
+          {renderStimulus('empty', j)}
+        </Grid>
+      );
     return (
       <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
-        {pos===0 && trialType.endsWith('bottom') && renderStimulus('empty',false)}
-        {pos===0 && trialType.endsWith('top') && trialType.startsWith('left-go') && renderStimulus(choices.go)}
-        {pos===0 && trialType.endsWith('top') && trialType.startsWith('left-nogo') && renderStimulus(choices.nogo)}
-        {pos===0 && trialType.endsWith('top') && (!trialType.includes('left-go')  && !trialType.includes('left-nogo')) && renderStimulus('empty')}
-        {pos===1 && trialType.endsWith('top') && renderStimulus('empty',false)}
-        {pos===1 && trialType.endsWith('bottom') && trialType.startsWith('left-go') && renderStimulus(choices.go)}
-        {pos===1 && trialType.endsWith('bottom') && trialType.startsWith('left-nogo') && renderStimulus(choices.nogo)}
-        {pos===1 && trialType.endsWith('bottom') && (!trialType.startsWith('left-go') && !trialType.startsWith('left-nogo')) && renderStimulus('empty')}
+        {stimuli?.pos === i && renderStimulus(stimuli.figure + '-' + stimuli.color, stimuli.pos)}
+        {stimuli?.pos === j && renderStimulus('empty', i)}
         <Divider orientation='vertical' flexItem />
-        {pos===0 && trialType.endsWith('bottom') && renderStimulus('empty',false)}
-        {pos===0 && trialType.endsWith('top') && trialType.startsWith('right-go') && renderStimulus(choices.go)}
-        {pos===0 && trialType.endsWith('top') && trialType.startsWith('right-nogo') && renderStimulus(choices.nogo)}
-        {pos===0 && trialType.endsWith('top') && (!trialType.includes('right-go')  && !trialType.includes('right-nogo')) && renderStimulus('empty')}
-        {pos===1 && trialType.endsWith('top') && renderStimulus('empty',false)}
-        {pos===1 && trialType.endsWith('bottom') && trialType.startsWith('right-go') && renderStimulus(choices.go)}
-        {pos===1 && trialType.endsWith('bottom') && trialType.startsWith('right-nogo') && renderStimulus(choices.nogo)}
-        {pos===1 && trialType.endsWith('bottom') && (!trialType.startsWith('right-go') && !trialType.startsWith('right-nogo')) && renderStimulus('empty')}
+        {stimuli?.pos === i && renderStimulus('empty', j)}
+        {stimuli?.pos === j && renderStimulus(stimuli.figure + '-' + stimuli.color, stimuli.pos)}
       </Grid>
     )
   }
-  const renderStimuli = (trialType) => {
-    //console.log("renderStimuli: ",trialType);
-    if(!trialType)
-      return;
+  const renderStimuli = (stimuli) => {
     return (
       <Grid item container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='ts-stimulus-container'>
-        {renderStimuliRow(trialType,0)}
+        {stimuli?.pos < 2 && renderStimuliRow(true, stimuli, 0, 1)}
+        {stimuli?.pos > 1 && renderStimuliRow(false)}
         <Grid item> <Divider orientation='horizontal' /> </Grid>
-        {renderStimuliRow(trialType,1)}
+        {stimuli?.pos < 2 && renderStimuliRow(false)}
+        {stimuli?.pos > 1 && renderStimuliRow(true, stimuli, 2, 3)}
       </Grid>
     )
   }
@@ -289,6 +282,7 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
         {!state.correct && <Incorrect fontSize='large' className='incorrect ts-icon' />}
       </Grid>
     )
+
   }
 
   const renderFixation = () => {
@@ -308,6 +302,7 @@ export default function TaskSwitch({ content, onStore, onProgress }) {
           <Button variant='outlined' color='secondary' onClick={() => startTask()}>{t('taskswitch.restart')}</Button>
         </Grid>
       </Grid>
+
     )
   }
 

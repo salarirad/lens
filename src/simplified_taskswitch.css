@@ -11,10 +11,7 @@
   background-color: #ffffff22;
   cursor: pointer;
   position: relative;
-}
 
-.ts-inactive {
-  cursor: initial;
 }
 
 .ts-stimulus:after {

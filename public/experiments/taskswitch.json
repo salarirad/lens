@@ -14,15 +14,32 @@
       "help":"taskswitch.help",
       "trials": {
         "total": 24,
-        "typeA": 12,
-        "left": 6,
-        "figureA": 6,
-        "colorA": 6
+        "top":{
+          "total": 12,
+          "go": 6,
+          "left": 6,
+          "leftGo": 3,
+          "choices": {
+            "go": "blue-star",
+            "nogo": "star"
+          }
+        },
+        "bottom":{
+          "total": 12,
+          "go": 6,
+          "left": 6,
+          "leftGo": 3,
+          "choices": {
+            "go": "star",
+            "nogo": "blue-star"
+          }
+        }
+
       },
-      "stimuliDuration": 4000,
+      "stimuliDuration": 2000,
       "fixationDuration": 1000, 
       "feedbackDuration": 1000,
-      "timeoutsBeforeReset": 100
+      "timeoutsBeforeReset": 5
     }
   ]
 }

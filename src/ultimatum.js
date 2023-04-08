@@ -201,7 +201,8 @@ export default function Ultimatum({ content, onStore, onNotification }) {
         disableEscapeKeyDown
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title">
+        // fix error h6 is nested in h2
+        <DialogTitle disableTypography id="dialog-title">
           <Typography variant='h6' color={state.trialResponses[state.trialResponses.length - 1].result==='accepted'?'primary':'error'}>
             <b>
             {state.trialResponses[state.trialResponses.length - 1].result==='accepted' ? 
