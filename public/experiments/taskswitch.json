@@ -1,0 +1,45 @@
+{
+  "studyId": "taskswitch-demo",
+  "conditon": "a",
+  "redirectTo": "https://cut.social",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@gmail.com"
+  },
+  "views": [
+    {
+      "id": "TaskSwitch Demo",
+      "type":"taskswitch",
+      "text":"taskswitch.instruction",
+      "help":"taskswitch.help",
+      "trials": {
+        "total": 24,
+        "top":{
+          "total": 12,
+          "go": 6,
+          "left": 6,
+          "leftGo": 3,
+          "choices": {
+            "go": "blue-star",
+            "nogo": "star"
+          }
+        },
+        "bottom":{
+          "total": 12,
+          "go": 6,
+          "left": 6,
+          "leftGo": 3,
+          "choices": {
+            "go": "star",
+            "nogo": "blue-star"
+          }
+        }
+
+      },
+      "stimuliDuration": 2000,
+      "fixationDuration": 1000, 
+      "feedbackDuration": 1000,
+      "timeoutsBeforeReset": 5
+    }
+  ]
+}

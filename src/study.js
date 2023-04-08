@@ -19,6 +19,9 @@ import Stroop from './stroop';
 import Ultimatum from './ultimatum';
 import Dictator from './dictator';
 import { useTranslation } from 'react-i18next';
+import TaskSwitch from './taskswitch';
+import SimplifiedTaskSwitch from './simplified_taskswitch';
+import ReactGA from "react-ga4";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -26,6 +29,7 @@ function useQuery() {
 
 export default function Study(props) {
 
+  ReactGA.initialize("G-YFD0H08757");
   const {t, i18n} = useTranslation();
   let {lang, studyId} = useParams();
 
@@ -112,7 +116,7 @@ export default function Study(props) {
   }
   
   const renderView = (view) => {
-
+    
     if (state.finished) {
       return (
         <Submission submission={{
@@ -142,6 +146,10 @@ export default function Study(props) {
         return <Ultimatum onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
       case 'dictator':
         return <Dictator onStore={storeData} content={view} key={view.id} onNotification={setNotification} />;
+      case 'taskswitch':
+        return <TaskSwitch onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
+      case 'simplified_taskswitch':
+        return <SimplifiedTaskSwitch onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
       default:
         return <div>Not Implemented!</div>;
     }
@@ -160,6 +168,11 @@ export default function Study(props) {
         view: experiment.views[0]
       }
     });
+
+    if (process.env.NODE_ENV === 'production') {
+      ReactGA.send({ hitType: "pageview", page: window.location.pathname , title: "window?.title" });
+    }
+
   }
 
   //load experiment
@@ -201,7 +214,7 @@ export default function Study(props) {
               {!state.loading && renderView(state.view)}
               </Paper>
             </Grid>
-            {!['gonogo','bart','stroop','ultimatum','dictator'].includes(state.view.type) && !state.loading &&
+            {!['gonogo','bart','stroop','ultimatum','dictator','taskswitch','simplified_taskswitch'].includes(state.view.type) && !state.loading &&
             <Grid item>
               <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
             </Grid>

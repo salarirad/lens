@@ -1,7 +1,7 @@
 {
   "studyId": "ultimatum-demo",
   "conditon": "a",
-  "redirectTo": "https://app.prolific.co/submissions/complete?cc=CWIHHG7D",
+  "redirectTo": "https://cut.social",
   "submissionNote": "submission.note",
   "metadata": {
     "maintainer": "radmanesh@gmail.com"
@@ -54,14 +54,20 @@
 			"text": "ultimatum.intro6.text"
 		},
     {
-			"id": "ultimatum-demo",
+			"id": "ultimatum.intro7",
+			"type": "text",
+			"instruction": true,
+			"text": "ultimatum.intro7.text"
+		},
+    {
+			"id": "ultimatum.demo.detailed",
 			"type": "ultimatum",
       "text" : "ultimatum.rule.text",
-			"trials": 3,
-      "tokens": 5,
+			"trials": 2,
+      "tokens": 3,
       "opponentTypes": ["occupied","female"],
       "useOpponentTypes": false,
-      "personsPrefix" : "ultimatum.person",
+      "personsPrefix" : "detailed.set.p",
       "persons": [
         {
           "id": 1,
@@ -69,7 +75,7 @@
           "field2": "field2.content",
           "field3": "field3.content",
           "field4": "field4.content",
-          "minAcceptable": 3,
+          "minAcceptable": 2,
           "avatar": "marry-avatar.jpg",
           "tags": ["occupied","single","female","young"]
         },
@@ -93,11 +99,36 @@
       ]
 		},
     {
+			"id": "ultimatum-demo-anonymous",
+			"type": "ultimatum",
+      "text" : "ultimatum.rule.text",
+			"trials": 2,
+      "tokens": 3,
+      "useOpponentTypes": false,
+      "personsPrefix" : "anonymous.set.p",
+      "persons": [
+        {
+          "id": 1,
+          "field1": "field1.content",
+          "minAcceptable": 2
+        },
+        {
+          "id": 2,
+          "field1": "field1.content",
+          "minAcceptable": 0
+        },
+        {
+          "id": 3,
+          "field1": "field1.content",
+          "minAcceptable": 1
+        }
+      ]
+		},
+    {
       "id": "done.statement",
       "type": "text",
       "instruction": true,
       "text": "done"
     }
-
   ]
 }

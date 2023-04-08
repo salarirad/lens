@@ -3,6 +3,11 @@ export const sample = (items, n=1) => {
   return items[rnd];
 }
 
+  /**
+  * Shuffles any array and returns it
+  * @param {*any} items any array to be shuffled
+  * @returns shuffled array
+  */
 export const shuffle = (items) => {
   const shuffled = items.slice();
   for (let i = items.length - 1; i > 0; i--) {
