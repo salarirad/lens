@@ -4,7 +4,7 @@
   font-size: 100px !important;
 }
 
-.ts-stimulus {
+.single-stimulus {
   width: 45% !important;
   /*height: 100px !important;*/
   font-size: 100px !important;
@@ -17,13 +17,13 @@
   cursor: initial;
 }
 
-.ts-stimulus:after {
+.single-stimulus:after {
   content: "";
   display: block;
   padding-bottom: 100%;
 }
 
-.ts-stimulus > svg {
+.single-stimulus > svg {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -51,23 +51,13 @@
   color: #2323a3;
 }
 
-.ts-stimulus-container {
+.single-stimulus-container {
   /* margin: 72px 0 72px 0 !important; */
   padding: 0 60px 0 60px !important;
 }
 
-.ts-container {
+.nback-container {
   padding: 0 24px 0 24px;
   height: calc(100vh - 40px);
 }
 
-.ts-empty-stimulus{
-  width: 45% !important;
-  height: 100% !important;
-  position: relative;
-}
-.ts-empty-stimulus:after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
-}

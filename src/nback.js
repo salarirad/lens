@@ -243,9 +243,9 @@ export default function NBack({content, onStore, onValidate}) {
   if (state.trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justifyContent='flex-start' className='Text-container'>
-        <Grid item><Markdown source={t('taskswitch.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
+        <Grid item><Markdown source={t('nback.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
         <Grid item>
-          <Button variant='outlined' onClick={() => startTask()}>{t('taskswitch.start')}</Button>
+          <Button variant='outlined' onClick={() => startTask()}>{t('nback.start')}</Button>
         </Grid>
       </Grid>
     )
