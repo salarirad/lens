@@ -1,0 +1,23 @@
+{
+  "studyId": "nback-demo",
+  "conditon": "a",
+  "redirectTo": "https://google.com?ID=123456",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@gmail.com"
+  },
+  "views": [
+    {
+      "id": "NBack Test Demo",
+      "type": "nback",
+      "text": "nback.instruction",
+      "help": "Press only if you have seen the image exactly two step ago. <br /> You have two seconds to respond.",
+      "trials": 24,
+      "figures" : ["circle", "rectangle", "star"],
+      "nback": 2,
+      "stimuliDuration": 2000,
+      "fixationDuration": 500,
+      "feedbackDuration": 500
+    }
+  ]
+}
