@@ -83,6 +83,7 @@ export default function NBack({content, onStore, onValidate}) {
   },[state]);
 
   useEffect(() => {
+    console.log("stimuli: ",state.stimuli)
     // generate stimuli stream
     if (state.stimuli===null) {
       let figureIndex = 0;
@@ -102,12 +103,12 @@ export default function NBack({content, onStore, onValidate}) {
           return figures[figureIndex].name;
         }
       });
-      console.log(stim);
       setState({...state, stimuli: shuffle(stim)});
     }
   },[state]);
 
   useEffect(() => {
+    console.log("step: %s,  state: %o",state.step,state);
     // # FIXATION
     if (state.step === 'fixation') {
       clearTimeout(clock);
@@ -125,11 +126,29 @@ export default function NBack({content, onStore, onValidate}) {
     if (state.state === 'response'){
       clearTimeout(clock);
       let choice = state.trialResponses[state.trial -1]?.choice ? state.trialResponses[state.trial -1]?.choice : _noresponse;
-      if(choice === _noresponse)
-        handleResponse(choice);
+      if(choice === _noresponse){
+        const respondedAt = Date.now(); //timestamp
+        const _correct = state.trial>nback ? state.stimuli[state.trial - 1]!==state.stimuli[state.trial - (nback+1)] : true ;
+
+        setState({
+          ...state,
+          correct: _correct,
+          respondedAt: respondedAt,
+          trialResponses: [...state.trialResponses, {
+            'trial': state.trial,
+            'stimuli': state.stimuli[state.trial - 1],
+            'choice': choice,
+            'correct': _correct,
+            'respondedAt': respondedAt,
+            'trialStartedAt': state.trialStartedAt,
+            'rt': respondedAt - state.trialStartedAt
+          }],
+          step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
+        });
+      }
       else{
         clock = setTimeout(() => {
-          setState({ ...state, step: 'fixation' })
+          setState({ ...state, step: 'feedback' })
         },100);
       }
 
