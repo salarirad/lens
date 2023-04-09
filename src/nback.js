@@ -189,7 +189,7 @@ export default function NBack({content, onStore, onValidate}) {
     }
 
     // check if it is finished
-    if (state.trial > trials.total) {
+    if (state.trial > trials) {
       console.log('------------ FINISHED -------')
       setState({ ...state, finished: true, taskFinishedAt: Date.now() })
     }
