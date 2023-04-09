@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, Fragment } from 'react';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown/with-html';
 import { 
@@ -26,7 +26,7 @@ const _noresponse = 'noresponse';
 
 export default function NBack({content, onStore, onValidate}) {
   //props: title, text
-  
+  console.log('NBack body...');
   const { t } = useTranslation();
 
   const { text, trials, stimuliDuration, fixationDuration, feedbackDuration, nback, figures } = content;
@@ -83,7 +83,7 @@ export default function NBack({content, onStore, onValidate}) {
   },[state]);
 
   useEffect(() => {
-    console.log("stimuli: ",state.stimuli)
+    //console.log("use effect generating stimuli: ", state.stimuli);
     // generate stimuli stream
     if (state.stimuli===null) {
       let figureIndex = 0;
@@ -123,35 +123,38 @@ export default function NBack({content, onStore, onValidate}) {
     }
 
     // # RESPONSE
-    if (state.state === 'response'){
+    if (state.step === 'response'){
       clearTimeout(clock);
-      let choice = state.trialResponses[state.trial -1]?.choice ? state.trialResponses[state.trial -1]?.choice : _noresponse;
+      console.log('RESPONSE');
+      let choice = state.trialResponses[state.trial -1].choice ? state.trialResponses[state.trial -1].choice : _noresponse;
+      console.log('RESPONSE --> choice: ',choice);
       if(choice === _noresponse){
         const respondedAt = Date.now(); //timestamp
         const _correct = state.trial>nback ? state.stimuli[state.trial - 1]!==state.stimuli[state.trial - (nback+1)] : true ;
-
-        setState({
-          ...state,
-          correct: _correct,
-          respondedAt: respondedAt,
-          trialResponses: [...state.trialResponses, {
-            'trial': state.trial,
-            'stimuli': state.stimuli[state.trial - 1],
-            'choice': choice,
-            'correct': _correct,
-            'respondedAt': respondedAt,
-            'trialStartedAt': state.trialStartedAt,
-            'rt': respondedAt - state.trialStartedAt
-          }],
-          step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
-        });
+        clock = setTimeout(() => {
+          setState({
+            ...state,
+            correct: _correct,
+            respondedAt: respondedAt,
+            trialResponses: [...state.trialResponses, {
+              'trial': state.trial,
+              'stimuli': state.stimuli[state.trial - 1],
+              'choice': choice,
+              'correct': _correct,
+              'respondedAt': respondedAt,
+              'trialStartedAt': state.trialStartedAt,
+              'rt': respondedAt - state.trialStartedAt
+            }],
+            step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
+          });
+        },100);
       }
       else{
         clock = setTimeout(() => {
-          setState({ ...state, step: 'feedback' })
+          const nextState = feedbackDuration>0 ? 'feedback' : 'fixation';
+          setState({ ...state, nextState })
         },100);
       }
-
     }
 
     // # FEEDBACK
@@ -162,9 +165,9 @@ export default function NBack({content, onStore, onValidate}) {
       }, feedbackDuration)
     }
 
+    // # STIMULO
     if (state.step === 'stimuli') {
       clearTimeout(clock); 
-
       clock = setTimeout(() => {
         setState({
           ...state,
@@ -185,6 +188,7 @@ export default function NBack({content, onStore, onValidate}) {
       }, stimuliDuration)
     }
 
+    // check if it is finished
     if (state.trial > trials.total) {
       console.log('------------ FINISHED -------')
       setState({ ...state, finished: true, taskFinishedAt: Date.now() })
@@ -289,11 +293,11 @@ export default function NBack({content, onStore, onValidate}) {
   return (
     <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='nback-container'>
       <Grid item>
-        <Markdown source={t(content.text)} escapeHtml={false} className='markdown-text' />
+        <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
       </Grid>
       
       {state.step === 'stimuli'  && renderFigure(state.stimuli[state.trial-1])}
-      {state.step === 'feedback' && renderFeedback()}
+      {state.step === 'feedback' && state.trial>nback && renderFeedback()}
       {state.step === 'fixation' && renderFixation()}
 
     </Grid>
