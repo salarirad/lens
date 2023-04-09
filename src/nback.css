@@ -1,20 +1,16 @@
-.ts-icon {
-  width: 45% !important;
+.nback-icon {
+  width: 70% !important;
   height: 100px !important;
   font-size: 100px !important;
 }
 
 .single-stimulus {
-  width: 45% !important;
+  width: 70% !important;
   /*height: 100px !important;*/
   font-size: 100px !important;
   background-color: #ffffff22;
   cursor: pointer;
   position: relative;
-}
-
-.ts-inactive {
-  cursor: initial;
 }
 
 .single-stimulus:after {

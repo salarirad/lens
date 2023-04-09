@@ -22,6 +22,8 @@ import { shuffle } from './utils/random';
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
+const _noresponse = 'noresponse';
+
 export default function NBack({content, onStore, onValidate}) {
   //props: title, text
   
@@ -59,6 +61,12 @@ export default function NBack({content, onStore, onValidate}) {
     const handleKeyPress = (event) => {
       const { key, keyCode } = event;
 
+      // press space to start the task
+      if (state.trial === null && (keyCode===32 || key===' ')) {
+        startTask()
+        return;
+      }
+
       // ignore invalid keys and invalid trial steps
       if (state.step !== 'stimuli' || !(keyCode === 32 || key === ' '))
         return;
@@ -77,8 +85,22 @@ export default function NBack({content, onStore, onValidate}) {
   useEffect(() => {
     // generate stimuli stream
     if (state.stimuli===null) {
+      let figureIndex = 0;
+      let figureTotal =0;
       let stim = [...Array(trials).keys()].map((i,t) => {
-        return figures[i < figures.length ? i : i % figures.length ]
+        let figure = figures[figureIndex];
+        if(figureTotal<figure.amount){
+          figureTotal++;
+          return figure.name;
+        }else{
+          figureIndex++;
+          figureTotal = 1;
+          if(figureIndex>=figures.length){
+            console.log('error in figure numbers and total trials, reseting figures...')
+            figureIndex = 0;
+          }
+          return figures[figureIndex].name;
+        }
       });
       console.log(stim);
       setState({...state, stimuli: shuffle(stim)});
@@ -99,30 +121,23 @@ export default function NBack({content, onStore, onValidate}) {
       }, fixationDuration);
     }
 
+    // # RESPONSE
+    if (state.state === 'response'){
+      clearTimeout(clock);
+      let choice = state.trialResponses[state.trial -1]?.choice ? state.trialResponses[state.trial -1]?.choice : _noresponse;
+      if(choice === _noresponse)
+        handleResponse(choice);
+      else{
+        clock = setTimeout(() => {
+          setState({ ...state, step: 'fixation' })
+        },100);
+      }
+
+    }
+
     // # FEEDBACK
     if (state.step === 'feedback') {
       clearTimeout(clock);
-
-
-      // if(state.choice[state.trial-1]===null){
-      //   const _correct = state.trial>nback ? state.stimuli[state.trial - 1] !== state.stimuli[state.trial - (nback+1)] : true;
-      //   const respondedAt = Date.now();
-      //   setState({
-      //     ...state,
-      //     correct: _correct,
-      //     respondedAt: respondedAt,
-      //     trialResponses: [...state.trialResponses, {
-      //       'trial': state.trial,
-      //       'stimuli': state.stimuli[state.trial - 1],
-      //       'choice': "no-action",
-      //       'correct': _correct,
-      //       'respondedAt': respondedAt,
-      //       'trialStartedAt': state.trialStartedAt,
-      //       'rt': respondedAt - state.trialStartedAt
-      //     }]
-      //   });    
-      // } 
-
       clock = setTimeout(() => {
         setState({ ...state, step: 'fixation' })
       }, feedbackDuration)
@@ -145,7 +160,8 @@ export default function NBack({content, onStore, onValidate}) {
           }],
           timeouts: state.timeouts + 1,
           correct: false,
-          step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
+          step: 'response'
+          //step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
         });
       }, stimuliDuration)
     }
@@ -186,7 +202,7 @@ export default function NBack({content, onStore, onValidate}) {
   const handleResponse = (selected) => {
     const respondedAt = Date.now(); //timestamp
     clearTimeout(clock);
-    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]===state.stimuli[state.trial - (nback+1)] : true;
+    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]===state.stimuli[state.trial - (nback+1)] : (!selected || selected===_noresponse) ;
 
     setState({
       ...state,
@@ -206,18 +222,18 @@ export default function NBack({content, onStore, onValidate}) {
   }
 
   const renderFigure = (figure) => {
+    console.log('renderFigure: ',figure);
     if(!components[figure]){
-      console.log('renderFigure: ',figure);
       return(
         <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
-          <div onClick={() => handleResponse('block')} className='single-stimulus'> <Block fontSize='large' className='yellow ts-icon' /> </div>
+          <div onClick={() => handleResponse('block')} className='single-stimulus'> <Block fontSize='large' className='yellow nback-icon' /> </div>
         </Grid>
       );
     }
     const FigureCompoentnt = components[figure];
     return(
       <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
-        <div onClick={() => handleResponse(figure)} className='single-stimulus'> <FigureCompoentnt fontSize='large' className='yellow ts-icon' /> </div>
+        <div onClick={() => handleResponse(figure)} className='single-stimulus'> <FigureCompoentnt fontSize='large' className='yellow nback-icon' /> </div>
       </Grid>
     )
   }
@@ -225,8 +241,8 @@ export default function NBack({content, onStore, onValidate}) {
   const renderFeedback = () => {
     return (
       <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
-        {state.correct && <Correct fontSize='large' className='correct ts-icon' />}
-        {!state.correct && <Incorrect fontSize='large' className='incorrect ts-icon' />}
+        {state.correct && <Correct fontSize='large' className='correct nback-icon' />}
+        {!state.correct && <Incorrect fontSize='large' className='incorrect nback-icon' />}
       </Grid>
     )
   }
@@ -234,7 +250,7 @@ export default function NBack({content, onStore, onValidate}) {
   const renderFixation = () => {
     return (
       <Grid item container direction="row" justifyContent="space-around" alignItems="center">
-        <Add fontSize='large' className='fixation ts-icon' />
+        <Add fontSize='large' className='fixation nback-icon' />
       </Grid>
     );
   }

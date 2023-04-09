@@ -12,8 +12,24 @@
       "type": "nback",
       "text": "nback.instruction",
       "help": "Press only if you have seen the image exactly two step ago. <br /> You have two seconds to respond.",
-      "trials": 24,
-      "figures" : ["circle", "rectangle", "star"],
+      "trials": 12,
+      "figures" : [
+        {
+          "type": "icon",
+          "name": "circle",
+          "amount": 7
+        },
+        {
+          "type": "icon",
+          "name": "rectangle",
+          "amount": 2
+        },
+        {
+          "type": "icon",
+          "name": "star",
+          "amount": 3
+        }
+      ],
       "nback": 2,
       "stimuliDuration": 2000,
       "fixationDuration": 500,
