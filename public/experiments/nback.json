@@ -17,12 +17,12 @@
         {
           "type": "icon",
           "name": "circle",
-          "amount": 12
+          "amount": 11
         },
         {
           "type": "icon",
           "name": "rectangle",
-          "amount": 2
+          "amount": 3
         },
         {
           "type": "icon",
@@ -37,7 +37,7 @@
         {
           "type": "icon",
           "name": "school",
-          "amount": 2
+          "amount": 3
         }
       ],
       "nback": 2,
