@@ -19,19 +19,22 @@ import {
 } from '@material-ui/icons';
 import { shuffle } from './utils/random';
 
+//css
+import "./nback.css";
+
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-const _noresponse = 'noresponse';
-
 export default function NBack({content, onStore, onValidate}) {
-  //props: title, text
-  console.log('NBack body...');
+  //props: title, text  
+  
   const { t } = useTranslation();
-
+  
   const { text, trials, stimuliDuration, fixationDuration, feedbackDuration, nback, figures } = content;
+  
+  const _noresponse = 'noresponse';
 
-  const components = {
+  const iconFigures = {
     star: Star,
     circle: Circle,
     triangle: Triangle,
@@ -43,7 +46,6 @@ export default function NBack({content, onStore, onValidate}) {
     cup: Cup
   };
 
-  const response = useRef(null);
   const [state, setState] = useState({
     finished: false,
     trial: null,
@@ -108,7 +110,6 @@ export default function NBack({content, onStore, onValidate}) {
   },[state]);
 
   useEffect(() => {
-    console.log("step: %s,  state: %o",state.step,state);
     // # FIXATION
     if (state.step === 'fixation') {
       clearTimeout(clock);
@@ -121,42 +122,7 @@ export default function NBack({content, onStore, onValidate}) {
         });
       }, fixationDuration);
     }
-
-    // # RESPONSE
-    if (state.step === 'response'){
-      clearTimeout(clock);
-      console.log('RESPONSE');
-      let choice = state.trialResponses[state.trial -1].choice ? state.trialResponses[state.trial -1].choice : _noresponse;
-      console.log('RESPONSE --> choice: ',choice);
-      if(choice === _noresponse){
-        const respondedAt = Date.now(); //timestamp
-        const _correct = state.trial>nback ? state.stimuli[state.trial - 1]!==state.stimuli[state.trial - (nback+1)] : true ;
-        clock = setTimeout(() => {
-          setState({
-            ...state,
-            correct: _correct,
-            respondedAt: respondedAt,
-            trialResponses: [...state.trialResponses, {
-              'trial': state.trial,
-              'stimuli': state.stimuli[state.trial - 1],
-              'choice': choice,
-              'correct': _correct,
-              'respondedAt': respondedAt,
-              'trialStartedAt': state.trialStartedAt,
-              'rt': respondedAt - state.trialStartedAt
-            }],
-            step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
-          });
-        },100);
-      }
-      else{
-        clock = setTimeout(() => {
-          const nextState = feedbackDuration>0 ? 'feedback' : 'fixation';
-          setState({ ...state, nextState })
-        },100);
-      }
-    }
-
+    
     // # FEEDBACK
     if (state.step === 'feedback') {
       clearTimeout(clock);
@@ -165,25 +131,26 @@ export default function NBack({content, onStore, onValidate}) {
       }, feedbackDuration)
     }
 
-    // # STIMULO
+    // # STIMULI
     if (state.step === 'stimuli') {
       clearTimeout(clock); 
       clock = setTimeout(() => {
+        const respondedAt = Date.now(); //timestamp
+        const _correct = state.trial>nback ? state.stimuli[state.trial - 1]!==state.stimuli[state.trial - (nback+1)] : true ;
         setState({
           ...state,
+          correct: _correct,
+          respondedAt: respondedAt,
           trialResponses: [...state.trialResponses, {
             'trial': state.trial,
             'stimuli': state.stimuli[state.trial - 1],
-            'choice': null,
-            'correct': null,
-            'respondedAt': null,
+            'choice': _noresponse,
+            'correct': _correct,
+            'respondedAt': respondedAt,
             'trialStartedAt': state.trialStartedAt,
             'rt': null
           }],
-          timeouts: state.timeouts + 1,
-          correct: false,
-          step: 'response'
-          //step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
+          step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
         });
       }, stimuliDuration)
     }
@@ -242,20 +209,23 @@ export default function NBack({content, onStore, onValidate}) {
       }],
       step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
     });
+    console.log('handle resp, state set');
   }
 
   const renderFigure = (figure) => {
-    console.log('renderFigure: ',figure);
-    if(!components[figure]){
+    //console.log('renderFigure: ',figure);
+    if(!iconFigures[figure]){
       return(
         <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
-          <div onClick={() => handleResponse('block')} className='single-stimulus'> <Block fontSize='large' className='yellow nback-icon' /> </div>
+          <Fragment>
+            <div onClick={() => handleResponse('block')} className='single-stimulus'> <Block fontSize='large' className='yellow nback-icon' /> </div>
+          </Fragment>
         </Grid>
       );
     }
-    const FigureCompoentnt = components[figure];
+    const FigureCompoentnt = iconFigures[figure];
     return(
-      <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+      <Grid item container direction='row' justifyContent='space-around' alignItems='center' >
         <div onClick={() => handleResponse(figure)} className='single-stimulus'> <FigureCompoentnt fontSize='large' className='yellow nback-icon' /> </div>
       </Grid>
     )
@@ -295,10 +265,12 @@ export default function NBack({content, onStore, onValidate}) {
       <Grid item>
         <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
       </Grid>
+      <Grid item container direction='row' justifyContent='space-around' alignItems='center' className='nback-main-container'>
+        {state.step === 'stimuli'  && renderFigure(state.stimuli[state.trial-1])}
+        {state.step === 'feedback' && state.trial>nback && renderFeedback()}
+        {state.step === 'fixation' && renderFixation()}
+      </Grid>
       
-      {state.step === 'stimuli'  && renderFigure(state.stimuli[state.trial-1])}
-      {state.step === 'feedback' && state.trial>nback && renderFeedback()}
-      {state.step === 'fixation' && renderFixation()}
 
     </Grid>
   );

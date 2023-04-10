@@ -1,12 +1,12 @@
 .nback-icon {
-  width: 50% !important;
-  height: 400px !important;
-  font-size: 400px !important;
+  width: 100% !important;
+  height: 200px !important;
+  font-size: 200px !important;
 }
 
 .single-stimulus {
-  width: 50% !important;
-  /*height: 100px !important;*/
+  width: 300px !important;
+  height: 300px !important;
   font-size: 400px !important;
   background-color: #ffffff22;
   cursor: pointer;
@@ -23,6 +23,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  font-size: 300px;
 }
 
 .correct {
@@ -48,12 +49,18 @@
 }
 
 .single-stimulus-container {
-  /* margin: 72px 0 72px 0 !important; */
+  /* margin: 72px 0 72px 0 !important;  */
   padding: 0 60px 0 60px !important;
+}
+
+.nback-main-container{
+  
 }
 
 .nback-container {
   padding: 0 24px 0 24px;
   height: calc(100vh - 40px);
+  min-height: 500px !important;
+
 }
 
