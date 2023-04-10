@@ -192,7 +192,7 @@ export default function NBack({content, onStore, onValidate}) {
   const handleResponse = (selected) => {
     const respondedAt = Date.now(); //timestamp
     clearTimeout(clock);
-    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]===state.stimuli[state.trial - (nback+1)] : (!selected || selected===_noresponse) ;
+    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]===state.stimuli[state.trial - (nback+1)] : false ;
 
     setState({
       ...state,
