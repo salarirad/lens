@@ -12,12 +12,12 @@
       "type": "nback",
       "text": "nback.instruction",
       "help": "Press only if you have seen the image exactly two step ago. <br /> You have two seconds to respond.",
-      "trials": 12,
+      "trials": 24,
       "figures" : [
         {
           "type": "icon",
           "name": "circle",
-          "amount": 7
+          "amount": 12
         },
         {
           "type": "icon",
@@ -26,8 +26,18 @@
         },
         {
           "type": "icon",
-          "name": "star",
-          "amount": 3
+          "name": "cup",
+          "amount": 5
+        },
+        {
+          "type": "icon",
+          "name": "hand",
+          "amount": 2
+        },
+        {
+          "type": "icon",
+          "name": "school",
+          "amount": 2
         }
       ],
       "nback": 2,
