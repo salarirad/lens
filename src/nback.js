@@ -216,7 +216,7 @@ export default function NBack({content, onStore, onValidate}) {
     //console.log('renderFigure: ',figure);
     if(!iconFigures[figure]){
       return(
-        <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+        <Grid item>
           <Fragment>
             <div onClick={() => handleResponse('block')} className='single-stimulus'> <Block fontSize='large' className='yellow nback-icon' /> </div>
           </Fragment>
@@ -265,7 +265,7 @@ export default function NBack({content, onStore, onValidate}) {
       <Grid item>
         <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
       </Grid>
-      <Grid item container direction='row' justifyContent='space-around' alignItems='center' className='nback-main-container'>
+      <Grid item container direction='row' justifyContent='center' alignItems='center' className='nback-main-container'>
         {state.step === 'stimuli'  && renderFigure(state.stimuli[state.trial-1])}
         {state.step === 'feedback' && state.trial>nback && renderFeedback()}
         {state.step === 'fixation' && renderFixation()}

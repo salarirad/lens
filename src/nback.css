@@ -1,7 +1,7 @@
 .nback-icon {
   width: 100% !important;
-  height: 200px !important;
-  font-size: 200px !important;
+  height: 300px !important;
+  font-size: 300px !important;
 }
 
 .single-stimulus {
@@ -54,7 +54,7 @@
 }
 
 .nback-main-container{
-  
+  height: 80%;
 }
 
 .nback-container {
