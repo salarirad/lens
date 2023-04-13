@@ -678,6 +678,20 @@
 	"taskswitch.instruction": "Use &#8594; and &#8592; keys, or click on symbols. **Be quick!**",
 	"taskswitch.main.introduction": "Ok, so let's begin round 2. You will not receive feedback. Press next to begin.",
 
-	"taskswitch.tutorial": "Use &#8594; and &#8592; keys. <br /> If the symbols are placed above the divider line you should focus only on shape of those Symbols, same side for the (blue/yellow) Circle, opposite side for the Star. <br /> If the symbols are placed below the divider line you should only focus on the color, Same side for Yellow, opposite side for blue. <br /> **Be quick!**"
+	"taskswitch.tutorial": "Use &#8594; and &#8592; keys. <br /> If the symbols are placed above the divider line you should focus only on shape of those Symbols, same side for the (blue/yellow) Circle, opposite side for the Star. <br /> If the symbols are placed below the divider line you should only focus on the color, Same side for Yellow, opposite side for blue. <br /> **Be quick!**",
 
+	"taskswitch.intro1.text": "The next task requires your focus and attention.<br /> In each trial, a star will appear in one of the four boxes. The star can be yellow or blue. <br /> <br /> Press next to see how you should respond.",
+	"taskswitch.intro2.text": "If the star appears in one of the top boxes, you should click on the BLUE stars, but click on the opposite side if it's YELLOW star (the empty box next to it). Like in the pictures below: <br /> Click on Blue <img src='./images/taskswitch.top2.png' width='100%' /> <br /> Click on the other side for Yellow<img src='./images/taskswitch.top1.png' width='100%' />",
+	"taskswitch.intro3.text": "When stars appear on the bottom, you should click on the YELLOW stars: <br /> <img src='./images/taskswitch.top3.png' width='100%' /><br /> And click on the opposite side when you see a BLUE star (the empty box next to it). <br /> <img src='./images/taskswitch.top4.png' width='100%' />",
+    "taskswitch.intro4.text": "Try to respond as accurately and quickly as possible. Faster accurate response get you more points and increase your chance in a raffle. You can also use &#8594; and &#8592; keys to make you choices",
+	"taskswitch.intro5.text": "The first few rounds, you will recevied feedback on whether your response is correct or not. Press next whne youre ready.",
+
+    "taskswitch.are_you_ready": "Place your fingers on the &#8594; and &#8592; keys. Press **Start** to begin.",
+    "taskswitch.too_many_timeouts": "You waited too long! Let's start over.",
+    "taskswitch.restart": "Restart",
+    "taskswitch.start": "Start",
+    "taskswitch.instruction": "Use &#8594; and &#8592; keys, or click on symbols. **Be quick!**",
+    "taskswitch.main.introduction": "Ok, so let's begin round 2. You will not receive feedback. Press next to begin.",
+    "taskswitch.tutorial": "Use &#8594; and &#8592; keys. <br /> If the symbols are placed above the divider line you should focus only on shape of those Symbols, same side for the (blue/yellow) Circle, opposite side for the Star. <br /> If the symbols are placed below the divider line you should only focus on the color, Same side for Yellow, opposite side for blue. <br /> **Be quick!**"
+  
 }
