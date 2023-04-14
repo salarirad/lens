@@ -17,8 +17,8 @@
         "go": 12
       },
       "stimuliDuration": 2000,
-      "fixationDuration": 200, 
-      "feedbackDuration": 200,
+      "fixationDuration": 500, 
+      "feedbackDuration": 1000,
       "choices": {
         "go": {
           "type": "letter",
