@@ -33,7 +33,7 @@ export default function Submission({submission, studyId, submissionNote}) {
   useEffect(() => {
     if (state.submissionCode === undefined) {
       const pid = findProlificId();
-      console.log("pid:",pid);
+      //console.log("pid:",pid);
       ReactGA.event({
         category: "info",
         action: "submission_insert, pid : "+pid,
@@ -52,7 +52,7 @@ export default function Submission({submission, studyId, submissionNote}) {
         .catch(error => {
           ReactGA.event({
             category: "error",
-            action: "submission_insert, pid : "+pid,
+            action: "submission_insert_error, pid : "+pid,
             label: "info submission insert: " + JSON.stringify(submission)
           });
           return console.error('Error:', error);
