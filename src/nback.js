@@ -12,7 +12,7 @@ import {
   Watch,
   School,
   FreeBreakfast as Cup,
-  Add,
+  Timer,
   Block,
   Check as Correct,
   Clear as Incorrect
@@ -298,7 +298,7 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
   const renderFixation = () => {
     return (
       <Grid item container direction="row" justifyContent="space-around" alignItems="center">
-        <Add fontSize='large' className='stimulus-fixation single-stimulus-icon' />
+        <Timer fontSize='large' className='stimulus-fixation single-stimulus-icon' />
       </Grid>
     );
   }
