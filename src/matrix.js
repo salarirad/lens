@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, Fragment} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 import {Grid, Radio, Tooltip, RadioGroup, FormControlLabel, Divider, Slider} from '@material-ui/core';
 
@@ -107,7 +107,7 @@ export default function Matrix({content, onStore, onValidate}) {
   }
 
   return (
-    <Grid container direction='column' alignItems='stretch' justify='flex-start' className='Text-container'>
+    <Grid container direction='column' alignItems='stretch' justifyContent='flex-start' className='Text-container'>
       {text && 
       <Grid item>
         <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />

@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import TaskSwitch from './taskswitch';
 import SimplifiedTaskSwitch from './simplified_taskswitch';
 import NBack from './nback';
+import GoNoGoAlt from './gonogoalt';
 import ReactGA from "react-ga4";
 
 function useQuery() {
@@ -153,6 +154,8 @@ export default function Study(props) {
         return <SimplifiedTaskSwitch onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
       case 'nback':
         return <NBack onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
+      case 'gonogoalt':
+        return <GoNoGoAlt onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
       default:
         return <div>Not Implemented!</div>;
     }
@@ -217,7 +220,7 @@ export default function Study(props) {
               {!state.loading && renderView(state.view)}
               </Paper>
             </Grid>
-            {!['gonogo','bart','stroop','ultimatum','dictator','taskswitch','simplified_taskswitch','nback'].includes(state.view.type) && !state.loading &&
+            {!['gonogo','bart','stroop','ultimatum','dictator','taskswitch','simplified_taskswitch','nback','gonogoalt'].includes(state.view.type) && !state.loading &&
             <Grid item>
               <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
             </Grid>

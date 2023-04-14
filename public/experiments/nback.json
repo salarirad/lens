@@ -8,39 +8,72 @@
   },
   "views": [
     {
+      "id": "NBack Test Demo Letters",
+      "type": "nback",
+      "text": "nback.instruction",
+      "help": "nback.help",
+      "trials": 12,
+      "nback": 2,
+      "stimuli" : [
+        {
+          "type": "letter",
+          "name": "1",
+          "amount": 1
+        },
+        {
+          "type": "letter",
+          "name": "2",
+          "amount": 5
+        },
+        {
+          "type": "letter",
+          "name": "3",
+          "amount": 5
+        },
+        {
+          "type": "letter",
+          "name": "4",
+          "amount": 1
+        }
+      ],
+      "stimuliDuration": 3000,
+      "fixationDuration": 1000,
+      "feedbackDuration": 200
+    },
+    {
       "id": "NBack Test Demo",
       "type": "nback",
       "text": "nback.instruction",
-      "help": "Press only if you have seen the image exactly two step ago. <br /> You have two seconds to respond.",
-      "trials": 24,
-      "figures" : [
+      "help": "nback.help",
+      "trials": 12,
+      "nback": 2,
+      "stimuli" : [
         {
           "type": "icon",
           "name": "circle",
-          "amount": 11
+          "amount": 7
         },
         {
           "type": "icon",
           "name": "rectangle",
-          "amount": 3
-        },
-        {
-          "type": "icon",
-          "name": "cup",
-          "amount": 5
-        },
-        {
-          "type": "icon",
-          "name": "hand",
           "amount": 2
         },
         {
           "type": "icon",
+          "name": "cup",
+          "amount": 1
+        },
+        {
+          "type": "icon",
+          "name": "hand",
+          "amount": 1
+        },
+        {
+          "type": "icon",
           "name": "school",
-          "amount": 3
+          "amount": 1
         }
       ],
-      "nback": 2,
       "stimuliDuration": 2000,
       "fixationDuration": 500,
       "feedbackDuration": 500

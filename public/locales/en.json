@@ -677,7 +677,19 @@
 	"taskswitch.start": "Start",
 	"taskswitch.instruction": "Use &#8594; and &#8592; keys, or click on symbols. **Be quick!**",
 	"taskswitch.main.introduction": "Ok, so let's begin round 2. You will not receive feedback. Press next to begin.",
+	"taskswitch.tutorial": "Use &#8594; and &#8592; keys. <br /> If the symbols are placed above the divider line you should focus only on shape of those Symbols, same side for the (blue/yellow) Circle, opposite side for the Star. <br /> If the symbols are placed below the divider line you should only focus on the color, Same side for Yellow, opposite side for blue. <br /> **Be quick!**",
 
-	"taskswitch.tutorial": "Use &#8594; and &#8592; keys. <br /> If the symbols are placed above the divider line you should focus only on shape of those Symbols, same side for the (blue/yellow) Circle, opposite side for the Star. <br /> If the symbols are placed below the divider line you should only focus on the color, Same side for Yellow, opposite side for blue. <br /> **Be quick!**"
+
+	"nback.are_you_ready": "Are you ready",
+	"nback.start": "Start",
+	"nback.instruction": "NBack Instructions",
+	"nback.help": "Press only if you have seen the image exactly two step ago. <br /> <br /> You have two seconds to respond.",
+
+
+	"gonogoalt.are_you_ready": "Place your finger on the **space** key or click on the symbols per instruction. Press **Start** to begin.",
+	"gonogoalt.introduction": "###Go-NoGo <br /> <br /> In this task... ",
+	"gonogoalt.start": "Start",
+	"gonogoalt.instruction": "Use **Space** key or click on the symbol. When you see a vowel letter, click as fast as possible; Otherwise don't do anything",
+	"gonogoalt.help": "Press any key or click on symbol per instruction in less than three seconds."
 
 }

@@ -30,7 +30,7 @@ export default function Prolific({content, onStore, onValidate}) {
         'response': response.current?.code || response.current
       })
     };
-  },[response, content]);
+  },[response]);
 
 
   const handleChange = (e, value) => {

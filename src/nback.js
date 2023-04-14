@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState, Fragment } from 'react';
-import { Button, Grid, Typography } from '@material-ui/core';
+import React, { useEffect, useState, Fragment } from 'react';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown/with-html';
 import { 
@@ -25,12 +25,12 @@ import "./nback.css";
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-export default function NBack({content, onStore, onValidate}) {
+export default function NBack({content, onStore, onNotification, onProgress}) {
   //props: title, text  
   
   const { t } = useTranslation();
   
-  const { text, trials, stimuliDuration, fixationDuration, feedbackDuration, nback, figures } = content;
+  const { text, trials, stimuliDuration, fixationDuration, feedbackDuration, nback, stimuli } = content;
   
   const _noresponse = 'noresponse';
 
@@ -51,7 +51,10 @@ export default function NBack({content, onStore, onValidate}) {
     trial: null,
     step: null,
     trialResponses: [],
-    taskStartedAt: Date.now(),
+    taskStartedAt: null,
+    taskFinishedAt: null,
+    taskDuration: null,
+    trialStartedAt: null,
     respondedAt: null,
     stimuli: null
   });
@@ -85,31 +88,36 @@ export default function NBack({content, onStore, onValidate}) {
   },[state]);
 
   useEffect(() => {
-    //console.log("use effect generating stimuli: ", state.stimuli);
+    // console.log("use effect for generating stimuli: ", state.stimuli);
     // generate stimuli stream
     if (state.stimuli===null) {
       let figureIndex = 0;
       let figureTotal =0;
       let stim = [...Array(trials).keys()].map((i,t) => {
-        let figure = figures[figureIndex];
+        let figure = stimuli[figureIndex];
         if(figureTotal<figure.amount){
           figureTotal++;
-          return figure.name;
+          return {"type": figure.type, "name": figure.name};
         }else{
           figureIndex++;
           figureTotal = 1;
-          if(figureIndex>=figures.length){
-            console.log('error in figure numbers and total trials, reseting figures...')
+          if(figureIndex>=stimuli.length){
+            console.log('error in figure numbers and total trials, reseting figures. Index: %d , length: %d', figureIndex, stimuli?.length);
             figureIndex = 0;
           }
-          return figures[figureIndex].name;
+          figure = stimuli[figureIndex];
+          return {"type": figure.type, "name": figure.name};
         }
       });
       setState({...state, stimuli: shuffle(stim)});
     }
-  },[state]);
 
-  useEffect(() => {
+    // check if it is finished
+    if (state.trial > trials) {
+      console.log('------------ FINISHED -------')
+      setState({ ...state, finished: true, taskFinishedAt: Date.now() })
+    }
+
     // # FIXATION
     if (state.step === 'fixation') {
       clearTimeout(clock);
@@ -136,7 +144,8 @@ export default function NBack({content, onStore, onValidate}) {
       clearTimeout(clock); 
       clock = setTimeout(() => {
         const respondedAt = Date.now(); //timestamp
-        const _correct = state.trial>nback ? state.stimuli[state.trial - 1]!==state.stimuli[state.trial - (nback+1)] : true ;
+        //console.log("trial: %d  - stimulus: %o",state.trial,state.stimuli[state.trial-1]);
+        const _correct = state.trial>nback ? state.stimuli[state.trial - 1]?.name!==state.stimuli[state.trial - (nback+1)]?.name : true ;
         setState({
           ...state,
           correct: _correct,
@@ -155,11 +164,8 @@ export default function NBack({content, onStore, onValidate}) {
       }, stimuliDuration)
     }
 
-    // check if it is finished
-    if (state.trial > trials) {
-      console.log('------------ FINISHED -------')
-      setState({ ...state, finished: true, taskFinishedAt: Date.now() })
-    }
+    // Set progress
+    onProgress(100.0 * state.trial / trials.total)
 
     // on finish
     if (state.finished) {
@@ -178,6 +184,9 @@ export default function NBack({content, onStore, onValidate}) {
 
   }, [state] );
 
+  /**
+   * Starts the task
+   */
   const startTask = () => {
     setState({
       ...state,
@@ -187,12 +196,26 @@ export default function NBack({content, onStore, onValidate}) {
       step: 'fixation',
       taskStartedAt: Date.now()
     })
+    console.log('task started. stimuli: %o', state.stimuli);
   }
 
+  /**
+   * handles user response
+   * @param {*} selected 
+   */
   const handleResponse = (selected) => {
+    if(state.trial<=nback){
+      return onNotification(t('nback.invalid.selection.notification'));
+    }
+
     const respondedAt = Date.now(); //timestamp
     clearTimeout(clock);
-    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]===state.stimuli[state.trial - (nback+1)] : false ;
+
+    //console.log("trial: %d  - stimulus: %o  -  selected: %o",state.trial,state.stimuli[state.trial-1],selected);
+    //if(state.trial>nback)
+    // console.log("stimulus1 : %o  -  stimulus2 : %o  -  comp result: %s",state.stimuli[state.trial - 1],state.stimuli[state.trial - (nback+1)],state.stimuli[state.trial - 1].name!==state.stimuli[state.trial - (nback+1)].name);
+
+    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]?.name===state.stimuli[state.trial - (nback+1)]?.name : false ;
 
     setState({
       ...state,
@@ -209,28 +232,57 @@ export default function NBack({content, onStore, onValidate}) {
       }],
       step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
     });
-    console.log('handle resp, state set');
+    //console.log('handle resp: %o , after setState', selected);
   }
 
+  /**
+   * Renders the figure given, if type is icon it uses iconFigures to render, and if type is letter it uses Typography element
+   * @param {*} figure 
+   * @returns html element of the stimuli
+   */
   const renderFigure = (figure) => {
-    //console.log('renderFigure: ',figure);
-    if(!iconFigures[figure]){
+    console.log('renderFigure: ',figure);
+    if(figure===null || figure===undefined){
+      console.log('figure is null, state:',state);
       return(
-        <Grid item>
-          <Fragment>
-            <div onClick={() => handleResponse('block')} className='single-stimulus'> <Block fontSize='large' className='yellow nback-icon' /> </div>
-          </Fragment>
+        <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+        </Grid>
+      )
+    }
+    if(figure.type==="icon"){
+      if(!iconFigures[figure.name]){
+        return(
+          <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+            <Fragment>
+              <Box onClick={() => handleResponse(figure)} className='single-stimulus single-stimulus-icon'>
+                <Block fontSize='large' className='yellow nback-icon' />
+              </Box>
+            </Fragment>
+          </Grid>
+        );
+      }
+      const FigureCompoentnt = iconFigures[figure.name];
+      return(
+        <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+          <Box onClick={() => handleResponse(figure)} className='single-stimulus single-stimulus-icon'>
+            <FigureCompoentnt fontSize='large' className='yellow nback-icon' />
+          </Box>
+        </Grid>
+      );
+    }else if(figure.type==="letter"){
+      return(
+        <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
+          <Box onClick={() => handleResponse(figure)} className='single-stimulus single-stimulus-letter' textAlign="center">
+            <Typography type='span' className='yellow single-stimuli-letter'> {figure.name} </Typography>
+          </Box>
         </Grid>
       );
     }
-    const FigureCompoentnt = iconFigures[figure];
-    return(
-      <Grid item container direction='row' justifyContent='space-around' alignItems='center' >
-        <div onClick={() => handleResponse(figure)} className='single-stimulus'> <FigureCompoentnt fontSize='large' className='yellow nback-icon' /> </div>
-      </Grid>
-    )
   }
 
+  /**
+   * Renders feedback
+   */
   const renderFeedback = () => {
     return (
       <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
@@ -240,10 +292,13 @@ export default function NBack({content, onStore, onValidate}) {
     )
   }
 
+  /**
+   * Renders fixation element
+   */
   const renderFixation = () => {
     return (
       <Grid item container direction="row" justifyContent="space-around" alignItems="center">
-        <Add fontSize='large' className='fixation nback-icon' />
+        <Add fontSize='large' className='nback-fixation nback-icon' />
       </Grid>
     );
   }
@@ -270,8 +325,6 @@ export default function NBack({content, onStore, onValidate}) {
         {state.step === 'feedback' && state.trial>nback && renderFeedback()}
         {state.step === 'fixation' && renderFixation()}
       </Grid>
-      
-
     </Grid>
   );
 }
