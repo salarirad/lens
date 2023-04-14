@@ -1,7 +1,8 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { Box, Button, Grid, Typography } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
-import Markdown from 'react-markdown/with-html';
+import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
+
+
+import { Button, Grid, Typography, Divider, Box} from '@material-ui/core';
+
 import { 
   Star, 
   RadioButtonUnchecked as Circle,
@@ -17,21 +18,21 @@ import {
   Check as Correct,
   Clear as Incorrect
 } from '@material-ui/icons';
-import { shuffle } from './utils/random';
 
-//css
-import "./nback.css";
+import Markdown from 'react-markdown/with-html';
+
+import { sample, shuffle } from './utils/random';
+import { useTranslation } from 'react-i18next';
+
+import './gonogoalt.css';
 
 //FIXME these are realtime variables, so I keep them out of the component's state.
 let clock
 
-export default function NBack({content, onStore, onNotification, onProgress}) {
-  //props: title, text  
-  
+export default function GoNoGoAlt({content, onStore, onProgress, onNotification}) {
+
   const { t } = useTranslation();
-  
-  const { text, trials, stimuliDuration, fixationDuration, feedbackDuration, nback, stimuli } = content;
-  
+  const { text, trials, stimuliDuration, fixationDuration, feedbackDuration, choices } = content;
   const _noresponse = 'noresponse';
 
   const iconFigures = {
@@ -44,7 +45,7 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
     watch: Watch,
     school: School,
     cup: Cup
-  };
+  }
 
   const [state, setState] = useState({
     finished: false,
@@ -56,8 +57,9 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
     taskDuration: null,
     trialStartedAt: null,
     respondedAt: null,
-    stimuli: null
-  });
+    stimuli: null,
+    correct: null
+  })
 
   useEffect(() => {
     /**
@@ -87,93 +89,83 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
 
   },[state]);
 
+
   useEffect(() => {
-    // console.log("use effect for generating stimuli: ", state.stimuli);
+
     // generate stimuli stream
     if (state.stimuli===null) {
-      let figureIndex = 0;
-      let figureTotal =0;
-      let stim = [...Array(trials).keys()].map((i,t) => {
-        let figure = stimuli[figureIndex];
-        if(figureTotal<figure.amount){
-          figureTotal++;
-          return {"type": figure.type, "name": figure.name};
-        }else{
-          figureIndex++;
-          figureTotal = 1;
-          if(figureIndex>=stimuli.length){
-            console.log('error in figure numbers and total trials, reseting figures. Index: %d , length: %d', figureIndex, stimuli?.length);
-            figureIndex = 0;
-          }
-          figure = stimuli[figureIndex];
-          return {"type": figure.type, "name": figure.name};
-        }
-      });
+      console.log(trials);
+      let stim = [...Array(trials.total).keys()].map((i,t) => {
+        if (i<trials.go)
+          return {"trialType": "go", "type": choices.go.type, "name":sample(choices.go.names)}
+        else
+          return {"trialType": "nogo", "type": choices.nogo.type, "name":sample(choices.nogo.names)}
+      }) 
       setState({...state, stimuli: shuffle(stim)});
-    }
-
-    // check if it is finished
-    if (state.trial > trials) {
-      console.log('------------ FINISHED -------')
-      onProgress(100.0)
-      setState({ ...state, finished: true, taskFinishedAt: Date.now() })
     }
 
     // # FIXATION
     if (state.step === 'fixation') {
-      clearTimeout(clock);
+      clearTimeout(clock);  
       clock = setTimeout(() => {
-        setState({
-          ...state,
-          trial: state.trial + 1,
-          trialStartedAt: Date.now(),
-          step: 'stimuli'
-        });
-      }, fixationDuration);
+          setState({
+            ...state, 
+            trial: state.trial+1, 
+            trialStartedAt: Date.now(), 
+            step: 'stimuli'
+          });
+        }, fixationDuration);
     }
-    
+
     // # FEEDBACK
     if (state.step === 'feedback') {
       clearTimeout(clock);
       clock = setTimeout(() => {
-        setState({ ...state, step: 'fixation' })
-      }, feedbackDuration)
+          setState({...state, step: 'fixation'})
+        }, feedbackDuration)
     }
 
     // # STIMULI
     if (state.step === 'stimuli') {
-      clearTimeout(clock); 
+      clearTimeout(clock);
       clock = setTimeout(() => {
         const respondedAt = Date.now(); //timestamp
-        //console.log("trial: %d  - stimulus: %o",state.trial,state.stimuli[state.trial-1]);
-        const _correct = state.trial>nback ? state.stimuli[state.trial - 1]?.name!==state.stimuli[state.trial - (nback+1)]?.name : true ;
+        console.log('stimuli step timeout. stimuli: %o', state.stimuli[state.trial-1]);
+        const _correct =  state.stimuli[state.trial-1]?.trialType?.endsWith('nogo');
         setState({
           ...state,
           correct: _correct,
           respondedAt: respondedAt,
           trialResponses: [...state.trialResponses, {
             'trial': state.trial,
-            'stimuli': state.stimuli[state.trial - 1],
+            'stimuli': state.stimuli[state.trial-1],
             'choice': _noresponse,
             'correct': _correct,
             'respondedAt': respondedAt,
             'trialStartedAt': state.trialStartedAt,
             'rt': null
           }],
-          step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
+          step: (feedbackDuration>0)?'feedback':'fixation'
         });
       }, stimuliDuration)
     }
 
     // Set progress
-    onProgress(100.0 * state.trial / trials)
+    onProgress(100.0 * state.trial / trials.total)
+  
+    // check if task is finished
+    if (state.trial>trials.total) {
+      console.log('------------ FINISHED -------')
+      onProgress(100.0)
+      setState({...state, finished: true, taskFinishedAt: Date.now()})
+    }
 
     // on finish
     if (state.finished) {
       clearTimeout(clock);
-
+      
       // timestamps
-      let response = { trials: state.trialResponses };
+      let response = {trials: state.trialResponses};
       response.taskStartedAt = state.taskStartedAt;
       response.taskFinishedAt = state.taskFinishedAt;
       response.taskDuration = state.taskFinishedAt - state.taskStartedAt;
@@ -183,20 +175,17 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
       }, true); // store + next
     }
 
-  }, [state] );
+  },[state]);
 
-  /**
-   * Starts the task
-   */
   const startTask = () => {
     setState({
-      ...state,
-      trialResponses: [],
-      trial: 0,
-      step: 'fixation',
+      ...state, 
+      trialResponses: [], 
+      trial: 0, 
+      step: 'fixation', 
       taskStartedAt: Date.now()
     })
-    console.log('task started. stimuli: %o', state.stimuli);
+    console.log('task started. stimuli: %o', state.stimuli)
   }
 
   /**
@@ -204,18 +193,10 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
    * @param {*} selected 
    */
   const handleResponse = (selected) => {
-    if(state.trial<=nback){
-      return onNotification(t('nback.invalid.selection.notification'));
-    }
-
     const respondedAt = Date.now(); //timestamp
     clearTimeout(clock);
 
-    //console.log("trial: %d  - stimulus: %o  -  selected: %o",state.trial,state.stimuli[state.trial-1],selected);
-    //if(state.trial>nback)
-    // console.log("stimulus1 : %o  -  stimulus2 : %o  -  comp result: %s",state.stimuli[state.trial - 1],state.stimuli[state.trial - (nback+1)],state.stimuli[state.trial - 1].name!==state.stimuli[state.trial - (nback+1)].name);
-
-    const _correct = state.trial>nback ? state.stimuli[state.trial - 1]?.name===state.stimuli[state.trial - (nback+1)]?.name : false ;
+    const _correct = !state.stimuli[state.trial-1]?.trialType?.endsWith('nogo')
 
     setState({
       ...state,
@@ -223,25 +204,24 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
       respondedAt: respondedAt,
       trialResponses: [...state.trialResponses, {
         'trial': state.trial,
-        'stimuli': state.stimuli[state.trial - 1],
+        'stimuli': state.stimuli[state.trial-1],
         'choice': selected,
         'correct': _correct,
         'respondedAt': respondedAt,
         'trialStartedAt': state.trialStartedAt,
         'rt': respondedAt - state.trialStartedAt
       }],
-      step: (feedbackDuration > 0) ? 'feedback' : 'fixation'
-    });
-    //console.log('handle resp: %o , after setState', selected);
+      step: (feedbackDuration>0)?'feedback':'fixation'
+    })
   }
 
   /**
-   * Renders the given stimulus, if type is icon it uses iconFigures to render, and if type is letter it uses Typography element
+   * Renders the given stimulus. If type is icon it uses iconFigures to render, and if type is letter it uses Typography element
    * @param {*} stimulus 
    * @returns html element of the stimuli
    */
   const renderStimulus = (stimulus) => {
-    console.log('renderFigure: ',stimulus);
+    console.log('renderStimulus: ',stimulus);
     if(stimulus===null || stimulus===undefined){
       console.log('figure is null, state:',state);
       return(
@@ -298,7 +278,7 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
   const renderFixation = () => {
     return (
       <Grid item container direction="row" justifyContent="space-around" alignItems="center">
-        <Add fontSize='large' className='stimulus-fixation single-stimulus-icon' />
+        <Add fontSize='large' className='single-stimulus-fixation single-stimulus-icon' />
       </Grid>
     );
   }
@@ -307,24 +287,25 @@ export default function NBack({content, onStore, onNotification, onProgress}) {
   if (state.trial === null) {
     return (
       <Grid container direction='column' spacing={2} alignItems='center' justifyContent='flex-start' className='Text-container'>
-        <Grid item><Markdown source={t('nback.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
+        <Grid item><Markdown source={t('gonogoalt.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
         <Grid item>
-          <Button variant='outlined' onClick={() => startTask()}>{t('nback.start')}</Button>
+          <Button variant='outlined' onClick={() => startTask()}>{t('gonogoalt.start')}</Button>
         </Grid>
       </Grid>
     )
   }
 
   return (
-    <Grid container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='nback-container'>
+    <Grid item container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='gonogoalt-container'>
       <Grid item>
         <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
       </Grid>
       <Grid item container direction='row' justifyContent='center' alignItems='center' className='nback-main-container'>
         {state.step === 'stimuli'  && renderStimulus(state.stimuli[state.trial-1])}
-        {state.step === 'feedback' && state.trial>nback && renderFeedback()}
+        {state.step === 'feedback' && renderFeedback()}
         {state.step === 'fixation' && renderFixation()}
       </Grid>
     </Grid>
   );
+
 }

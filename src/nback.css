@@ -1,4 +1,4 @@
-.nback-icon {
+.single-stimulus-icon {
   width: 100% !important;
   height: 300px !important;
   font-size: 300px !important;
@@ -35,11 +35,15 @@
 }
 
 .correct {
-  color: #cecece;
+  color: #275700;
 }
 
 .incorrect {
-  color: #cecece;
+  color: #6e0000;
+}
+
+.single-stimulus-fixation {
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .nback-fixation {
