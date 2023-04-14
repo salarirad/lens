@@ -2,7 +2,7 @@ name: Github Page Deploy Workflow
 
 on:
   push:
-    branches: [mirror, develop]
+    branches: [master]
 
 jobs:
   deploy:
