@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import {useParams, Link} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
@@ -15,7 +15,7 @@ import './index.css'
 
 export default function LanguageSelector(props) {
 
-  const {t, i18n} = useTranslation();
+  const { t } = useTranslation();
   let {studyId} = useParams();
 
 
@@ -27,13 +27,13 @@ export default function LanguageSelector(props) {
         <Grid item container
           spacing={2}
           direction="column"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="stretch"
         >
           <Paper className='languages-container'>
 
           <Markdown source={t('language_selector.text')} escapeHtml={false}  className='markdown-text' />
-          <Grid container direction='row' spacing={3} justify='space-around'>
+          <Grid container direction='row' spacing={3} justifyContent='space-around'>
           {Object.entries(languages).map(([key, val]) => 
             <Grid item key={key} xs={4}>
               <Button component={Link} to={`/${studyId}/${key}`} fullWidth variant='outlined'>{val.title}</Button>

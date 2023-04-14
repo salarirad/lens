@@ -1,0 +1,40 @@
+{
+  "studyId": "GoNoGoAlt-demo",
+  "conditon": "a",
+  "redirectTo": "https://cut.social",
+  "submissionNote": "submission.note",
+  "metadata": {
+    "maintainer": "radmanesh@me.com"
+  },
+  "views": [
+    {
+      "id": "GoNoGoAlt Demo",
+      "type":"gonogoalt",
+      "text":"gonogoalt.instruction",
+      "help":"gonogoalt.help",
+      "trials": {
+        "total": 24,
+        "go": 12
+      },
+      "stimuliDuration": 2000,
+      "fixationDuration": 500, 
+      "feedbackDuration": 1000,
+      "choices": {
+        "go": {
+          "type": "letter",
+          "names": ["b","c","d","f","g","h"]
+        },
+        "nogo": {
+          "type": "letter",
+          "names":["a","e","i","o","u"] 
+        }
+      }
+    },
+    {
+      "id": "gonogo_demo.outro_text",
+      "type": "text",
+      "instruction": true,
+      "text": "Thanks!"
+    }
+  ]
+}

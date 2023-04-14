@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 
 
-import { Button, Grid, Typography, Divider} from '@material-ui/core';
+import { Button, Grid, Divider } from '@material-ui/core';
 
 import { 
   Star, 
@@ -13,7 +13,7 @@ import {
 
 import Markdown from 'react-markdown/with-html';
 
-import {sample, shuffle} from './utils/random';
+import { shuffle } from './utils/random';
 import { useTranslation } from 'react-i18next';
 
 import './gonogo.css';
@@ -219,7 +219,7 @@ export default function GoNoGo({content, onStore, onProgress}) {
 
   const renderStimuli = (trialType) => {
     return (
-      <Grid item container direction="row" justify="space-around" alignItems="center">
+      <Grid item container direction="row" justifyContent="space-around" alignItems="center">
         {trialType === 'left-go' && renderStimulus(choices.go)}
         {trialType === 'left-nogo' && renderStimulus(choices.nogo)}
         {(trialType !== 'left-go' && trialType !== 'left-nogo') && renderStimulus('empty')}
@@ -233,7 +233,7 @@ export default function GoNoGo({content, onStore, onProgress}) {
 
   const renderFeedback = () => {
     return (
-      <Grid item container direction='row' justify='space-around' alignItems='center'>
+      <Grid item container direction='row' justifyContent='space-around' alignItems='center'>
         {state.correct && <Correct fontSize='large' className='correct gng-icon' />}
         {!state.correct && <Incorrect fontSize='large' className='incorrect gng-icon' />}
       </Grid>
@@ -243,7 +243,7 @@ export default function GoNoGo({content, onStore, onProgress}) {
 
   const renderFixation = () => {
     return (
-      <Grid item container direction="row" justify="space-around" alignItems="center">
+      <Grid item container direction="row" justifyContent="space-around" alignItems="center">
         <Add fontSize='large' className='fixation gng-icon' />
       </Grid>
     );
@@ -252,7 +252,7 @@ export default function GoNoGo({content, onStore, onProgress}) {
   // show reset screen on timeouts reaching a threshold
   if (state.step === 'reset') {
     return (
-      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
+      <Grid container direction='column' spacing={2} alignItems='center' justifyContent='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('gonogo.too_many_timeouts')} escapeHtml={false}  className='markdown-text' /></Grid>
         <Grid item>
           <Button variant='outlined' color='secondary' onClick={() => startTask()}>{t('gonogo.restart')}</Button>
@@ -265,7 +265,7 @@ export default function GoNoGo({content, onStore, onProgress}) {
   // start screen
   if (state.trial === null) {
     return (
-      <Grid container direction='column' spacing={2} alignItems='center' justify='flex-start' className='Text-container'>
+      <Grid container direction='column' spacing={2} alignItems='center' justifyContent='flex-start' className='Text-container'>
         <Grid item><Markdown source={t('gonogo.are_you_ready')} escapeHtml={false} className='markdown-text' /></Grid>
         <Grid item>
           <Button variant='outlined' onClick={() => startTask()}>{t('gonogo.start')}</Button>
@@ -278,7 +278,7 @@ export default function GoNoGo({content, onStore, onProgress}) {
 
   //const render = () => {
     return (
-        <Grid item container direction='column' spacing={2} alignItems='stretch' justify='flex-start' className='gonogo-container'>
+        <Grid item container direction='column' spacing={2} alignItems='stretch' justifyContent='flex-start' className='gonogo-container'>
           <Grid item>
             <Markdown source={t(text)} escapeHtml={false} className='markdown-text' />
           </Grid>

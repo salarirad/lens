@@ -1,0 +1,117 @@
+.single-stimulus-icon {
+  width: 100% !important;
+  height: 300px !important;
+  font-size: 300px !important;
+}
+
+.single-stimulus {
+  width: 300px !important;
+  height: 300px !important;
+  font-size: 400px !important;
+  background-color: #ffffff22;
+  cursor: pointer;
+  position: relative;
+}
+
+.single-stimulus-icon:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.single-stimulus-icon>svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 300px;
+}
+
+.single-stimulus-letter {
+  position: relative;
+}
+
+.single-stimuli-letter {
+  font-size: 230px !important;
+}
+
+.correct {
+  color: #275700;
+}
+
+.incorrect {
+  color: #6e0000;
+}
+
+.single-stimulus-fixation {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.nback-fixation {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.nback-fixation.blink{
+  -moz-transition:all 0.5s ease-in-out;
+  -webkit-transition:all 0.5s ease-in-out;
+  -o-transition:all 0.5s ease-in-out;
+  -ms-transition:all 0.5s ease-in-out;
+  transition:all 0.5s ease-in-out;
+  -moz-animation:fixationblink normal 1.5s infinite ease-in-out;
+  /* Firefox */
+  -webkit-animation:fixationblink normal 1.5s infinite ease-in-out;
+  /* Webkit */
+  -ms-animation:fixationblink normal 1.5s infinite ease-in-out;
+  /* IE */
+  animation:fixationblink normal 1.5s infinite ease-in-out;
+  /* Opera */
+}
+
+@keyframes fixationblink {
+  0% {
+    color: rgba(255, 255, 255, 0.5)
+  }
+  50% {
+    color: rgba(255, 255, 255, 0.3)
+  }
+  100% {
+    color: rgba(255, 255, 255, 0.5)
+  }
+}
+
+@-webkit-keyframes fixationblink {
+  0% {
+    color: rgba(255, 255, 255, 0.5)
+  }
+  50% {
+    color: rgba(255, 255, 255, 0.3)
+  }
+  100% {
+    color: rgba(255, 255, 255, 0.5)
+  }
+}
+
+.yellow {
+  cursor: pointer;
+  color: #fced24;
+}
+
+.blue {
+  cursor: pointer;
+  color: #2323a3;
+}
+
+.single-stimulus-container {
+  /* margin: 72px 0 72px 0 !important;  */
+  padding: 0 60px 0 60px !important;
+}
+
+.nback-main-container {
+  height: 80%;
+}
+
+.nback-container {
+  padding: 0 24px 0 24px;
+  height: calc(100vh - 40px);
+  min-height: 500px !important;
+
+}

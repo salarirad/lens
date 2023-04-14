@@ -1,0 +1,10 @@
+.gonogoalt-main-container {
+  height: 80%;
+}
+
+.gonogoalt-container {
+  padding: 0 24px 0 24px;
+  height: calc(100vh - 40px);
+  min-height: 500px !important;
+
+}

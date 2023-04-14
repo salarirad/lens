@@ -10,6 +10,7 @@ import {languages} from './utils/i18n';
 
 import Navigation from './navigation';
 import Text from './text';
+import Prolific from './prolific'
 import Matrix from './matrix';
 import Submission from './submission';
 import BART from './bart';
@@ -20,6 +21,8 @@ import Dictator from './dictator';
 import { useTranslation } from 'react-i18next';
 import TaskSwitch from './taskswitch';
 import SimplifiedTaskSwitch from './simplified_taskswitch';
+import NBack from './nback';
+import GoNoGoAlt from './gonogoalt';
 import ReactGA from "react-ga4";
 
 function useQuery() {
@@ -131,6 +134,8 @@ export default function Study(props) {
     switch(view?.type) {
       case 'text':
         return <Text onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />;
+      case 'prolific':
+        return <Prolific onStore={storeData} content={view} key={view.id} onValidate={(r) => responseIsValid.current = r} />;
       case 'bart':
         return <BART onStore={storeData} content={view} key={view.id} />;
       case 'gonogo': 
@@ -147,6 +152,10 @@ export default function Study(props) {
         return <TaskSwitch onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
       case 'simplified_taskswitch':
         return <SimplifiedTaskSwitch onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
+      case 'nback':
+        return <NBack onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
+      case 'gonogoalt':
+        return <GoNoGoAlt onStore={storeData} onProgress={updateViewProgress} content={view} key={view.id} onNotification={setNotification} />;
       default:
         return <div>Not Implemented!</div>;
     }
@@ -211,7 +220,7 @@ export default function Study(props) {
               {!state.loading && renderView(state.view)}
               </Paper>
             </Grid>
-            {!['gonogo','bart','stroop','ultimatum','dictator','taskswitch','simplified_taskswitch'].includes(state.view.type) && !state.loading &&
+            {!['gonogo','bart','stroop','ultimatum','dictator','taskswitch','simplified_taskswitch','nback','gonogoalt'].includes(state.view.type) && !state.loading &&
             <Grid item>
               <Navigation onNext={onNext} finished={state.finished} redirectTo={state.experiment.redirectTo} />
             </Grid>

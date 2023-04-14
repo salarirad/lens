@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import {Button, Grid} from '@material-ui/core';
 
@@ -9,7 +9,7 @@ export default function Navigation({finished, redirectTo, onNext}) {
   const {t} = useTranslation();
 
   return (
-    <Grid container direction='row' justify='flex-end'>
+    <Grid container direction='row' justifyContent='flex-end'>
       <Grid item>
         {!finished && 
           <Button variant="contained" color="primary" onClick={onNext}>{t('next')}</Button>
