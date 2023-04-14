@@ -37,8 +37,8 @@
         }
       ],
       "stimuliDuration": 3000,
-      "fixationDuration": 1000,
-      "feedbackDuration": 200
+      "fixationDuration": 800,
+      "feedbackDuration": 1000
     },
     {
       "id": "NBack Test Demo",
