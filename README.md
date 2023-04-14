@@ -13,9 +13,9 @@ Lens uses React and Material UI to structure the development process while simpl
 
 This architecture provides several other functionalities, in addition to facilitating the integration of interactive tasks with conventional survey elements:
 
-* Multilingual survey content with little effort
-* Device adaptable research instruments
-* Texts formatting using Markdown
+* Multilingual survey content with minimial effort
+* Device adaptive research instruments
+* Markdown texts formatting
 
 We obtained funding from the New School and the Association for Psychological Science (APS) to develop this tool. Research using this platform has been published in the *Journal Personality and Social Psychology Bulletin*:
 
