@@ -8,7 +8,7 @@
   width: 300px !important;
   height: 300px !important;
   font-size: 400px !important;
-  background-color: #ffffff22;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
   position: relative;
 }
@@ -35,11 +35,11 @@
 }
 
 .correct {
-  color: #275700;
+  color: #4c7928;
 }
 
 .incorrect {
-  color: #6e0000;
+  color: #c22d2d;
 }
 
 .single-stimulus-fixation {
